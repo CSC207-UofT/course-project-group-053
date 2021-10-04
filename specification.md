@@ -11,7 +11,7 @@ Players (1 or more) may click on the board to place their chips during the first
 # Project classes
 
 ## Entity classes
-###Players (Abstract class)
+### Players (Abstract class)
     Keep track of player’s chips (i.e: how many they have right now?)
 Subclasses: Human Player 1, Human Player 2, Computer (Next step)
 
@@ -42,7 +42,7 @@ Computer vs Computer (Next Step)
     probability of winning/losing as per the users. (Next Step)
 
 ## Controller classes:
-## NineMenMorrisGame
+### NineMenMorrisGame
     Initializes game board
     Initializes players
     Runs GameBoardManager and PlayerManager to start the game (?)
