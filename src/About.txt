@@ -1,1 +1,8 @@
 This .txt file contains information about src
+
+Task 1: GameBoard
+Task 2: UI
+Task 3: Deletion
+Task 4: Keeping Track + Testing
+Task 5: Players
+Task 6: Positions + Scoring
