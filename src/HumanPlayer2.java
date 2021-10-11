@@ -1,6 +1,6 @@
 public class HumanPlayer2 extends Player {
-    public HumanPlayer2(String username) {
-        super(username);
+    public HumanPlayer2(String username, String colour) {
+        super(username, colour);
     }
 
     @Override
