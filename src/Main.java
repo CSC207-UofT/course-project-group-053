@@ -37,10 +37,10 @@ public class Main {
     }
 
     public static void IniGameBoard(){
-        // initialize a new, empty GameBoard
-        GameBoard gb = GameBoardManager.makeNewGameBoard();
+        // initialize a new GameBoardManager, storing and keeping track of an empty GameBoard object
+        GameBoardManager gbManager = new GameBoardManager();
 
-        // print the state of the new GameBoard to the screen
-        System.out.println(GameBoardManager.getGameBoardState(gb));
+        // should print the initial, empty state of GameBoard
+        System.out.println(gbManager.getGameBoardState());
     }
 }
