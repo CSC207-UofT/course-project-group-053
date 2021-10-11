@@ -32,4 +32,8 @@ public class GameBoardManager {
             insertToken(token, boxNumber, boxPosition);
         }
     }
+
+    // place new method for end of phase 1
+    // when all players are out of tokens, the game ends
+    // check if players have max number of tokens on gameboard
 }

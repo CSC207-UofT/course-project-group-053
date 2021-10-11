@@ -6,6 +6,8 @@ public class GameBoard {
     private String[][] gameBoard;
     public static String EMPTY_GAMEBOARD_SLOT = "X";
 
+    // TODO - change EMPTY_GAMEBOARD_SLOT to A1, etc so players can easily specify coordinates
+
     /**
      * Initializes an empty Nine Men Morris gameboard.
      *
