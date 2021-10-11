@@ -4,8 +4,16 @@ import java.util.Arrays;
 public class GameBoard {
     // Defines the game board used for Nine Men Morris, which holds tokens from each player
     private String[][] gameBoard;
-    public static String emptyGameBoardSlot = "X";
+    public static String EMPTY_GAMEBOARD_SLOT = "X";
 
+    /**
+     * Initializes an empty Nine Men Morris gameboard.
+     *
+     * Gameboard layout:
+     *
+     *
+     *
+     */
     public GameBoard() {
         // set up arrays representing each "box" in the Nine Men Morris gameboard
         String[] outerBox = new String[8];
@@ -13,9 +21,9 @@ public class GameBoard {
         String[] innerBox = new String[8];
 
         // fill each array with 8 empty slots, representing places where tokens can be placed in each box
-        Arrays.fill(outerBox, GameBoard.emptyGameBoardSlot);
-        Arrays.fill(middleBox, GameBoard.emptyGameBoardSlot);
-        Arrays.fill(innerBox, GameBoard.emptyGameBoardSlot);
+        Arrays.fill(outerBox, GameBoard.EMPTY_GAMEBOARD_SLOT);
+        Arrays.fill(middleBox, GameBoard.EMPTY_GAMEBOARD_SLOT);
+        Arrays.fill(innerBox, GameBoard.EMPTY_GAMEBOARD_SLOT);
 
         gameBoard = new String[][]{outerBox, middleBox, innerBox};
     }
@@ -61,23 +69,39 @@ public class GameBoard {
                 gameBoardTokens);
     }
 
+    /**
+     * Place a Player's token in a specified box and box position in GameBoard
+     *
+     * @param token string representing the colored token the player will place on the GameBoard
+     * @param boxNumber int representing which GameBoard box the token belongs to (1 = outer box, 2 = middle, 3 = inner)
+     * @param boxPosition int representing which index within the box the token is to be placed
+     */
     public void setToken(String token, int boxNumber, int boxPosition) {
-        // token: string for token to put on board
-        // boxNumber: 1 - 3, 1 = outer box, 2 = middle box, 3 = inner box
-        // boxPosition: position within box to place token
-
         // stuff TODO
         // 1) in GameBoardManager/Placer/etc classes, raise error when token isn't valid
         // 2) in Gameboard/Placer/etc classes, raise error when boxNumber or boxPosition is invalid
         gameBoard[boxNumber - 1][boxPosition - 1] = token;
     }
 
+    /**
+     * Remove a Player's token from a specified box and box position in GameBoard
+     *
+     * @param boxNumber int representing which GameBoard box the token belongs to (1 = outer box, 2 = middle, 3 = inner)
+     * @param boxPosition int representing which index within the box the token is to be placed
+     */
     public void removeToken(int boxNumber, int boxPosition) {
         // remove a token at specified box number and box position, by setting it to emptyGameBoardSlot string
         // offset by 1 to account for zero indexing
-        gameBoard[boxNumber - 1][boxPosition - 1] = GameBoard.emptyGameBoardSlot;
+        gameBoard[boxNumber - 1][boxPosition - 1] = GameBoard.EMPTY_GAMEBOARD_SLOT;
     }
 
+    /**
+     * Retrieve the string of the player token placed in a particular box, at a particular position in GameBoard.
+     * Return EMPTY_GAMEBOARD_SLOT if no player token is placed at specified location
+     *
+     * @param boxNumber int representing which GameBoard box the token belongs to (1 = outer box, 2 = middle, 3 = inner)
+     * @param boxPosition int representing which index within the box the token is to be placed
+     */
     public String getTokenAtPosition(int boxNumber, int boxPosition) {
         // returns the string of the token at box number and position within box
         // if no token has been placed at specified location in gameBoard, emptyGameBoardSlot will be returned
