@@ -20,6 +20,21 @@ public class GameBoard {
         gameBoard = new String[][]{outerBox, middleBox, innerBox};
     }
 
+    public static void main(String[] args) {
+        // sample main method, in case you want to see how the board looks like
+        GameBoard gb = new GameBoard();
+        System.out.println(gb);
+        System.out.println("---------------------------------------------------------------");
+        System.out.println(gb.getTokenAtPosition(2, 8));
+        gb.setToken("A", 2, 4);
+        System.out.println(gb.getTokenAtPosition(2, 4));
+        System.out.println("---------------------------------------------------------------");
+        System.out.println(gb);
+        gb.removeToken(2, 4);
+        System.out.println("---------------------------------------------------------------");
+        System.out.println(gb);
+    }
+
     @Override
     public String toString() {
         // create array of string values of tokens in each box in gameBoard
