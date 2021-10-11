@@ -37,6 +37,10 @@ public class Main {
     }
 
     public static void IniGameBoard(){
-        Scanner sc = new Scanner(System.in);
+        // initialize a new, empty GameBoard
+        GameBoard gb = GameBoardManager.makeNewGameBoard();
+
+        // print the state of the new GameBoard to the screen
+        System.out.println(GameBoardManager.getGameBoardState(gb));
     }
 }
