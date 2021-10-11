@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class GameBoard {
     // Defines the game board used for Nine Men Morris, which holds tokens from each player
     private String[][] gameBoard;
-    public static String emptyGameBoardSlot = "[]";
+    public static String emptyGameBoardSlot = "X";
 
     public GameBoard() {
         // set up arrays representing each "box" in the Nine Men Morris gameboard
@@ -18,11 +18,6 @@ public class GameBoard {
         Arrays.fill(innerBox, GameBoard.emptyGameBoardSlot);
 
         gameBoard = new String[][]{outerBox, middleBox, innerBox};
-    }
-
-    public static void main(String[] args) {
-        GameBoard gb = new GameBoard();
-        System.out.println(gb);
     }
 
     @Override
@@ -39,19 +34,15 @@ public class GameBoard {
         }
 
         // This string is merked af rn
-        return MessageFormat.format("{0} ------------------ {1} ------------------ {2}\n\\ " +
-                "|                      |                      |\n\\" +
-                "|       {8} ---------- {9} ---------  {10}    |\n\\ " +
-                "|       |              |               |      |\n\\ " +
-                "|       |       {16} - {17} - {18}     |      |\n\\ " +
-                "|       |       |             |        |      |\n\\ " +
-                "{3} --- {11} -- {19}          {20} -- {12} -- {4}\n\\" +
-                "|       |       |             |       |       |\n\\ " +
-                "|       |       {21} - {22} - {23}    |       |\n\\ " +
-                "|       |              |              |       |\n\\ " +
-                "|       {13} --------- {14} --------- {15}    |\n\\ " +
-                "|                      |                      |\n\\ " +
-                "{5} ------------------ {6} ------------------ {7}",
+        return MessageFormat.format(
+                "{0}\t\t\t\t\t{1}\t\t\t\t\t{2}\n" +
+                "\n\n\n" +
+                "\t\t{8}\t\t\t{9}\t\t\t{10}\n\n\n" +
+                "\t\t\t\t{16}\t{17}\t{18}\n\n\n" +
+                "{3}\t\t{11}\t\t{19}\t\t{20}\t\t{12}\t\t{4}\n\n\n" +
+                "\t\t\t\t{21}\t{22}\t{23}\n\n\n" +
+                "\t\t{13}\t\t\t{14}\t\t\t{15}\n\n\n\n" +
+                "{5}\t\t\t\t\t{6}\t\t\t\t\t{7}",
                 gameBoardTokens);
     }
 
@@ -63,17 +54,18 @@ public class GameBoard {
         // stuff TODO
         // 1) in GameBoardManager/Placer/etc classes, raise error when token isn't valid
         // 2) in Gameboard/Placer/etc classes, raise error when boxNumber or boxPosition is invalid
-        gameBoard[boxNumber][boxPosition] = token;
+        gameBoard[boxNumber - 1][boxPosition - 1] = token;
     }
 
     public void removeToken(int boxNumber, int boxPosition) {
         // remove a token at specified box number and box position, by setting it to emptyGameBoardSlot string
-        gameBoard[boxNumber][boxPosition] = GameBoard.emptyGameBoardSlot;
+        // offset by 1 to account for zero indexing
+        gameBoard[boxNumber - 1][boxPosition - 1] = GameBoard.emptyGameBoardSlot;
     }
 
     public String getTokenAtPosition(int boxNumber, int boxPosition) {
         // returns the string of the token at box number and position within box
         // if no token has been placed at specified location in gameBoard, emptyGameBoardSlot will be returned
-        return gameBoard[boxNumber][boxPosition];
+        return gameBoard[boxNumber - 1][boxPosition - 1];
     }
 }
