@@ -44,4 +44,13 @@ public class Main {
         // should print the initial, empty state of GameBoard
         System.out.println(gbManager.getGameBoardState());
     }
+
+    public static void GamePlay(){
+        // get the first status
+        // while game has not finished
+          // Ask p1 to play
+          // print the boad
+          // ask p2
+          // print board
+    }
 }
