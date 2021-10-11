@@ -20,6 +20,11 @@ public class GameBoard {
         gameBoard = new String[][]{outerBox, middleBox, innerBox};
     }
 
+    public static void main(String[] args) {
+        GameBoard gb = new GameBoard();
+        System.out.println(gb);
+    }
+
     @Override
     public String toString() {
         // create array of string values of tokens in each box in gameBoard
@@ -33,21 +38,21 @@ public class GameBoard {
             }
         }
 
-        return MessageFormat.format("""
-                {0} ------------------ {1} ------------------ {2}
-                |                      |                      |
-                |       {8} ---------- {9} ---------  {10}    |
-                |       |              |               |      |
-                |       |       {16} - {17} - {18}     |      |
-                |       |       |             |        |      |
-                {3} --- {11} -- {19}          {20} -- {12} -- {4}
-                |       |       |             |       |       |
-                |       |       {21} - {22} - {23}    |       |
-                |       |              |              |       |
-                |       {13} --------- {14} --------- {15}    |
-                |                      |                      |
-                {5} ------------------ {6} ------------------ {7}
-                """, gameBoardTokens);
+        // This string is merked af rn
+        return MessageFormat.format("{0} ------------------ {1} ------------------ {2}\n\\ " +
+                "|                      |                      |\n\\" +
+                "|       {8} ---------- {9} ---------  {10}    |\n\\ " +
+                "|       |              |               |      |\n\\ " +
+                "|       |       {16} - {17} - {18}     |      |\n\\ " +
+                "|       |       |             |        |      |\n\\ " +
+                "{3} --- {11} -- {19}          {20} -- {12} -- {4}\n\\" +
+                "|       |       |             |       |       |\n\\ " +
+                "|       |       {21} - {22} - {23}    |       |\n\\ " +
+                "|       |              |              |       |\n\\ " +
+                "|       {13} --------- {14} --------- {15}    |\n\\ " +
+                "|                      |                      |\n\\ " +
+                "{5} ------------------ {6} ------------------ {7}",
+                gameBoardTokens);
     }
 
     public void setToken(String token, int boxNumber, int boxPosition) {
