@@ -49,7 +49,7 @@ public class Main {
         String name1 = player1.str_player_username;
         String name2 = player2.str_player_username;
         String col1 = player1.str_player_tokencolour;
-        String col2 = player1.str_player_tokencolour;
+        String col2 = player2.str_player_tokencolour;
 
         System.out.println("Starting Game between " + name1 + " and " + name2);
 
@@ -61,43 +61,47 @@ public class Main {
 
             while(true){
                 try{
-                    System.out.println(name1 + "'s turn. Place " + col1 + "token. Choose an empty place");
+                    System.out.println(name1 + "'s turn. Place " + col1 + " token. Choose an empty place");
                     // in gameboard manager add a function that returns a lst of positions available
                     String t1 = sc.nextLine();
                     gbManager.processPlayerMove(player1.get_tokencolour(), t1);
                     break;
-                }catch(InvalidPositionException e){
+                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException e){
                     System.out.println("Invalid, try again.Choose empty space");
+                    continue;
                     // t1 = sc.next(); // skip the invalid token
                     // continue; is not required
                 }
             }
-
-            //if the exception is thrown, loop the last line again and again
-
-            // next just show what the gameboard looks like
-
             System.out.println(gbManager.getGameBoardState());
+
+
+            // Now check if the player1 has created a mill
+            // Then let the player1 remove player2's token
+            // Do it until the move is valid. If not valid pass
+            // Then show the current state again
+
 
             while(true){
                 try{
-                    System.out.println(name2 + "'s turn. Place " + col2 + "token. Choose an empty place");
+                    System.out.println(name2 + "'s turn. Place " + col2 + " token. Choose an empty place");
                     // in gameboard manager add a function that returns a lst of positions available
                     String t2 = sc.nextLine();
                     gbManager.processPlayerMove(player2.get_tokencolour(), t2);
                     break;
-                }catch(InvalidPositionException e){
+                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException e){
                     System.out.println("Invalid, try again.Choose empty space");
+                    continue;
                     // t1 = sc.next(); // skip the invalid token
-                    // continue; is not required
+                    //is not required
                 }
             }
-
-            //if the exception is thrown, loop the last line again and again
-
-            // next just show what the gameboard looks like
-
             System.out.println(gbManager.getGameBoardState());
+
+            // Now check if the player1 has created a mill
+            // Then let the player1 remove player2's token
+            // Do it until the move is valid. If not valid pass
+
             b = !gbManager.checkPhaseOneEnd();
         }
     }
