@@ -1,0 +1,17 @@
+1			2			3	OUTER BOX
+
+
+	1		2		3	MIDDLE BOX
+
+
+		1	2	3
+			INNER
+4	4	4	BOX	5	5	5
+
+		6	7	8
+
+
+	6		7		8
+
+
+6			7			8

@@ -1,23 +1,41 @@
 import java.text.MessageFormat;
-import java.util.Arrays;
+import java.util.HashMap;
 
 public class GameBoard {
     // Defines the game board used for Nine Men Morris, which holds tokens from each player
-    private String[][] gameBoard;
-    public static String emptyGameBoardSlot = "X";
+    private final HashMap<String, String[]> gameBoard;
 
+    // keeps track of how many empty slots are currently on the gameboard
+    private int gameBoardCapacity;
+
+    // regex pattern for empty slots on board
+    public static String EMPTY_SLOT_PATTERN = "[ABC][1-8]";
+
+    /**
+     * Initializes an empty Nine Men Morris gameboard.
+     *
+     * gameBoard is a hashmap, mapping coordinates to each position in each box of the gameboard
+     *
+     */
     public GameBoard() {
-        // set up arrays representing each "box" in the Nine Men Morris gameboard
-        String[] outerBox = new String[8];
-        String[] middleBox = new String[8];
-        String[] innerBox = new String[8];
+        // set up hash table, with keys as boxes (A = outer box, B = middle box, C = inner box) and values as
+        // arrays representing slots in each box
+        HashMap<String, String[]> gbHash = new HashMap<>();
+        gbHash.put("A", new String[8]);  // A = outer box
+        gbHash.put("B", new String[8]);  // B = middle box
+        gbHash.put("C", new String[8]);  // C = inner box
 
-        // fill each array with 8 empty slots, representing places where tokens can be placed in each box
-        Arrays.fill(outerBox, GameBoard.emptyGameBoardSlot);
-        Arrays.fill(middleBox, GameBoard.emptyGameBoardSlot);
-        Arrays.fill(innerBox, GameBoard.emptyGameBoardSlot);
+        // populate each array for key in hash table, with items [LETTER][1-8]
+        for (String key: gbHash.keySet()) {
+            String[] boxArr = gbHash.get(key);
+            for (int i = 1; i <= boxArr.length; i++) {
+                // -1 offset for boxArr indexing, to account for array indexing starting from zero
+                boxArr[i - 1] = key + i;
+            }
+        }
 
-        gameBoard = new String[][]{outerBox, middleBox, innerBox};
+        gameBoard = gbHash;
+        gameBoardCapacity = 24;
     }
 
     public static void main(String[] args) {
@@ -25,12 +43,12 @@ public class GameBoard {
         GameBoard gb = new GameBoard();
         System.out.println(gb);
         System.out.println("---------------------------------------------------------------");
-        System.out.println(gb.getTokenAtPosition(2, 8));
-        gb.setToken("A", 2, 4);
-        System.out.println(gb.getTokenAtPosition(2, 4));
+        System.out.println(gb.getTokenAtPosition("B8"));
+        gb.setToken("B", "B4");
+        System.out.println(gb.getTokenAtPosition("B4"));
         System.out.println("---------------------------------------------------------------");
         System.out.println(gb);
-        gb.removeToken(2, 4);
+        gb.removeToken("B4");
         System.out.println("---------------------------------------------------------------");
         System.out.println(gb);
     }
@@ -40,47 +58,97 @@ public class GameBoard {
         // create array of string values of tokens in each box in gameBoard
         String[] gameBoardTokens = new String[24];
 
+        // populate array with all tokens in gameBoard
         int i = 0;
-        for (String[] box: gameBoard) {
-            for (String boxItem: box) {
+        for (String key: gameBoard.keySet()) {
+            String[] boxArr = gameBoard.get(key);
+            for (String boxItem: boxArr) {
                 gameBoardTokens[i] = boxItem;
                 i++;
             }
         }
 
-        // This string is merked af rn
         return MessageFormat.format(
-                "{0}\t\t\t\t\t{1}\t\t\t\t\t{2}\n" +
-                "\n\n\n" +
-                "\t\t{8}\t\t\t{9}\t\t\t{10}\n\n\n" +
-                "\t\t\t\t{16}\t{17}\t{18}\n\n\n" +
-                "{3}\t\t{11}\t\t{19}\t\t{20}\t\t{12}\t\t{4}\n\n\n" +
-                "\t\t\t\t{21}\t{22}\t{23}\n\n\n" +
-                "\t\t{13}\t\t\t{14}\t\t\t{15}\n\n\n\n" +
-                "{5}\t\t\t\t\t{6}\t\t\t\t\t{7}",
+                "{0}----------------------{1}----------------------{2}\n"+
+                        "|                                                |\n"+
+                "|                                                |\n"+
+                "|     {8}----------------{9}----------------{10}     |\n"+
+                "|     |                 |                  |     |\n"+
+                "|     |                 |                  |     |\n"+
+                "|     |     {16}----------{17}----------{18}     |     |\n"+
+                "|     |     |                        |     |     |\n"+
+        "{3}    {11}    {19}                      {20}    {12}     {4}\n"+
+                "|     |     |                        |     |     |\n"+
+                "|     |     {21}----------{22}----------{23}     |     |\n"+
+                "|     |                 |                  |     |\n"+
+                "|     |                 |                  |     |\n"+
+                "|     {13}----------------{14}----------------{15}     |\n"+
+                "|                                                |\n"+
+                "|                                                |\n"+
+        "{5}----------------------{6}----------------------{7}\n",
                 gameBoardTokens);
     }
 
-    public void setToken(String token, int boxNumber, int boxPosition) {
-        // token: string for token to put on board
-        // boxNumber: 1 - 3, 1 = outer box, 2 = middle box, 3 = inner box
-        // boxPosition: position within box to place token
+    private String[] splitCoordinates(String targetPosition) {
+        return targetPosition.split("(?<=\\D)(?=\\d+\\b)");
+    }
 
+    /**
+     * Place a Player's token in a specified box and box position in GameBoard
+     *
+     * @param token string representing the colored token the player will place on the GameBoard
+     * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
+     */
+    public void setToken(String token, String targetPosition) {
         // stuff TODO
         // 1) in GameBoardManager/Placer/etc classes, raise error when token isn't valid
         // 2) in Gameboard/Placer/etc classes, raise error when boxNumber or boxPosition is invalid
-        gameBoard[boxNumber - 1][boxPosition - 1] = token;
+
+        // split targetPosition string into letter and integer index within box
+        String[] coordinates = splitCoordinates(targetPosition);
+
+        // get array of box elements corresponding to box of specified letter
+        // then, set token to given numerical index in box
+        // offset index within box by 1, to account for indexing starting from zero
+        gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1] = token;
+        gameBoardCapacity--;
     }
 
-    public void removeToken(int boxNumber, int boxPosition) {
-        // remove a token at specified box number and box position, by setting it to emptyGameBoardSlot string
-        // offset by 1 to account for zero indexing
-        gameBoard[boxNumber - 1][boxPosition - 1] = GameBoard.emptyGameBoardSlot;
+    /**
+     * Remove a Player's token from a specified box and box position in GameBoard
+     *
+     * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
+     *
+     */
+    public void removeToken(String targetPosition) {
+        // split targetPosition string into letter and integer index within box
+        String[] coordinates = splitCoordinates(targetPosition);
+
+        // get array of box elements corresponding to box of specified letter
+        // then, set item in box back to default coordinate values (i.e: the slot is now free)
+        // offset index within box by 1, to account for indexing starting from zero
+        gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1] = targetPosition;
+        gameBoardCapacity++;
     }
 
-    public String getTokenAtPosition(int boxNumber, int boxPosition) {
-        // returns the string of the token at box number and position within box
-        // if no token has been placed at specified location in gameBoard, emptyGameBoardSlot will be returned
-        return gameBoard[boxNumber - 1][boxPosition - 1];
+    /**
+     * Retrieve the string of the player token placed in a particular box, at a particular position in GameBoard.
+     * Return EMPTY_GAMEBOARD_SLOT if no player token is placed at specified location
+     *
+     * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
+     *
+     */
+    public String getTokenAtPosition(String targetPosition) {
+        // split targetPosition string into letter and integer index within box
+        String[] coordinates = splitCoordinates(targetPosition);
+
+        return gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1];
     }
+
+    /**
+     * Returns the current number of empty slots on the GameBoard, an int between 0 - 24
+     *
+     * @return int representing number of empty slots on GameBoard
+     */
+    public int getGameBoardCapacity() { return gameBoardCapacity; }
 }
