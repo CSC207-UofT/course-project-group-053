@@ -1,11 +1,11 @@
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 public class GameBoard {
     // Defines the game board used for Nine Men Morris, which holds tokens from each player
-    private HashMap<String, String[]> gameBoard;
-    public static Pattern EMPTY_SLOT_PATTERN = Pattern.compile("[ABC][1-8]");
+    private final HashMap<String, String[]> gameBoard;
+    // regex pattern for empty slots on board
+    public static String EMPTY_SLOT_PATTERN = "[ABC][1-8]";
 
     /**
      * Initializes an empty Nine Men Morris gameboard.
@@ -25,7 +25,8 @@ public class GameBoard {
         for (String key: gbHash.keySet()) {
             String[] boxArr = gbHash.get(key);
             for (int i = 1; i <= boxArr.length; i++) {
-                boxArr[i] = key + i;
+                // -1 offset for boxArr indexing, to account for array indexing starting from zero
+                boxArr[i - 1] = key + i;
             }
         }
 
@@ -64,23 +65,23 @@ public class GameBoard {
 
         return MessageFormat.format(
                 "{0}----------------------{1}----------------------{2}\n"+
-                        "|                                             |\n"+
-                "|                                             |\n"+
+                        "|                                                |\n"+
+                "|                                                |\n"+
                 "|     {8}----------------{9}----------------{10}     |\n"+
-                "|     |                |                |     |\n"+
-                "|     |                |                |     |\n"+
+                "|     |                 |                  |     |\n"+
+                "|     |                 |                  |     |\n"+
                 "|     |     {16}----------{17}----------{18}     |     |\n"+
-                "|     |     |                     |     |     |\n"+
-        "{3}     {11}     {19}                     {20}     {12}     {4}\n"+
-                "|     |     |                     |     |     |\n"+
+                "|     |     |                        |     |     |\n"+
+        "{3}    {11}    {19}                      {20}    {12}     {4}\n"+
+                "|     |     |                        |     |     |\n"+
                 "|     |     {21}----------{22}----------{23}     |     |\n"+
-                "|     |                |                |     |\n"+
-                "|     |                |                |     |\n"+
+                "|     |                 |                  |     |\n"+
+                "|     |                 |                  |     |\n"+
                 "|     {13}----------------{14}----------------{15}     |\n"+
-                "|                                             |\n"+
-                "|                                             |\n"+
-        "{5}----------------------{6}----------------------{7}\n"	,
-                (Object) gameBoardTokens);
+                "|                                                |\n"+
+                "|                                                |\n"+
+        "{5}----------------------{6}----------------------{7}\n",
+                gameBoardTokens);
     }
 
     /**

@@ -6,12 +6,12 @@ public class GameBoardManager {
         return gb.toString();
     }
 
-    private String getItemInGameBoard(int boxNumber, int boxPosition) {
-        return gb.getTokenAtPosition(boxNumber, boxPosition);
+    private String getItemInGameBoard(String targetPosition) {
+        return gb.getTokenAtPosition(targetPosition);
     }
 
-    private void insertToken(String token, int boxNumber, int boxPosition) {
-        gb.setToken(token, boxNumber, boxPosition);
+    private void insertToken(String token, String targetPosition) {
+        gb.setToken(token, targetPosition);
     }
 
     /**
@@ -19,17 +19,16 @@ public class GameBoardManager {
      * If Player-requested move is invalid, InvalidMoveException will be thrown
      *
      * @param token string representing a player's token to be placed
-     * @param boxNumber int representing which box the token is to be placed (1 = outer, 2 = middle, 3 = inner)
-     * @param boxPosition int representing index within box to place token
+     * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      */
-    public void processPlayerMove(String token, int boxNumber, int boxPosition) {
-        String itemAtPosition = getItemInGameBoard(boxNumber, boxPosition);
-        if (!itemAtPosition.equals(GameBoard.EMPTY_GAMEBOARD_SLOT)) {
+    public void processPlayerMove(String token, String targetPosition) {
+        String itemAtPosition = getItemInGameBoard(targetPosition);
+        if (!itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
             // TODO: make this throw a custom Exception instead
             System.out.println("Cannot place token in slot occupied by another token");
         } else {
             // insert the new player token into the desired position in GameBoard
-            insertToken(token, boxNumber, boxPosition);
+            insertToken(token, targetPosition);
         }
     }
 
