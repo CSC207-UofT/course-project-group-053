@@ -6,3 +6,10 @@ Task 3: Deletion
 Task 4: Keeping Track + Testing
 Task 5: Players
 Task 6: Positions + Scoring
+
+11 October
+Task 7: A : Update Main to check for game start and finsh and everything in the middle
+Task 8: J : Update String in GameBoard and GameBoardManager with processes
+Task 9: F : PlayerManager
+Task 10: A : Scenerio Walk Through + Draft Instructions
+Task 11: M : Testing
