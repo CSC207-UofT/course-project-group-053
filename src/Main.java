@@ -66,7 +66,7 @@ public class Main {
                     String t1 = sc.nextLine();
                     gbManager.processPlayerMove(player1.get_tokencolour(), t1);
                     break;
-                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException e){
+                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
                     System.out.println("Invalid, try again.Choose empty space");
                     // t1 = sc.next(); // skip the invalid token
                     // continue; is not required
@@ -89,7 +89,7 @@ public class Main {
                     String t2 = sc.nextLine();
                     gbManager.processPlayerMove(player2.get_tokencolour(), t2);
                     break;
-                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException e){
+                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
                     System.out.println("Invalid, try again.Choose empty space");
                     // t1 = sc.next(); // skip the invalid token
                     //is not required
