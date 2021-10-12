@@ -55,7 +55,7 @@ public class Main {
 
         System.out.println(gbManager.getGameBoardState());
 
-        boolean b = !gbManager.checkPhaseOneEnd();
+        boolean b = !(player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
 
         while (b) {
 
@@ -68,11 +68,11 @@ public class Main {
                     break;
                 }catch(InvalidPositionException | ArrayIndexOutOfBoundsException e){
                     System.out.println("Invalid, try again.Choose empty space");
-                    continue;
                     // t1 = sc.next(); // skip the invalid token
                     // continue; is not required
                 }
             }
+            player1.dec_numchipsleft();
             System.out.println(gbManager.getGameBoardState());
 
 
@@ -91,18 +91,18 @@ public class Main {
                     break;
                 }catch(InvalidPositionException | ArrayIndexOutOfBoundsException e){
                     System.out.println("Invalid, try again.Choose empty space");
-                    continue;
                     // t1 = sc.next(); // skip the invalid token
                     //is not required
                 }
             }
+            player2.dec_numchipsleft();
             System.out.println(gbManager.getGameBoardState());
 
             // Now check if the player1 has created a mill
             // Then let the player1 remove player2's token
             // Do it until the move is valid. If not valid pass
 
-            b = !gbManager.checkPhaseOneEnd();
+            b = !(player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
         }
     }
 }

@@ -34,7 +34,7 @@ public class GameBoardManager {
 
     public boolean checkPhaseOneEnd() {
         // phase 1 ends when both players have put down all of their six tokens on the board
-        return gb.getGameBoardCapacity() == 0; // AL: we want the player to place all of their tokens
+        return gb.getGameBoardCapacity() == 18; // AL: This strategy actually wont work
     }
 
     // TODO:
