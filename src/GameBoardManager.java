@@ -21,18 +21,24 @@ public class GameBoardManager {
      * @param token string representing a player's token to be placed
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      */
-    public void processPlayerMove(String token, String targetPosition) {
+    public void processPlayerMove(String token, String targetPosition) throws InvalidPositionException {
         String itemAtPosition = getItemInGameBoard(targetPosition);
-        if (!itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
-            // TODO: make this throw a custom Exception instead
-            System.out.println("Cannot place token in slot occupied by another token");
+        if (! itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
+            // targetPosition is already occupied by another token, or an invalid position on the GameBoard was given
+            throw new InvalidPositionException();
         } else {
             // insert the new player token into the desired position in GameBoard
             insertToken(token, targetPosition);
         }
     }
 
-    // place new method for end of phase 1
-    // when all players are out of tokens, the game ends
-    // check if players have max number of tokens on gameboard
+    public boolean checkPhaseOneEnd() {
+        // phase 1 ends when both players have put down all of their six tokens on the board
+        return gb.getGameBoardCapacity() == 18;
+    }
+
+    // TODO:
+    // 1) figure out check houses method
+    // 2) keep track of player tokens
+    // 3) create more specific exception classes
 }

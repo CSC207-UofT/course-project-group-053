@@ -4,6 +4,10 @@ import java.util.HashMap;
 public class GameBoard {
     // Defines the game board used for Nine Men Morris, which holds tokens from each player
     private final HashMap<String, String[]> gameBoard;
+
+    // keeps track of how many empty slots are currently on the gameboard
+    private int gameBoardCapacity;
+
     // regex pattern for empty slots on board
     public static String EMPTY_SLOT_PATTERN = "[ABC][1-8]";
 
@@ -31,6 +35,7 @@ public class GameBoard {
         }
 
         gameBoard = gbHash;
+        gameBoardCapacity = 24;
     }
 
     public static void main(String[] args) {
@@ -84,6 +89,10 @@ public class GameBoard {
                 gameBoardTokens);
     }
 
+    private String[] splitCoordinates(String targetPosition) {
+        return targetPosition.split("(?<=\\D)(?=\\d+\\b)");
+    }
+
     /**
      * Place a Player's token in a specified box and box position in GameBoard
      *
@@ -96,12 +105,13 @@ public class GameBoard {
         // 2) in Gameboard/Placer/etc classes, raise error when boxNumber or boxPosition is invalid
 
         // split targetPosition string into letter and integer index within box
-        String[] coordinates = targetPosition.split("(?<=\\D)(?=\\d+\\b)");
+        String[] coordinates = splitCoordinates(targetPosition);
 
         // get array of box elements corresponding to box of specified letter
         // then, set token to given numerical index in box
         // offset index within box by 1, to account for indexing starting from zero
         gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1] = token;
+        gameBoardCapacity--;
     }
 
     /**
@@ -112,12 +122,13 @@ public class GameBoard {
      */
     public void removeToken(String targetPosition) {
         // split targetPosition string into letter and integer index within box
-        String[] coordinates = targetPosition.split("(?<=\\D)(?=\\d+\\b)");
+        String[] coordinates = splitCoordinates(targetPosition);
 
         // get array of box elements corresponding to box of specified letter
         // then, set item in box back to default coordinate values (i.e: the slot is now free)
         // offset index within box by 1, to account for indexing starting from zero
         gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1] = targetPosition;
+        gameBoardCapacity++;
     }
 
     /**
@@ -128,11 +139,16 @@ public class GameBoard {
      *
      */
     public String getTokenAtPosition(String targetPosition) {
-        // returns the string of the token at box number and position within box
-        // if no token has been placed at specified location in gameBoard, emptyGameBoardSlot will be returned
         // split targetPosition string into letter and integer index within box
-        String[] coordinates = targetPosition.split("(?<=\\D)(?=\\d+\\b)");
+        String[] coordinates = splitCoordinates(targetPosition);
 
         return gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1];
     }
+
+    /**
+     * Returns the current number of empty slots on the GameBoard, an int between 0 - 24
+     *
+     * @return int representing number of empty slots on GameBoard
+     */
+    public int getGameBoardCapacity() { return gameBoardCapacity; }
 }
