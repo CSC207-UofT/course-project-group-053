@@ -7,4 +7,4 @@ public class HumanPlayer1 extends Player{
     public boolean isHuman() {
         return true;
     }
-}
+

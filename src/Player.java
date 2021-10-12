@@ -15,32 +15,32 @@ public abstract class Player {
         this.int_player_numchipsonboard = 0;
     }
 
-    private void reset() {
+    public void reset() {
         this.int_player_numchipsleft = 9;
         this.int_player_numchipsonboard = 9;
     }
 
-    private String get_username() {
+    public String get_username() {
         return this.str_player_username;
     }
 
-    private String get_tokencolour() { return this.str_player_tokencolour; }
+    public String get_tokencolour() { return this.str_player_tokencolour; }
 
-    private int get_numchipsleft() {
+    public int get_numchipsleft() {
         return this.int_player_numchipsleft;
     }
 
-    private int get_numchipsonboard() {
+    public int get_numchipsonboard() {
         return this.int_player_numchipsonboard;
     }
 
     //decrease or increase number of chips
-    private void dec_numchipsleft() {
+    public void dec_numchipsleft() {
         //used when other player gets house. with dec_numchipsonboard()
         --this.int_player_numchipsleft;
     }
 
-    private void inc_numchipsonboard() {
+    public void inc_numchipsonboard() {
         ++this.int_player_numchipsonboard;
     }
 
