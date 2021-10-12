@@ -7,9 +7,7 @@ public class Main {
 
     public static void main(String[] args){
         List<Player> lst = Start();
-        GameBoardManager gbManager = new GameBoardManager();
-        GamePlay(lst, gbManager);
-
+        GamePlay(lst);
     }
 
     public static List<Player> Start(){
@@ -38,11 +36,11 @@ public class Main {
         System.out.print("The colour for " + pla2 + " is " + color + "\r\n");
 
         HumanPlayer2 player2 = new HumanPlayer2(pla2, col2);
-        List<Player> lst = List.of(new Player[]{player1, player2});
-        return lst;
+        return List.of(new Player[]{player1, player2});
     }
 
-    public static void GamePlay(List<Player> lst, GameBoardManager game){
+    public static void GamePlay(List<Player> lst){
+        GameBoardManager gbManager = new GameBoardManager();
         Scanner sc = new Scanner(System.in);
 
         HumanPlayer1 player1 = new HumanPlayer1(lst.get(0).str_player_username, lst.get(0).str_player_tokencolour);
@@ -53,33 +51,54 @@ public class Main {
         String col1 = player1.str_player_tokencolour;
         String col2 = player1.str_player_tokencolour;
 
-        System.out.print("Starting Game between " + name1 + " and " + name2);
+        System.out.println("Starting Game between " + name1 + " and " + name2);
 
-        GameBoardManager gbManager = new GameBoardManager();
         System.out.println(gbManager.getGameBoardState());
 
-        //while !game_finished(){ // this function needs to be made in GameboardManager and can be named anything
-            //int ini_count_p1 = player1.int_player_numchipsleft;
-            //int ini_count_p2 = player2.int_player_numchipsleft;
+        boolean b = !gbManager.checkPhaseOneEnd();
 
+        while (b) {
 
-
-            //System.out.println(name1 + "'s turn. Place " + col1 + "token. Choose a place from "); // + lst of places to
-            // choose from
-            // in gameboard manager add a function that returns a lst of positions available
-            //String t1 = sc.nextLine();
-
-            // while t1 is not in the lst:
-                // System.out.println(name1 + "'s turn. Place " + col1 + "token. Choose a place from ");
-                // String t1 = sc.nextLine();
-
-            //game.processPlayerMove(confirm what goes in here)
+            while(true){
+                try{
+                    System.out.println(name1 + "'s turn. Place " + col1 + "token. Choose an empty place");
+                    // in gameboard manager add a function that returns a lst of positions available
+                    String t1 = sc.nextLine();
+                    gbManager.processPlayerMove(player1.get_tokencolour(), t1);
+                    break;
+                }catch(InvalidPositionException e){
+                    System.out.println("Invalid, try again.Choose empty space");
+                    // t1 = sc.next(); // skip the invalid token
+                    // continue; is not required
+                }
+            }
 
             //if the exception is thrown, loop the last line again and again
 
             // next just show what the gameboard looks like
 
-            //System.out.println(gbManager.getGameBoardState());
-        //}
+            System.out.println(gbManager.getGameBoardState());
+
+            while(true){
+                try{
+                    System.out.println(name2 + "'s turn. Place " + col2 + "token. Choose an empty place");
+                    // in gameboard manager add a function that returns a lst of positions available
+                    String t2 = sc.nextLine();
+                    gbManager.processPlayerMove(player2.get_tokencolour(), t2);
+                    break;
+                }catch(InvalidPositionException e){
+                    System.out.println("Invalid, try again.Choose empty space");
+                    // t1 = sc.next(); // skip the invalid token
+                    // continue; is not required
+                }
+            }
+
+            //if the exception is thrown, loop the last line again and again
+
+            // next just show what the gameboard looks like
+
+            System.out.println(gbManager.getGameBoardState());
+            b = !gbManager.checkPhaseOneEnd();
+        }
     }
 }

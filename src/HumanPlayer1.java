@@ -1,4 +1,4 @@
-public class HumanPlayer1 extends Player{
+public class HumanPlayer1 extends Player {
     public HumanPlayer1(String username, String colour) {
         super(username, colour);
     }
@@ -8,3 +8,4 @@ public class HumanPlayer1 extends Player{
         return true;
     }
 
+}
