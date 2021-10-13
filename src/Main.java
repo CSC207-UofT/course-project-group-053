@@ -59,6 +59,10 @@ public class Main {
 
         while (b) {
 
+            int player1Houses, player2Houses;
+            player1Houses = (int) gbManager.getPlayer1Houses();
+            player2Houses = (int) gbManager.getPlayer2Houses();
+
             while(true){
                 try{
                     System.out.println(name1 + "'s turn. Place " + col1 + " token. Choose an empty place");
@@ -80,9 +84,26 @@ public class Main {
             // Then let the player1 remove player2's token
             // Do it until the move is valid. If not valid pass
             // Then show the current state again
+            gbManager.checkHouse();
+            if (gbManager.getPlayer1Houses() > player1Houses){
+                player1Houses = gbManager.getPlayer1Houses();
+                while (true){
+                    try{
+                        System.out.println(name1 + "'s turn. Choose a token to remove");
+                        // in gameboard manager add a function that returns a lst of positions available
+                        String r1 = sc.nextLine();
+                        gbManager.processPlayerRemove(1, r1);
+                        break;
+                    }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
+                        System.out.println("Invalid, try again.Choose opponent's token");
+                        // t1 = sc.next(); // skip the invalid token
+                        // continue; is not required
+                    }
 
+                }
+            }
 
-            while(true){
+                while(true){
                 try{
                     System.out.println(name2 + "'s turn. Place " + col2 + " token. Choose an empty place");
                     // in gameboard manager add a function that returns a lst of positions available
@@ -101,8 +122,27 @@ public class Main {
             // Now check if the player1 has created a mill
             // Then let the player1 remove player2's token
             // Do it until the move is valid. If not valid pass
+            gbManager.checkHouse();
+            if (gbManager.getPlayer2Houses() > player2Houses){
+                player2Houses = gbManager.getPlayer2Houses();
+                while (true){
+                    try{
+                        System.out.println(name2 + "'s turn. Choose a token to remove");
+                        // in gameboard manager add a function that returns a lst of positions available
+                        String r2 = sc.nextLine();
+                        gbManager.processPlayerRemove(1, r2);
+                        break;
+                    }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
+                        System.out.println("Invalid, try again.Choose opponent's token");
+                        // t1 = sc.next(); // skip the invalid token
+                        // continue; is not required
+                    }
 
+                }
+            }
             b = !(player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
         }
     }
 }
+//TODO: Fix gameplay. Player1 should be whichever player chose white not the first player to input.
+//TODO: Fix output strings for copied blocks
