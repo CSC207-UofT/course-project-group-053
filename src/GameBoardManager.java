@@ -1,19 +1,22 @@
 import java.util.*;
 
 public class GameBoardManager<playerMills> {
-    //Stores the location of mills formed by both player
+    // Stores the location of mills formed by both players
     public HashMap<Integer, Set> playerMills;
 
     // Creates and stores a GameBoard instance, and processes Player moves on the GameBoard
     private final GameBoard gb = new GameBoard();
 
     public GameBoardManager() {
-
         playerMills = new HashMap<>();
+
         //Stores the mills for player 1
         HashSet<List<String>> player1Mills = new HashSet<>();
+
         //Stores the mills for player 2
         HashSet<List<String>> player2Mills = new HashSet<>();
+
+        // playerMills ends up as a hashmap, mapping player number to HashSets containing each player's mills
         playerMills.put(1, player1Mills);
         playerMills.put(2, player2Mills);
     }
@@ -23,8 +26,12 @@ public class GameBoardManager<playerMills> {
         return gb.toString();
     }
 
-    private String getItemInGameBoard(String targetPosition) {
-        return gb.getTokenAtPosition(targetPosition);
+    private String getItemInGameBoard(String targetPosition) throws InvalidPositionException {
+        if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
+            throw new InvalidPositionException();
+        } else {
+            return gb.getTokenAtPosition(targetPosition);
+        }
     }
 
     private void insertToken(String token, String targetPosition) {
@@ -40,11 +47,12 @@ public class GameBoardManager<playerMills> {
      */
     public void processPlayerMove(String token, String targetPosition) throws InvalidPositionException {
         String itemAtPosition = getItemInGameBoard(targetPosition);
+
+        // check if gameboard slot already occupied by another token
         if (! itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
-            // targetPosition is already occupied by another token, or an invalid position on the GameBoard was given
-            throw new InvalidPositionException();
+            throw new InvalidPositionException();  // TODO - change this to OccupiedSlotException
+
         } else {
-            // insert the new player token into the desired position in GameBoard
             insertToken(token, targetPosition);
         }
     }
@@ -55,17 +63,17 @@ public class GameBoardManager<playerMills> {
 
 
     public boolean checkPhaseOneEnd() {
-        // phase 1 ends when both players have put down all of their six tokens on the board
-        return gb.getGameBoardCapacity() == 18; // AL: This strategy actually won't work
+        // phase 1 ends when both players have put down all of their nine tokens on the board
+        return gb.getGameBoardCapacity() == 6; // AL: This strategy actually won't work
     }
 
-    public void millAdder(String position, String[] mill) {
+    public void millAdder(String position, String[] mill) throws InvalidPositionException {
         if (getItemInGameBoard(position).equals("W")){ playerMills.get(1).add(mill);}
         else { playerMills.get(2).add(mill);}
 
     }
 
-    public void checkHouse() {
+    public void checkHouse() throws InvalidPositionException {
         if (getItemInGameBoard("A1").equals(getItemInGameBoard("A2")))
             if (getItemInGameBoard("A2").equals(getItemInGameBoard("A3")) && !getItemInGameBoard("A1").equals(GameBoard.EMPTY_SLOT_PATTERN)) {
                 millAdder("A1", new String[]{"A1", "A2", "A3"});
@@ -107,7 +115,8 @@ public class GameBoardManager<playerMills> {
     }
 
     /***
-     *Checks if the token being removed is valid and then remove it if it is valid. TODO: add check for token being removed only being non mill token unless no other tokens available
+     *Checks if the token being removed is valid and then remove it if it is valid.
+     * TODO: add check for token being removed only being non mill token unless no other tokens available
      * @param playerNumber: which player is removing a token from the opponent's tokens
      * @param position: target position
      */
@@ -115,9 +124,9 @@ public class GameBoardManager<playerMills> {
         String itemAtPosition = getItemInGameBoard(position);
         if ((itemAtPosition.matches("B") || itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) && playerNumber==2) {
             // targetPosition is already occupied by another token, or an invalid position on the GameBoard was given
-            throw new InvalidPositionException();
+            throw new InvalidPositionException();  // TODO - replace with RemoveNonselfTokenException
         }
-        if ((itemAtPosition.matches("W") || itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) && playerNumber==1) {
+        else if ((itemAtPosition.matches("W") || itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) && playerNumber==1) {
             // targetPosition is already occupied by another token, or an invalid position on the GameBoard was given
             throw new InvalidPositionException();
         }

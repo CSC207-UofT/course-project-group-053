@@ -101,8 +101,6 @@ public class GameBoard {
      */
     public void setToken(String token, String targetPosition) {
         // stuff TODO
-        // 1) in GameBoardManager/Placer/etc classes, raise error when token isn't valid
-        // 2) in Gameboard/Placer/etc classes, raise error when boxNumber or boxPosition is invalid
 
         // split targetPosition string into letter and integer index within box
         String[] coordinates = splitCoordinates(targetPosition);

@@ -17,20 +17,28 @@ public class Main {
         String pla1 = sc.nextLine();
         System.out.print("Choose Colour for: " + pla1 + ". Type B for Black or W for white \r\n");
         String col1 = sc.nextLine();
+
         while (!col1.equals(Black) & !col1.equals(White)){
             System.out.print("Choose Colour for: " + pla1 + ". Type B for Black or W for white \r\n");
             col1 = sc.nextLine();
         }
+
+        // done initializing player 1
         HumanPlayer1 player1 = new HumanPlayer1(pla1, col1);
+
+        // now initialize player 2
         String color;
         String col2;
-        if (col1.equals(White)){
+
+        // set color for player 2 to be the color player 1 didn't choose
+        if (col1.equals(White)) {
             color = "Black";
             col2 = Black;
-        }else{
+        }else {
             color = "White";
             col2 = White;
         }
+
         System.out.print("Type name of the Human Player 2: \r\n");
         String pla2 = sc.nextLine();
         System.out.print("The colour for " + pla2 + " is " + color + "\r\n");
@@ -39,6 +47,7 @@ public class Main {
         return List.of(new Player[]{player1, player2});
     }
 
+    // lst = list of players returned by Start()
     public static void GamePlay(List<Player> lst){
         GameBoardManager gbManager = new GameBoardManager();
         Scanner sc = new Scanner(System.in);
@@ -53,30 +62,44 @@ public class Main {
 
         System.out.println("Starting Game between " + name1 + " and " + name2);
 
+        // print the initial gameboard state, before players make any moves
         System.out.println(gbManager.getGameBoardState());
 
+        // keep track of whether both players have run out of chips/tokens to place
+        // when they do, phase 1 of the game ends
         boolean b = !(player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
 
+        // while loop to run phase 1 of game, where players lay all their chips on the board
         while (b) {
 
             int player1Houses, player2Houses;
             player1Houses = (int) gbManager.getPlayer1Houses();
             player2Houses = (int) gbManager.getPlayer2Houses();
 
-            while(true){
-                try{
-                    System.out.println(name1 + "'s turn. Place " + col1 + " token. Choose an empty place");
+            while(true) {
+                try {
+                    System.out.println(name1 + "'s turn. Place " + col1 + " token. Choose an empty slot");
                     // in gameboard manager add a function that returns a lst of positions available
+
+                    // player 1 inputs gameboard position to place their token in
                     String t1 = sc.nextLine();
                     gbManager.processPlayerMove(player1.get_tokencolour(), t1);
+
+                    // player 1 has successfully placed down a token, so break out of the while loop
                     break;
-                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
-                    System.out.println("Invalid, try again.Choose empty space");
+
+                } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
+                    System.out.println("Invalid, try again. Choose an empty slot");
                     // t1 = sc.next(); // skip the invalid token
-                    // continue; is not required
+                    // continue; is not required(gbManager.getGameBoardState());
+
                 }
             }
+
+            // reduce player 1's chips by 1
             player1.dec_numchipsleft();
+
+            // print gameboard state after player 1 places down a chip
             System.out.println(gbManager.getGameBoardState());
 
 
