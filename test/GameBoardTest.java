@@ -1,24 +1,60 @@
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO - finish writing these unit tests lol
-
 class GameBoardTest {
-    GameBoard gb;
+    GameBoard gameBoard;
 
-    @org.junit.jupiter.api.BeforeEach
-    void setUp() {
-        gb = new GameBoard();
+    @BeforeEach
+    void setUp() { gameBoard = new GameBoard(); }
+
+    @AfterEach
+    void tearDown() {
+        gameBoard = null;
+        System.out.println("Tear down: "+ gameBoard);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    void main() {
+    }
+
+    @Test
+    void testToString() {
+    }
+
+    @Test
     void setToken() {
+        gameBoard.setToken("W","A1");
+        assertEquals("W", gameBoard.getTokenAtPosition("A1"), "setToken: True");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void removeToken() {
+        //removeTokenTest for nonempty position
+        gameBoard.setToken("W","A2");
+        gameBoard.removeToken("A2");
+        /* TODO: solve below
+        at an empty tokenposition, gb.getTokenAtPosition() returns the position
+        */
+        //assertEquals("", gb.getTokenAtPosition("B4"), "removeToken: True");
+
+        //removeTokenTest for empty position
+        //TODO: test for empty token
+        gameBoard.removeToken("C1");
+
     }
 
-    @org.junit.jupiter.api.Test
+
+    @Test
     void getTokenAtPosition() {
+        gameBoard.setToken("W","A3");
+        assertEquals("W", gameBoard.getTokenAtPosition("A3"), "getTokenAtPosition: True");
+    }
+
+    @Test
+    void getGameBoardCapacity() {
+        assertEquals(24, gameBoard.getGameBoardCapacity(),"getGameBoardCapacity: True");
     }
 }
