@@ -47,38 +47,6 @@ public class Main {
         System.out.print("The colour for " + name_secondinput + " is " + color_secondinput + ". ");
         System.out.print(player1.get_username()+" will be playing first.\n\n");
 
-
-//        System.out.print("Type name of the Human Player 1: \r\n");
-//        String name_firstinput = sc.nextLine();
-//        System.out.print("Choose Colour for: " + name_firstinput + ". Type B for Black or W for white \r\n");
-//        String color_firstinput = sc.nextLine();
-//
-//        while (!color_firstinput.equals(Black) & !color_firstinput.equals(White)){
-//            System.out.print("Choose Colour for: " + name_firstinput + ". Type B for Black or W for white \r\n");
-//            color_firstinput = sc.nextLine();
-//        }
-//
-//        // done initializing player 1
-//        HumanPlayer1 player1 = new HumanPlayer1(name_firstinput, color_firstinput);
-//
-//        // now initialize player 2
-//        String color;
-//        String color_secondinput;
-//
-//        // set color for player 2 to be the color player 1 didn't choose
-//        if (color_firstinput.equals(White)) {
-//            color = "Black";
-//            color_secondinput = Black;
-//        }else {
-//            color = "White";
-//            color_secondinput = White;
-//        }
-//
-//        System.out.print("Type name of the Human Player 2: \r\n");
-//        String name_secondinput = sc.nextLine();
-//        System.out.print("The colour for " + name_secondinput + " is " + color + "\r\n");
-//
-//        HumanPlayer2 player2 = new HumanPlayer2(name_secondinput, color_secondinput);
         return List.of(new Player[]{player1, player2});
     }
 
