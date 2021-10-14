@@ -217,7 +217,7 @@ public class GameBoardManager {
      * @param playerNumber: int representing the player (1 or 3) requesting to remove a token
      * @param position: coordinate (in format [A-C][1-8]) on gameboard to remove token from
      */
-    public void processPlayerRemove(int playerNumber, String position) throws InvalidPositionException {
+    public void processPlayerRemove(int playerNumber, String position) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException {
         // if an invalid gameboard position was given, getItemInGameBoard will throw InvalidPositionException
         String itemAtPosition = getItemInGameBoard(position);
 
