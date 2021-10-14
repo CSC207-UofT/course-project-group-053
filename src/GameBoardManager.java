@@ -53,12 +53,12 @@ public class GameBoardManager {
      * @param targetPosition coordinates on the gameboard to retrieve a token from.
      *                       throw InvalidPositionException if the position is empty
      * @return String for token occupying targetPosition on gameboard
-     * @throws InvalidPositionException
+     * @throws NonexistentPositionException
      */
-    private String getItemInGameBoard(String targetPosition) throws InvalidPositionException {
+    private String getItemInGameBoard(String targetPosition) throws NonexistentPositionException {
         if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
             // position given isn't formatted properly/doesn't exist on gameboard
-            throw new InvalidPositionException();
+            throw new NonexistentPositionException();
         } else {
             return gb.getTokenAtPosition(targetPosition);
         }
@@ -145,13 +145,13 @@ public class GameBoardManager {
      * @param token string representing a player's token to be placed
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      */
-    public void processPlayerMove(String token, String targetPosition) throws InvalidPositionException,
-            OccupiedSlotException {
-        // if targetPosition was an invalid gameboard coordinate, getItemInGameBoard will throw InvalidPositionException
+    public void processPlayerMove(String token, String targetPosition) throws InvalidPositionException {
+        // if targetPosition was an invalid gameboard coordinate, getItemInGameBoard will throw NonexistentPositionException
         String itemAtPosition = getItemInGameBoard(targetPosition);
 
         // check if gameboard slot already occupied by another token
         if (! itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
+            // child class of InvalidPositionException, so it works with method signature
             throw new OccupiedSlotException();
 
         } else {
@@ -217,7 +217,8 @@ public class GameBoardManager {
      * @param playerNumber: int representing the player (1 or 3) requesting to remove a token
      * @param position: coordinate (in format [A-C][1-8]) on gameboard to remove token from
      */
-    public void processPlayerRemove(int playerNumber, String position) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException {
+    public void processPlayerRemove(int playerNumber, String position) throws InvalidPositionException,
+            InvalidRemovalException {
         // if an invalid gameboard position was given, getItemInGameBoard will throw InvalidPositionException
         String itemAtPosition = getItemInGameBoard(position);
 
