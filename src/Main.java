@@ -4,6 +4,8 @@ import java.util.*;
 public class Main {
     public static String Black = "B";
     public static String White = "W";
+    public static HumanPlayer1 player1;
+    public static HumanPlayer2 player2;
 
     public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException {
         List<Player> lst = Start();
@@ -13,37 +15,38 @@ public class Main {
     public static List<Player> Start(){
         Scanner sc = new Scanner(System.in);
         System.out.print("Initializing Nine Men Morris \r\n");
-        System.out.print("Type name of the Human Player 1: \r\n");
-        String pla1 = sc.nextLine();
-        System.out.print("Choose Colour for: " + pla1 + ". Type B for Black or W for white \r\n");
-        String col1 = sc.nextLine();
+        System.out.println("1. Type name of the Human Player: \r\n");
+        String name_firstinput = sc.nextLine();
 
-        while (!col1.equals(Black) & !col1.equals(White)){
-            System.out.print("Choose Colour for: " + pla1 + ". Type B for Black or W for white \r\n");
-            col1 = sc.nextLine();
+        System.out.print("Choose Colour for: " + name_firstinput + ". Type B for Black or W for white \r\n");
+        String color_firstinput = sc.nextLine();
+
+        //if user types wrong form
+        while (!color_firstinput.equals(Black) & !color_firstinput.equals(White)){
+            System.out.print("Choose Colour for: " + name_firstinput + ". Type B for Black or W for white \r\n");
+            color_firstinput = sc.nextLine();
         }
 
-        // done initializing player 1
-        HumanPlayer1 player1 = new HumanPlayer1(pla1, col1);
+        System.out.print("2. Type name of another Human Player: \r\n");
+        String name_secondinput = sc.nextLine();
 
-        // now initialize player 2
-        String color;
-        String col2;
 
         // set color for player 2 to be the color player 1 didn't choose
-        if (col1.equals(White)) {
-            color = "Black";
-            col2 = Black;
+        String color_secondinput;
+        if (color_firstinput.equals(White)) {
+            color_secondinput = Black;
+            // done initializing player 1
+            player1 = new HumanPlayer1(name_firstinput, White);
+            player2 = new HumanPlayer2(name_secondinput, Black);
         }else {
-            color = "White";
-            col2 = White;
+            color_secondinput = White;
+            player1 = new HumanPlayer1(name_secondinput, White);
+            player2 = new HumanPlayer2(name_firstinput, Black);
         }
 
-        System.out.print("Type name of the Human Player 2: \r\n");
-        String pla2 = sc.nextLine();
-        System.out.print("The colour for " + pla2 + " is " + color + "\r\n");
+        System.out.print("The colour for " + name_secondinput + " is " + color_secondinput + ". ");
+        System.out.print(player1.get_username()+" will be playing first.\n\n");
 
-        HumanPlayer2 player2 = new HumanPlayer2(pla2, col2);
         return List.of(new Player[]{player1, player2});
     }
 
