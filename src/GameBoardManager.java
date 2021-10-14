@@ -96,11 +96,11 @@ public class GameBoardManager {
      * @return boolean indicating whether position falls into a player's mills
      */
     private boolean checkIfPositionInMill(int playerNumber, String position) {
-        HashSet<List<String>> mills = (HashSet<List<String>>) playerMills.get(playerNumber);
+        Set mills = playerMills.get(playerNumber);
 
         // iterate over mills in mills, and check if position occurs in any of the mills
-        for (List<String> m: mills) {
-            if (m.contains(position)) {
+        for (Object m: mills) {
+            if (((List) m).contains(position)) {
                 // found position in one of the player's mills
                 return true;
             }
