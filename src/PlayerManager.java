@@ -2,11 +2,6 @@
  * (through csv files) keeps records of player game history (wins, losses) and creates user
  * accounts and give them unique usernames so that we can can calculate the
  * probability of winning/losing as per the users.
- * Keep track of player’s chips on board
- * Allows players to make moves on a game board -> slide or place chip
- *
- * AS OF NOW, PlayerManager is being designed to control a single player, meaning that in a multiplayer game,
- * each player would have different PlayerManager objects.
  *
  * There will be a csv file for each player. Those files will have dates as rows, each consisting
  * of the player's scores and whether they won/lost/drew the games at that specific date in yyyy/mm/dd. E.g.
@@ -18,6 +13,7 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,27 +22,29 @@ import java.util.*;
 
 public class PlayerManager {
     private final String USERNAME;
-    private final char TOKEN_COLOUR;
+    private final String TOKEN_COLOUR;
     private final File PLAYER_DATA_FILE;
     private Map<Date, String[]> userdata;
     private Map<Date, double[]> userscore;
     private Map<Date, char[]> userwin;
 
+
     /**
      * Construct a PlayerManager, giving it the username and token colour of the player to be managed
      *
-     * @param name username for the player this PlayerManager is managing
-     * @param colour token colour ('B' or 'W') for the player this PlayerManager is managing
+     * @param player Player object for the player this PlayerManager is managing
      */
-    public PlayerManager(String name, char colour) throws FileNotFoundException, ParseException {
-        USERNAME = name;
-        TOKEN_COLOUR = colour;
+    public PlayerManager(Player player) throws FileNotFoundException, ParseException {
+        USERNAME = player.get_username();
+        TOKEN_COLOUR = player.get_tokencolour();
         PLAYER_DATA_FILE = new File("UserData/" + this.USERNAME + ".csv");
         createUserFile();
         userdata = getUserData();
         userscore = getUserScore();
         userwin = getUserWin();
     }
+
+    //HELPER METHODS FOR THE CONSTRUCTOR
 
     private void createUserFile() {
         // create a data file for the player; if the player already has one, createNewFile will not overwrite it.
@@ -63,14 +61,14 @@ public class PlayerManager {
         // is an array of values of win/draw/loss plus score.
         HashMap<Date, String[]> userdata = new HashMap<>();
         // specify the format of the String used to store the date
-        DateFormat format = new SimpleDateFormat("yyyy,MM,dd");
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
         Scanner scanner = new Scanner(PLAYER_DATA_FILE);
         scanner.useDelimiter(",");
 
         while (scanner.hasNext()) {
             String[] row = scanner.next().split(","); // transform row into an array
-            Date date = format.parse(row[0]); //get first column and store it as a date
+            Date date = df.parse(row[0]); //get first column and store it as a date
             String[] rowScores = Arrays.copyOfRange(row, 1, row.length); // slice row to get all but the first value
             userdata.put(date, rowScores);
         }
@@ -97,7 +95,7 @@ public class PlayerManager {
     }
 
     private HashMap<Date, char[]> getUserWin(){
-        // store row's scores in a dict, where the key is the date and the 
+        // store row's scores in a dict, where the key is the date and the
         // value is a char storing whether the user Won, Drew, or Lost.
         // copy the values from userdata
         HashMap<Date, char[]> userwins = new HashMap<>();
@@ -115,6 +113,29 @@ public class PlayerManager {
         }
         return userwins;
     }
+
+    // UPDATE THE .CSV FILES WITH NEW SCORE
+    public void updatePlayerData(double score, String result) throws ParseException, IOException {
+        // The content written in the file will be in the last row or on a new row, depending on
+        // whether today's date already has its own row on the file.
+        FileWriter writer = new FileWriter("UserData/" + this.USERNAME + ".csv");
+
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        Date today = df.parse(df.format(new Date())); // get today's date
+        String todayDate = df.format(today); //save today as a string
+
+        String scoreResultData = result + score;
+
+        if(!userdata.containsKey(today)){
+            writer.append("\n"); //add new row for today's scores
+            writer.append(todayDate);
+        }
+        // the following must be added in the same way regardless of whether it is in a new row
+        writer.append(',');
+        writer.append(scoreResultData);
+    }
+
+    // METHODS FOR DATA FOR THE PLAYER
 
     public double getAverageScore(){
         double totalScore = 0.0;
