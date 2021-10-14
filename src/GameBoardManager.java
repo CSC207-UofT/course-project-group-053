@@ -10,10 +10,11 @@ public class GameBoardManager<playerMills> {
     public GameBoardManager() {
         playerMills = new HashMap<>();
 
-        //Stores the mills for player 1
+        // Stores the mills for player 1
+        // represent player mills as list of strings (ex: A1 A2 A3), and store the mills in HashSet
         HashSet<List<String>> player1Mills = new HashSet<>();
 
-        //Stores the mills for player 2
+        // Stores the mills for player 2
         HashSet<List<String>> player2Mills = new HashSet<>();
 
         // playerMills ends up as a hashmap, mapping player number to HashSets containing each player's mills
@@ -28,6 +29,7 @@ public class GameBoardManager<playerMills> {
 
     private String getItemInGameBoard(String targetPosition) throws InvalidPositionException {
         if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
+            // position given isn't formatted properly/doesn't exist on gameboard
             throw new InvalidPositionException();
         } else {
             return gb.getTokenAtPosition(targetPosition);
@@ -38,6 +40,21 @@ public class GameBoardManager<playerMills> {
         gb.setToken(token, targetPosition);
     }
 
+    // private helper method for checking if a position occurs in a player's mills
+    private boolean checkIfPositionInMill(int playerNumber, String position) {
+        HashSet<List<String>> mills = (HashSet<List<String>>) playerMills.get(playerNumber);
+
+        // iterate over mills in mills, and check if position occurs in any of the mills
+        for (List<String> m: mills) {
+            if (m.contains(position)) {
+                // found position in one of the player's mills
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Process a Player's request to place their token on the GameBoard.
      * If Player-requested move is invalid, InvalidMoveException will be thrown
@@ -45,12 +62,14 @@ public class GameBoardManager<playerMills> {
      * @param token string representing a player's token to be placed
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      */
-    public void processPlayerMove(String token, String targetPosition) throws InvalidPositionException {
+    public void processPlayerMove(String token, String targetPosition) throws InvalidPositionException,
+            OccupiedSlotException {
+        // if targetPosition was an invalid gameboard coordinate, getItemInGameBoard will throw InvalidPositionException
         String itemAtPosition = getItemInGameBoard(targetPosition);
 
         // check if gameboard slot already occupied by another token
         if (! itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
-            throw new InvalidPositionException();  // TODO - change this to OccupiedSlotException
+            throw new OccupiedSlotException();
 
         } else {
             insertToken(token, targetPosition);
@@ -61,14 +80,9 @@ public class GameBoardManager<playerMills> {
 
     public int getPlayer2Houses(){ return playerMills.get(2).size();}
 
-
-    public boolean checkPhaseOneEnd() {
-        // phase 1 ends when both players have put down all of their nine tokens on the board
-        return gb.getGameBoardCapacity() == 6; // AL: This strategy actually won't work
-    }
-
     public void millAdder(String position, String[] mill) throws InvalidPositionException {
-        if (getItemInGameBoard(position).equals("W")){ playerMills.get(1).add(mill);}
+        // checks which player the mill belongs to, and add the mill to the player's mills
+        if (getItemInGameBoard(position).equals("W")) { playerMills.get(1).add(mill); }
         else { playerMills.get(2).add(mill);}
 
     }
@@ -117,23 +131,31 @@ public class GameBoardManager<playerMills> {
     /***
      *Checks if the token being removed is valid and then remove it if it is valid.
      * TODO: add check for token being removed only being non mill token unless no other tokens available
-     * @param playerNumber: which player is removing a token from the opponent's tokens
-     * @param position: target position
+     * @param playerNumber: int representing the player (1 or 3) requesting to remove a token
+     * @param position: coordinate (in format [A-C][1-8]) on gameboard to remove token from
      */
-    public void processPlayerRemove(int playerNumber, String position) throws InvalidPositionException {
+    public void processPlayerRemove(int playerNumber, String otherColor, String position) throws InvalidPositionException {
+        // if an invalid gameboard position was given, getItemInGameBoard will throw InvalidPositionException
         String itemAtPosition = getItemInGameBoard(position);
-        if ((itemAtPosition.matches("B") || itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) && playerNumber==2) {
-            // targetPosition is already occupied by another token, or an invalid position on the GameBoard was given
-            throw new InvalidPositionException();  // TODO - replace with RemoveNonselfTokenException
-        }
-        else if ((itemAtPosition.matches("W") || itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) && playerNumber==1) {
-            // targetPosition is already occupied by another token, or an invalid position on the GameBoard was given
-            throw new InvalidPositionException();
-        }
-        else {
-            // remove the player token into the desired position in GameBoard
-            gb.removeToken(position);
 
+        // cannot remove token from empty/unoccupied gameboard slot
+        if (itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
+            throw new RemoveEmptySlotException();
+        }
+
+        // player cannot remove an opponent's token from the gameboard
+        else if (! itemAtPosition.equals(otherColor)) {
+            throw new RemoveSelfTokenException();
+        }
+
+        else if (checkIfPositionInMill(playerNumber, position)) {
+            throw new RemoveMillException();
+        }
+
+        // valid gameboard position was specified by player, occupied by an opponent's token, so go ahead and remove
+        // the token
+        else {
+            gb.removeToken(position);
         }
     }
 

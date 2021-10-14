@@ -100,8 +100,6 @@ public class GameBoard {
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      */
     public void setToken(String token, String targetPosition) {
-        // stuff TODO
-
         // split targetPosition string into letter and integer index within box
         String[] coordinates = splitCoordinates(targetPosition);
 

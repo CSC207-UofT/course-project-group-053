@@ -1,3 +1,5 @@
+// TODO - DELETE THIS CLASS
+
 public class GameBoardPlacer {
     // collection of static methods for manipulating GameBoard by adding/removing tokens
     // use class for GameBoard, used in conjunction with GameBoardManager?
