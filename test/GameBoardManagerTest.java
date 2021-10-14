@@ -1,8 +1,26 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO - add tests later
-
-
 public class GameBoardManagerTest {
+    GameBoardManager gbm;
+
+    @BeforeEach
+    void setUp() { gbm = new GameBoardManager(); }
+
+    @Test
+    void processPlayerMove() {
+        // player places token in valid spot
+        gbm.processPlayerMove("W", "A1");
+
+        // player places token in occupied slot
+
+        // player specifies nonexistent coordinate to place token
+    }
+
+    @Test
+    void processPlayerRemove() {
+
+    }
 
 }

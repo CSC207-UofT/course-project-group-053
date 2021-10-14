@@ -12,11 +12,11 @@ public class GameBoardManager {
 
     // Hash to map player colors to player numbers
     // white ("W" token) = player 1, black ("B" token) = player 2, as defined in Main.java
-    private Map<String, Integer> playerColorsToNumbers = Map.of("W", 1, "B", 2);
+    private final Map<String, Integer> playerColorsToNumbers = Map.of("W", 1, "B", 2);
 
     public GameBoardManager() {
         // initialize playerTokens
-        playerTokens = new HashMap<Integer, Set<String>>();
+        playerTokens = new HashMap<>();
         HashSet<String> player1Tokens = new HashSet<>();  // initialize set of each player's tokens as empty sets
         HashSet<String> player2Tokens = new HashSet<>();
         playerTokens.put(1, player1Tokens);  // map player numbers to their token sets
@@ -53,7 +53,7 @@ public class GameBoardManager {
      * @param targetPosition coordinates on the gameboard to retrieve a token from.
      *                       throw InvalidPositionException if the position is empty
      * @return String for token occupying targetPosition on gameboard
-     * @throws NonexistentPositionException
+     * @throws NonexistentPositionException exception raised if targetPosition doesn't exist on gameboard
      */
     private String getItemInGameBoard(String targetPosition) throws NonexistentPositionException {
         if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
@@ -165,8 +165,11 @@ public class GameBoardManager {
 
     public void millAdder(String position, String[] mill) throws InvalidPositionException {
         // checks which player the mill belongs to, and add the mill to the player's mills
-        if (getItemInGameBoard(position).equals("W")) { playerMills.get(1).add(mill); }
-        else { playerMills.get(2).add(mill);}
+        if (getItemInGameBoard(position).equals("W")) {
+            playerMills.get(1).add(mill);
+        } else {
+            playerMills.get(2).add(mill);
+        }
 
     }
 
