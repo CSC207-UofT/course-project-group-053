@@ -92,6 +92,7 @@ public class Main {
                     // player 1 has successfully placed down a token, so break out of the while loop
                     break;
 
+                    // TODO - remove OccupiedSlotExcept as InvalidPosExc already accounts for it
                 } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
                     System.out.println(e.getMessage());
                     // t1 = sc.next(); // skip the invalid token
@@ -118,6 +119,8 @@ public class Main {
                     System.out.println(name1 + "'s turn. Choose a token to remove");
                     // in gameboard manager add a function that returns a lst of positions available
                     String r1 = sc.nextLine();
+
+                    // TODO - whenever processPlayerRemove called, have a catch block to deal with InvalidRemovalException
                     gbManager.processPlayerRemove(1, r1);
                     break;
 
@@ -131,6 +134,7 @@ public class Main {
                     String t2 = sc.nextLine();
                     gbManager.processPlayerMove(player2.get_tokencolour(), t2);
                     break;
+                    // TODO remove OccupiedSlotException from catch block, since InvalidPosExc already accounts for it
                 }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
                     System.out.println(e.getMessage());
                     // t1 = sc.next(); // skip the invalid token
