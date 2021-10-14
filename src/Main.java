@@ -5,7 +5,7 @@ public class Main {
     public static String Black = "B";
     public static String White = "W";
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException {
         List<Player> lst = Start();
         GamePlay(lst);
     }
@@ -48,7 +48,8 @@ public class Main {
     }
 
     // lst = list of players returned by Start()
-    public static void GamePlay(List<Player> lst){
+    //throws InvalidPositionException for checkHouse()
+    public static void GamePlay(List<Player> lst) throws InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException, RemoveEmptySlotException, RemoveMillException, RemoveSelfTokenException {
         GameBoardManager gbManager = new GameBoardManager();
         Scanner sc = new Scanner(System.in);
 
@@ -88,7 +89,7 @@ public class Main {
                     // player 1 has successfully placed down a token, so break out of the while loop
                     break;
 
-                } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
+                } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
                     System.out.println("Invalid, try again. Choose an empty slot");
                     // t1 = sc.next(); // skip the invalid token
                     // continue; is not required(gbManager.getGameBoardState());
@@ -111,29 +112,23 @@ public class Main {
             if (gbManager.getPlayer1Houses() > player1Houses){
                 player1Houses = gbManager.getPlayer1Houses();
                 while (true){
-                    try{
-                        System.out.println(name1 + "'s turn. Choose a token to remove");
-                        // in gameboard manager add a function that returns a lst of positions available
-                        String r1 = sc.nextLine();
-                        gbManager.processPlayerRemove(1, r1);
-                        break;
-                    }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
-                        System.out.println("Invalid, try again.Choose opponent's token");
-                        // t1 = sc.next(); // skip the invalid token
-                        // continue; is not required
-                    }
+                    System.out.println(name1 + "'s turn. Choose a token to remove");
+                    // in gameboard manager add a function that returns a lst of positions available
+                    String r1 = sc.nextLine();
+                    gbManager.processPlayerRemove(1, r1);
+                    break;
 
                 }
             }
 
-                while(true){
+            while(true){
                 try{
                     System.out.println(name2 + "'s turn. Place " + col2 + " token. Choose an empty place");
                     // in gameboard manager add a function that returns a lst of positions available
                     String t2 = sc.nextLine();
                     gbManager.processPlayerMove(player2.get_tokencolour(), t2);
                     break;
-                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
+                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
                     System.out.println("Invalid, try again.Choose empty space");
                     // t1 = sc.next(); // skip the invalid token
                     //is not required
