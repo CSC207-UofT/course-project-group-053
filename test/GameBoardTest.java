@@ -56,5 +56,13 @@ class GameBoardTest {
     @Test
     void getGameBoardCapacity() {
         assertEquals(24, gameBoard.getGameBoardCapacity(),"getGameBoardCapacity: True");
+
+        //after gameBoard--
+        gameBoard.setToken("W","B1");
+        assertEquals(23, gameBoard.getGameBoardCapacity(),"getGameBoardCapacity: True");
+
+        //after gameBoard++
+        gameBoard.removeToken("B1");
+        assertEquals(24, gameBoard.getGameBoardCapacity(),"getGameBoardCapacity: True");
     }
 }
