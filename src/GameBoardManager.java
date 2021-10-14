@@ -1,17 +1,32 @@
 import java.util.*;
 
-public class GameBoardManager<playerMills> {
-    // Stores the location of mills formed by both players
-    public HashMap<Integer, Set> playerMills;
-
+public class GameBoardManager {
     // Creates and stores a GameBoard instance, and processes Player moves on the GameBoard
     private final GameBoard gb = new GameBoard();
 
+    // Stores the positions of each player's tokens on the gameboard
+    public HashMap<Integer, Set<String>> playerTokens;
+
+    // Stores the location of mills formed by both players
+    public HashMap<Integer, Set> playerMills;
+
+    // Hash to map player colors to player numbers
+    // white ("W" token) = player 1, black ("B" token) = player 2, as defined in Main.java
+    private Map<String, Integer> playerColorsToNumbers = Map.of("W", 1, "B", 2);
+
     public GameBoardManager() {
+        // initialize playerTokens
+        playerTokens = new HashMap<Integer, Set<String>>();
+        HashSet<String> player1Tokens = new HashSet<>();  // initialize set of each player's tokens as empty sets
+        HashSet<String> player2Tokens = new HashSet<>();
+        playerTokens.put(1, player1Tokens);  // map player numbers to their token sets
+        playerTokens.put(2, player2Tokens);
+
+        // initialize playerMills to keep track of mills formed by each player
         playerMills = new HashMap<>();
 
         // Stores the mills for player 1
-        // represent player mills as list of strings (ex: A1 A2 A3), and store the mills in HashSet
+        // represent player mills as list of strings (ex: A1 A2 A3), and store the lists in the HashSets
         HashSet<List<String>> player1Mills = new HashSet<>();
 
         // Stores the mills for player 2
@@ -22,11 +37,24 @@ public class GameBoardManager<playerMills> {
         playerMills.put(2, player2Mills);
     }
 
+    // PRIVATE HELPER METHODS - CAN IGNORE
 
-    public String getGameBoardState() {
-        return gb.toString();
+    /**
+     * Private helper to return which player number owns a token, based on token's color
+     * @param token a String being either "W" (white, p1) or "B" (black, p2)
+     * @return int for player number
+     */
+    private int getPlayerFromToken(String token) {
+        return playerColorsToNumbers.get(token);
     }
 
+    /**
+     * Private helper to return string of the token occupying a specified position on the gameboard
+     * @param targetPosition coordinates on the gameboard to retrieve a token from.
+     *                       throw InvalidPositionException if the position is empty
+     * @return String for token occupying targetPosition on gameboard
+     * @throws InvalidPositionException
+     */
     private String getItemInGameBoard(String targetPosition) throws InvalidPositionException {
         if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
             // position given isn't formatted properly/doesn't exist on gameboard
@@ -36,11 +64,37 @@ public class GameBoardManager<playerMills> {
         }
     }
 
+    /**
+     * Private helper for inserting token into specified position on gameboard
+     * @param token string representing token to be inserted at target position
+     * @param targetPosition coordinates on board to place the token
+     */
     private void insertToken(String token, String targetPosition) {
         gb.setToken(token, targetPosition);
+
+        // using value of token, update playerTokens entry for the player the token belongs to, to include this newly
+        // added token for the player
+        playerTokens.get(getPlayerFromToken(token)).add(targetPosition);
     }
 
-    // private helper method for checking if a position occurs in a player's mills
+    /**
+     * Private helper for removing token from
+     * @param otherPlayerNumber int for player number whose token is to be removed
+     * @param targetPosition position of otherPlayerNumber's token to remove
+     */
+    private void removeOpponentToken(int otherPlayerNumber, String targetPosition) {
+        gb.removeToken(targetPosition);
+
+        // remove token from token set of otherPlayerNumber
+        playerTokens.get(otherPlayerNumber).remove(targetPosition);
+    }
+
+    /**
+     * Returns whether a particular position on the gameboard falls into a mill formed by a player
+     * @param playerNumber player that we are checking whether the position falls into their mills
+     * @param position string for position on the board to check
+     * @return boolean indicating whether position falls into a player's mills
+     */
     private boolean checkIfPositionInMill(int playerNumber, String position) {
         HashSet<List<String>> mills = (HashSet<List<String>>) playerMills.get(playerNumber);
 
@@ -53,6 +107,35 @@ public class GameBoardManager<playerMills> {
         }
 
         return false;
+    }
+
+    /**
+     * Private helper to check whether all of a player's tokens are in mills
+     * @param playerNumber int representing player number to check
+     * @return boolean indicating whether player's tokens are all in a mill
+     */
+    private boolean checkAllTokensInMill(int playerNumber) {
+        Set<String> playerTokenSet = playerTokens.get(playerNumber);
+
+        for (String tokenPosition: playerTokenSet) {
+            if (! checkIfPositionInMill(playerNumber, tokenPosition)) {
+                // if any of player's tokens not in a mill, return false
+                return false;
+            }
+        }
+
+        // all of the player's tokens were in a mill
+        return true;
+    }
+
+    // END OF PRIVATE HELPER METHODS
+
+    //
+
+    // PUBLIC METHODS
+
+    public String getGameBoardState() {
+        return gb.toString();
     }
 
     /**
@@ -134,33 +217,37 @@ public class GameBoardManager<playerMills> {
      * @param playerNumber: int representing the player (1 or 3) requesting to remove a token
      * @param position: coordinate (in format [A-C][1-8]) on gameboard to remove token from
      */
-    public void processPlayerRemove(int playerNumber, String otherColor, String position) throws InvalidPositionException {
+    public void processPlayerRemove(int playerNumber, String position) throws InvalidPositionException {
         // if an invalid gameboard position was given, getItemInGameBoard will throw InvalidPositionException
         String itemAtPosition = getItemInGameBoard(position);
+
+        // determine number of playerNumber's opponent
+        int otherPlayerNumber;
+        if (playerNumber == 1) {
+            otherPlayerNumber = 2;
+        } else {
+            otherPlayerNumber = 1;
+        }
 
         // cannot remove token from empty/unoccupied gameboard slot
         if (itemAtPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
             throw new RemoveEmptySlotException();
         }
 
-        // player cannot remove an opponent's token from the gameboard
-        else if (! itemAtPosition.equals(otherColor)) {
+        // player cannot remove own token from the gameboard
+        else if (playerColorsToNumbers.get(getItemInGameBoard(position)).equals(playerNumber)) {
             throw new RemoveSelfTokenException();
         }
 
-        else if (checkIfPositionInMill(playerNumber, position)) {
+        // player cannot remove opponents token if it's in a mill, and the opponent has tokens outside of mills
+        else if (checkIfPositionInMill(otherPlayerNumber, position) && ! checkAllTokensInMill(otherPlayerNumber)) {
             throw new RemoveMillException();
         }
 
         // valid gameboard position was specified by player, occupied by an opponent's token, so go ahead and remove
         // the token
         else {
-            gb.removeToken(position);
+            removeOpponentToken(otherPlayerNumber, position);
         }
     }
-
-
-    // TODO:
-    // 3) create more specific exception classes
-    // 4) improve checkHouse(requires bit of rework of gameboard numbering)
 }
