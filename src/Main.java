@@ -93,7 +93,7 @@ public class Main {
                     break;
 
                 } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
-                    System.out.println("Invalid, try again. Choose an empty slot");
+                    System.out.println(e.getMessage());
                     // t1 = sc.next(); // skip the invalid token
                     // continue; is not required(gbManager.getGameBoardState());
 
@@ -132,7 +132,7 @@ public class Main {
                     gbManager.processPlayerMove(player2.get_tokencolour(), t2);
                     break;
                 }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
-                    System.out.println("Invalid, try again.Choose empty space");
+                    System.out.println(e.getMessage());
                     // t1 = sc.next(); // skip the invalid token
                     //is not required
                 }
@@ -154,7 +154,7 @@ public class Main {
                         gbManager.processPlayerRemove(1, r2);
                         break;
                     }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
-                        System.out.println("Invalid, try again.Choose opponent's token");
+                        System.out.println(e.getMessage());
                         // t1 = sc.next(); // skip the invalid token
                         // continue; is not required
                     }
@@ -165,5 +165,5 @@ public class Main {
         }
     }
 }
-//TODO: Fix gameplay. Player1 should be whichever player chose white not the first player to input.
+
 //TODO: Fix output strings for copied blocks
