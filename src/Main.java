@@ -12,12 +12,20 @@ public class Main {
         GamePlay(lst);
     }
 
+
+
+    /**
+     * Setting name and color for players
+     *
+     * @return Player[]{player1, player2}
+     */
     public static List<Player> Start(){
         Scanner sc = new Scanner(System.in);
         System.out.print("Initializing Nine Men Morris \r\n");
+
+        //Setting for player
         System.out.println("1. Type name of the Human Player: \r\n");
         String name_firstinput = sc.nextLine();
-
         System.out.print("Choose Colour for: " + name_firstinput + ". Type B for Black or W for white \r\n");
         String color_firstinput = sc.nextLine();
 
@@ -27,12 +35,13 @@ public class Main {
             color_firstinput = sc.nextLine();
         }
 
+        //Setting for other player
         System.out.print("2. Type name of another Human Player: \r\n");
         String name_secondinput = sc.nextLine();
 
-
-        // set color for player 2 to be the color player 1 didn't choose
         String color_secondinput;
+
+        //user w/ white is player1
         if (color_firstinput.equals(White)) {
             color_secondinput = Black;
             // done initializing player 1
@@ -50,14 +59,20 @@ public class Main {
         return List.of(new Player[]{player1, player2});
     }
 
-    // lst = list of players returned by Start()
-    //throws InvalidPositionException for checkHouse()
-    public static void GamePlay(List<Player> lst) throws InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException, RemoveEmptySlotException, RemoveMillException, RemoveSelfTokenException {
+
+    /**
+     *
+     *
+     * throws InvalidPositionException for checkHouse()
+     *
+     * @param playerList list of player1, player2 setted by start()
+     */
+    public static void GamePlay(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException, RemoveEmptySlotException, RemoveMillException, RemoveSelfTokenException {
         GameBoardManager gbManager = new GameBoardManager();
         Scanner sc = new Scanner(System.in);
 
-        HumanPlayer1 player1 = new HumanPlayer1(lst.get(0).get_username(), lst.get(0).get_tokencolour());
-        HumanPlayer2 player2 = new HumanPlayer2(lst.get(1).get_username(), lst.get(1).get_tokencolour());
+        HumanPlayer1 player1 = new HumanPlayer1(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
+        HumanPlayer2 player2 = new HumanPlayer2(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
 
         String name1 = player1.get_username();
         String name2 = player2.get_username();
@@ -77,13 +92,13 @@ public class Main {
         while (!end_of_p1) {
 
             int player1Houses, player2Houses;
-            player1Houses = (int) gbManager.getPlayer1Houses();
-            player2Houses = (int) gbManager.getPlayer2Houses();
+            player1Houses = gbManager.getPlayer1Houses();
+            player2Houses = gbManager.getPlayer2Houses();
 
             while(true) {
                 try {
                     System.out.println(name1 + "'s turn. Place " + col1 + " token. Choose an empty slot");
-                    // TODO: in gameboard manager add a function that returns a lst of positions available
+                    // TODO: in gameboard manager add a function that returns a playerList of positions available
 
                     // player 1 inputs gameboard position to place their token in
                     String t1 = sc.nextLine();
@@ -92,8 +107,6 @@ public class Main {
                     // player 1 has successfully placed down a token, so break out of the while loop
                     break;
 
-                    // TODO - remove OccupiedSlotExcept as InvalidPosExc already accounts for it
-                    // Removed OccupiedSlotExcept as InvalidPosExc already accounts for it
                 } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
                     System.out.println(e.getMessage());
                     // skip the invalid token and ask for prompt again
@@ -118,7 +131,7 @@ public class Main {
                 while (true){
                     try {
                         System.out.println(name1 + "'s turn. Choose a token to remove");
-                        // in gameboard manager add a function that returns a lst of positions available
+                        // in gameboard manager add a function that returns a playerList of positions available
                         String r1 = sc.nextLine();
 
                         // TODO - whenever processPlayerRemove called, have a catch block to deal with InvalidRemovalException
@@ -139,12 +152,10 @@ public class Main {
             while(true){
                 try{
                     System.out.println(name2 + "'s turn. Place " + col2 + " token. Choose an empty place");
-                    // in gameboard manager add a function that returns a lst of positions available
+                    // in gameboard manager add a function that returns a playerList of positions available
                     String t2 = sc.nextLine();
                     gbManager.processPlayerMove(player2.get_tokencolour(), t2);
                     break;
-                    // TODO remove OccupiedSlotException from catch block, since InvalidPosExc already accounts for it
-                    // Removed OccupiedSlotExcept as InvalidPosExc already accounts for it
                 }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
                     System.out.println(e.getMessage());
                     // skip the invalid token
@@ -163,9 +174,9 @@ public class Main {
                 while (true){
                     try{
                         System.out.println(name2 + "'s turn. Choose a token to remove");
-                        // in gameboard manager add a function that returns a lst of positions available
+                        // in gameboard manager add a function that returns a playerList of positions available
                         String r2 = sc.nextLine();
-                        gbManager.processPlayerRemove(1, r2);
+                        gbManager.processPlayerRemove(2, r2);
                         break;
                     }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e){
                         System.out.println(e.getMessage());

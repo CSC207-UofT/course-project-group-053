@@ -3,6 +3,6 @@
  */
 public class RemoveSelfTokenException extends InvalidRemovalException {
     public RemoveSelfTokenException() {
-        super("Player cannot remove an opponent's token from the gameboard.");
+        super("Player cannot remove your own token from the gameboard.");
     }
 }
