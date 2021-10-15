@@ -19,5 +19,5 @@ public class GameBoardManagerTest {
 
     @Test
     void processPlayerRemove() {
-
+    }
 }
