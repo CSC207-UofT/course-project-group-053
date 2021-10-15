@@ -1,57 +1,23 @@
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameBoardManagerTest {
-    GameBoardManager gameBoardManager;
-    GameBoard gameBoard;
+public class GameBoardManagerTest {
+    GameBoardManager gbm;
 
     @BeforeEach
-    void setUp() {
-        gameBoardManager = new GameBoardManager();
-        gameBoard = new GameBoard();
-    }
-
-    @AfterEach
-    void tearDown() {
-        gameBoardManager = null;
-    }
+    void setUp() { gbm = new GameBoardManager(); }
 
     @Test
-    void getGameBoardState() {
-    }
+    void processPlayerMove() {
+        // player places token in valid spot
 
-    @Test
-    void processPlayerMove() throws InvalidPositionException, OccupiedSlotException {
-        gameBoardManager.processPlayerMove("W", "A1");
+        // player places token in occupied slot
 
-        //when placing on occupied spot
-        gameBoardManager.processPlayerMove("B","A1");
-    }
-
-    @Test
-    void getPlayer1Houses() {
-    }
-
-    @Test
-    void getPlayer2Houses() {
-    }
-
-    @Test
-    void checkPhaseOneEnd() {
-    }
-
-    @Test
-    void millAdder() {
-    }
-
-    @Test
-    void checkHouse() {
+        // player specifies nonexistent coordinate to place token
     }
 
     @Test
     void processPlayerRemove() {
-    }
+
 }

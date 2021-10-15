@@ -56,13 +56,13 @@ public class Main {
         GameBoardManager gbManager = new GameBoardManager();
         Scanner sc = new Scanner(System.in);
 
-        HumanPlayer1 player1 = new HumanPlayer1(lst.get(0).str_player_username, lst.get(0).str_player_tokencolour);
-        HumanPlayer2 player2 = new HumanPlayer2(lst.get(1).str_player_username, lst.get(1).str_player_tokencolour);
+        HumanPlayer1 player1 = new HumanPlayer1(lst.get(0).get_username(), lst.get(0).get_tokencolour());
+        HumanPlayer2 player2 = new HumanPlayer2(lst.get(1).get_username(), lst.get(1).get_tokencolour());
 
-        String name1 = player1.str_player_username;
-        String name2 = player2.str_player_username;
-        String col1 = player1.str_player_tokencolour;
-        String col2 = player2.str_player_tokencolour;
+        String name1 = player1.get_username();
+        String name2 = player2.get_username();
+        String col1 = player1.get_tokencolour();
+        String col2 = player2.get_tokencolour();
 
         System.out.println("Starting Game between " + name1 + " and " + name2);
 
@@ -71,10 +71,10 @@ public class Main {
 
         // keep track of whether both players have run out of chips/tokens to place
         // when they do, phase 1 of the game ends
-        boolean b = !(player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
+        boolean end_of_p1 = (player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
 
         // while loop to run phase 1 of game, where players lay all their chips on the board
-        while (b) {
+        while (!end_of_p1) {
 
             int player1Houses, player2Houses;
             player1Houses = (int) gbManager.getPlayer1Houses();
@@ -83,7 +83,7 @@ public class Main {
             while(true) {
                 try {
                     System.out.println(name1 + "'s turn. Place " + col1 + " token. Choose an empty slot");
-                    // in gameboard manager add a function that returns a lst of positions available
+                    // TODO: in gameboard manager add a function that returns a lst of positions available
 
                     // player 1 inputs gameboard position to place their token in
                     String t1 = sc.nextLine();
@@ -92,10 +92,11 @@ public class Main {
                     // player 1 has successfully placed down a token, so break out of the while loop
                     break;
 
-                } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
+                    // TODO - remove OccupiedSlotExcept as InvalidPosExc already accounts for it
+                    // Removed OccupiedSlotExcept as InvalidPosExc already accounts for it
+                } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
                     System.out.println(e.getMessage());
-                    // t1 = sc.next(); // skip the invalid token
-                    // continue; is not required(gbManager.getGameBoardState());
+                    // skip the invalid token and ask for prompt again
 
                 }
             }
@@ -115,14 +116,25 @@ public class Main {
             if (gbManager.getPlayer1Houses() > player1Houses){
                 player1Houses = gbManager.getPlayer1Houses();
                 while (true){
-                    System.out.println(name1 + "'s turn. Choose a token to remove");
-                    // in gameboard manager add a function that returns a lst of positions available
-                    String r1 = sc.nextLine();
-                    gbManager.processPlayerRemove(1, r1);
-                    break;
+                    try {
+                        System.out.println(name1 + "'s turn. Choose a token to remove");
+                        // in gameboard manager add a function that returns a lst of positions available
+                        String r1 = sc.nextLine();
+
+                        // TODO - whenever processPlayerRemove called, have a catch block to deal with InvalidRemovalException
+                        gbManager.processPlayerRemove(1, r1);
+                        break;
+                    } catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e){
+                        System.out.println(e.getMessage());
+                        // skip the invalid token and ask for prompt again
+                    }
 
                 }
+                //shows state after removing opponents token
+                System.out.println(gbManager.getGameBoardState());
             }
+
+
 
             while(true){
                 try{
@@ -131,16 +143,18 @@ public class Main {
                     String t2 = sc.nextLine();
                     gbManager.processPlayerMove(player2.get_tokencolour(), t2);
                     break;
-                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | OccupiedSlotException e){
+                    // TODO remove OccupiedSlotException from catch block, since InvalidPosExc already accounts for it
+                    // Removed OccupiedSlotExcept as InvalidPosExc already accounts for it
+                }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
                     System.out.println(e.getMessage());
-                    // t1 = sc.next(); // skip the invalid token
-                    //is not required
+                    // skip the invalid token
                 }
             }
+
             player2.dec_numchipsleft();
             System.out.println(gbManager.getGameBoardState());
 
-            // Now check if the player1 has created a mill
+            // Now check if the player2 has created a mill
             // Then let the player1 remove player2's token
             // Do it until the move is valid. If not valid pass
             gbManager.checkHouse();
@@ -153,15 +167,17 @@ public class Main {
                         String r2 = sc.nextLine();
                         gbManager.processPlayerRemove(1, r2);
                         break;
-                    }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e){
+                    }catch(InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e){
                         System.out.println(e.getMessage());
                         // t1 = sc.next(); // skip the invalid token
                         // continue; is not required
                     }
 
                 }
+                //shows state after removing opponents token
+                System.out.println(gbManager.getGameBoardState());
             }
-            b = !(player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
+            end_of_p1 = (player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
         }
     }
 }

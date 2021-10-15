@@ -17,32 +17,36 @@ class GameBoardTest {
     }
 
     @Test
-    void main() {
-    }
-
-    @Test
-    void testToString() {
-    }
-
-    @Test
     void setToken() {
         gameBoard.setToken("W","A1");
         assertEquals("W", gameBoard.getTokenAtPosition("A1"), "setToken: True");
+        assertEquals(23, gameBoard.getGameBoardCapacity(), "successfully updated capacity");
     }
 
     @Test
     void removeToken() {
         //removeTokenTest for nonempty position
         gameBoard.setToken("W","A2");
+        assertEquals("W", gameBoard.getTokenAtPosition("A2"), "setToken: True");
         gameBoard.removeToken("A2");
-        /* TODO: solve below
-        at an empty tokenposition, gb.getTokenAtPosition() returns the position
-        */
-        //assertEquals("", gb.getTokenAtPosition("B4"), "removeToken: True");
+        assertEquals("A2", gameBoard.getTokenAtPosition("A2"));
+        assertEquals(24, gameBoard.getGameBoardCapacity());
+
+        // if you try to remove a token from an empty slot, you will "replace" the item at the slot with the same
+        // empty token, since empty spots hold "tokens" with the pattern [ABC][1-8]
+
+        // however, capacity will go up, even though no token was really removed
+
+        // GameBoardManager will never call removeToken on an empty slot, and will throw a RemoveEmptySlotException
+        // when a player tries to do so
+
+        // - Jason
 
         //removeTokenTest for empty position
-        //TODO: test for empty token
         gameBoard.removeToken("C1");
+        assertEquals("C1", gameBoard.getTokenAtPosition("C1"));
+        assertEquals(25, gameBoard.getGameBoardCapacity());
+
 
     }
 
