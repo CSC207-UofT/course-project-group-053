@@ -86,7 +86,7 @@ public class GameBoard {
                 "|                                                |\n"+
                 "|                                                |\n"+
         "{5}----------------------{6}----------------------{7}\n",
-                gameBoardTokens);
+                (Object) gameBoardTokens);
     }
 
     private String[] splitCoordinates(String targetPosition) {

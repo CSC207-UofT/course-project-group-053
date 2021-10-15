@@ -11,7 +11,6 @@ public class GameBoardManagerTest {
     @Test
     void processPlayerMove() {
         // player places token in valid spot
-        gbm.processPlayerMove("W", "A1");
 
         // player places token in occupied slot
 

@@ -8,7 +8,7 @@ public class GameBoardManager {
     public HashMap<Integer, Set<String>> playerTokens;
 
     // Stores the location of mills formed by both players
-    public HashMap<Integer, Set> playerMills;
+    public HashMap<Integer, Set<List<String>>> playerMills;
 
     // Hash to map player colors to player numbers
     // white ("W" token) = player 1, black ("B" token) = player 2, as defined in Main.java
@@ -96,11 +96,11 @@ public class GameBoardManager {
      * @return boolean indicating whether position falls into a player's mills
      */
     private boolean checkIfPositionInMill(int playerNumber, String position) {
-        Set mills = playerMills.get(playerNumber);
+        Set<List<String>> mills = playerMills.get(playerNumber);
 
         // iterate over mills in mills, and check if position occurs in any of the mills
-        for (Object m: mills) {
-            if (((List) m).contains(position)) {
+        for (List<String> m: mills) {
+            if (m.contains(position)) {
                 // found position in one of the player's mills
                 return true;
             }
@@ -166,9 +166,9 @@ public class GameBoardManager {
     public void millAdder(String position, String[] mill) throws InvalidPositionException {
         // checks which player the mill belongs to, and add the mill to the player's mills
         if (getItemInGameBoard(position).equals("W")) {
-            playerMills.get(1).add(mill);
+            playerMills.get(1).add(List.of(mill));
         } else {
-            playerMills.get(2).add(mill);
+            playerMills.get(2).add(List.of(mill));
         }
 
     }
@@ -216,7 +216,7 @@ public class GameBoardManager {
 
     /***
      *Checks if the token being removed is valid and then remove it if it is valid.
-     * TODO: add check for token being removed only being non mill token unless no other tokens available
+     *
      * @param playerNumber: int representing the player (1 or 3) requesting to remove a token
      * @param position: coordinate (in format [A-C][1-8]) on gameboard to remove token from
      */
