@@ -47,6 +47,7 @@ public class GameBoardManagerTest {
     @Test
     void processPlayerRemove() {
         try {
+            //TODO: mill not created properly -> RemoveMillException is not checked properly
             gbm.processPlayerMove("W", "A1");
             gbm.processPlayerMove("W", "A2");
             gbm.processPlayerMove("W", "A3");
