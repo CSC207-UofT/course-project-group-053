@@ -1,7 +1,0 @@
-Run main
-Main asks for user input to specify player names and player token colors
-Main instantiates and calls PlayerManager to store instances of new players + tokens (?)
-Main instantiates new GameBoardManager instance to store instance of empty GameBoard
-Main runs loop to keep asking for user inputs, to specify where they want to place their tokens on the board
-During loop, main passes the user inputs to GameBoardManager, to process player requests to place tokens on board
-Loop ends when GameBoardManager determines that both players have placed max number of tokens on GameBoard
