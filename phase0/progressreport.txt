@@ -5,4 +5,8 @@ Mary -  worked on the players class
 Jason - worked on gameboard and gameboardmanager classes.  
 Felipe - worked on the player manager class. 
 
-Challenges: The ideation phase is always challenging. It took a while to get in the flow of things as a team. There were some changes that were made to the gameboard to ensure that the game could be played in the most efficient way possible. We also had some challenges regarding github specifically when it came to committing that were sorted in our second in-person meeting. 
+Challenges: The ideation phase is always challenging. 
+It took a while to get in the flow of things as a team. 
+There were some changes that were made to the gameboard to ensure that the game 
+could be played in the most efficient way possible. We also had some challenges 
+regarding github specifically when it came to committing that were sorted in our second in-person meeting. 
