@@ -1,8 +1,8 @@
 Aalina - worked on the scenario walkthrough and the progress reports.  
-Aliza - worked on gameboard and main.java . 
-Saksam - worked on the ‘removing token’ method. 
-Mary -  worked on players class, GamePlayer1, tests
-Jason - worked on gameboard and gameboardmanager classes.  
+Aliza - worked on gameboard, Gameplayer1 and main.java. 
+Saksam - worked on removing the tokens when a mill was formed. 
+Mary -  worked on players class, GamePlayer1, tests, CRC models. 
+Jason - worked on gameboard and gameboardmanager classes, CRC models.  
 Felipe - worked on the player manager class. 
 
 Challenges: The ideation phase is always challenging. 
