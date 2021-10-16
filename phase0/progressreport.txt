@@ -1,7 +1,7 @@
 Aalina - worked on the scenario walkthrough and the progress reports.  
 Aliza - worked on gameboard and main.java . 
 Saksam - worked on the ‘removing token’ method. 
-Mary -  worked on the players class 
+Mary -  worked on players class, GamePlayer1, tests
 Jason - worked on gameboard and gameboardmanager classes.  
 Felipe - worked on the player manager class. 
 
