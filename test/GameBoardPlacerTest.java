@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// NOTE: we don't need this class
+
 class GameBoardPlacerTest {
 
     @BeforeEach

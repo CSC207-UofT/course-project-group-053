@@ -68,6 +68,9 @@ public class GameBoard {
             }
         }
 
+        // NOTE: IntelliJ complains about the style of the string below, but implementing IntelliJ's suggestions breaks
+        // the code. I have kept this string as is.
+        // - Jason
         return MessageFormat.format(
                 "{0}----------------------{1}----------------------{2}\n"+
                         "|                                                |\n"+
@@ -86,7 +89,7 @@ public class GameBoard {
                 "|                                                |\n"+
                 "|                                                |\n"+
         "{5}----------------------{6}----------------------{7}\n",
-                (Object) gameBoardTokens);
+                (Object[]) gameBoardTokens);
     }
 
     private String[] splitCoordinates(String targetPosition) {
