@@ -1,7 +1,7 @@
 Aalina - worked on the scenario walkthrough and the progress reports.  
-Aliza - worked on gameboard, Gameplayer1 and main.java. 
-Saksam - worked on removing the tokens when a mill was formed. 
-Mary -  worked on players class, GamePlayer1, tests, CRC models. 
+Aliza - worked on Main.java some part of which os now GamePlay1 and Scenario Walk Through. 
+Saksam - worked on removing the tokens when a mill was formed, and checking when the removal of token was valid. 
+Mary -  worked on Players class, HumanPlayer1 class, HumanPlayer2 class, GamePlayer1, tests, CRC models. 
 Jason - worked on gameboard and gameboardmanager classes, CRC models.  
 Felipe - worked on the player manager class. 
 
