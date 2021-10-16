@@ -1,5 +1,11 @@
-# Project domain: 9 men morris multiplayer game
+# Project domain: Nine Men Morris - 2 player board game
 
 # Project description:
 
-The project so far is a command-line version of the Nine Men's Morris board game, for two players to play. Launching the program prompts the first player to enter their player name, and what color they want their game pieces (tokens) to be. The program then prompts the same information from the second player. After this, the game starts, and players are shown an ASCII graphic of the gameboard. Players take turns typing in the command line, specifying the coordinates where they want to place their game pieces. When players get their game tokens to form horizontal or vertical stacks on the gameboard (a "house"), they can remove one of their opponent's tokens from the board if they are not also in a house. The game ends when both players run out of tokens to place.
+Running the program launches a graphical interface, depicting the game board used for Nine Men Morris. Players will be asked whether they want to play against another human player (someone sharing the computer with them), or a computer player. Then, players are prompted to enter their username and choice of game piece ("token") color.
+
+The game takes on two phases. In the first phase, players can place their tokens on the game board, by clicking on positions on the screen. When a player gets three of their pieces in a row, horizontally or vertically, they form a "house". When they form a house, they can remove one of their opponent's tokens, and their tokens in the house cannot be removed by their opponent. The first phase ends when players have put all their tokens on the game board.
+
+In the second phase, players can slide their tokens across the board, to try and form houses and eliminate the other player's tokens. The game ends when one player has only two tokens left, as they can no longer form houses. This player loses, and the other player wins.
+
+Moreover, when players enter their usernames at the start, our program will also keep track of each player. Our program will note the number of games played, wins, and other statistics for that username. When a previously used username is entered by a player, the program will record information from the current game for that username.
