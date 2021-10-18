@@ -7,12 +7,12 @@ Jason - worked on gameboard and gameboardmanager classes, CRC models.
 Felipe - worked on the player manager class. 
 
 What each group member plans to work on:
-Aalina -  
-Aliza -  
-Saksam - 
-Mary -   
-Jason -  
-Felipe - 
+Aalina -  Login and database, unit test
+Aliza -  Phase2 GamePlay class
+Saksam - validating moves on phase2
+Mary -   ComputerPlayer class
+Jason -  Phase2 board
+Felipe - PlayerManager(login)
 
 Good design choices:
 1) Our classes were quite modular and lowly coupled, so we were able to work on our code independently, without worrying too much about breaking other people's code
