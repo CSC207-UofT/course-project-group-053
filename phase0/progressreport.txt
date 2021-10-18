@@ -14,6 +14,11 @@ Mary -
 Jason -  
 Felipe - 
 
+Good design choices:
+1) Our classes were quite modular and lowly coupled, so we were able to work on our code independently, without worrying too much about breaking other people's code
+2) Our classes have made good use of encapsulation. It was easy for us to use methods from each other's classes, since the public methods were concisely named. We could also make major changes to our classes' implementations without changing how our classes are used because of this.
+3) Our use case and entity classes, at least, are only responsible for single specific functions, and have been easy to extend
+
 
 Challenges: The ideation phase is always challenging. 
 It took a while to get in the flow of things as a team. 
