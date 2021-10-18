@@ -30,15 +30,16 @@ regarding github specifically when it came to committing that were sorted in our
 
 Open Questions your group is still struggling with:
 Since we have most of our logic for how the first phase of our game will work, 
-there are not a lot of open questions that we have on my end. For Phase 2, 
+there are not a lot of open questions that we have on our end for phase I. For Phase 2, 
 the game itself does not much change in terms of its logic but more in the 
 kinds of rules that are allowed. For our team, the next step and perhaps the most 
 challenging one is going to be ensuring a boundary for what moves are allowed according 
 to the rules and keeping them in check since the game moves from placing tokens to sliding 
-the pre-existing tokens already on the board. There are also some variations on this game 
+the pre-existing tokens on the board. There are also some variations on this game 
 where skipping tokens may be allowed which is a design choice and open question that still 
 needs to be addressed (this would be our phase 3). In addition, some open questions are also 
-to what extent we want to display player data in terms of their previous statistics.
+to what extent we want to display player data in terms of their previous statistics and how detailed 
+the chosen statistics would be. 
 
 
 Summary:
