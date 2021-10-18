@@ -1,9 +1,19 @@
+What each group member has worked on:
 Aalina - worked on the scenario walkthrough and the progress reports.  
 Aliza - worked on Main.java some part of which os now GamePlay1 and Scenario Walk Through. 
 Saksam - worked on removing the tokens when a mill was formed, and checking when the removal of token was valid. 
 Mary -  worked on Players class, HumanPlayer1 class, HumanPlayer2 class, GamePlayer1, tests, CRC models. 
 Jason - worked on gameboard and gameboardmanager classes, CRC models.  
 Felipe - worked on the player manager class. 
+
+What each group member plans to work on:
+Aalina -  
+Aliza -  
+Saksam - 
+Mary -   
+Jason -  
+Felipe - 
+
 
 Challenges: The ideation phase is always challenging. 
 It took a while to get in the flow of things as a team. 
