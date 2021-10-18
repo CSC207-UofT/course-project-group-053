@@ -53,5 +53,5 @@ of two Human Players and the colour the first Human Player chooses.
 So when the Input is received, HumanPlayer, which is the subclass of Player initializes two player 
 instances and stores the name of player, the token colour of the player, and initializes the number 
 of chips as 9 and sets the number of chips on the board to 0.
-The same is the case of when (wlog) Player1 forms a mill and gets to remove opponents token, GameBoardManager 
+When Player1 forms a mill and gets to remove opponents token, GameBoardManager 
 validates the move and then stores the move and then outputs the state of the board.
