@@ -12,12 +12,28 @@ could be played in the most efficient way possible. We also had some challenges
 regarding github specifically when it came to committing that were sorted in our second in-person meeting. 
 
 Open Questions your group is still struggling with:
-Since we have most of our logic for how the first phase of our game will work, there are not a lot of open questions that we have on my end. For Phase 2, the game itself does not much change in terms of its logic but more in the kinds of rules that are allowed. For our team, the next step and perhaps the most challenging one is going to be ensuring a boundary for what moves are allowed according to the rules and keeping them in check since the game moves from placing tokens to sliding the pre-existing tokens already on the board. There are also some variations on this game where skipping tokens may be allowed which is a design choice and open question that still needs to be addressed (this would be our phase 3). In addition, some open questions are also to what extent we want to display player data in terms of their previous statistics.
+Since we have most of our logic for how the first phase of our game will work, 
+there are not a lot of open questions that we have on my end. For Phase 2, 
+the game itself does not much change in terms of its logic but more in the 
+kinds of rules that are allowed. For our team, the next step and perhaps the most 
+challenging one is going to be ensuring a boundary for what moves are allowed according 
+to the rules and keeping them in check since the game moves from placing tokens to sliding 
+the pre-existing tokens already on the board. There are also some variations on this game 
+where skipping tokens may be allowed which is a design choice and open question that still 
+needs to be addressed (this would be our phase 3). In addition, some open questions are also 
+to what extent we want to display player data in terms of their previous statistics.
 
 
 Summary:
-At this point GameBoardManager is working to see where on the board the token has been placed and making a record of it, and the Player class keeps track of how many tokens the Players are left with and how many of Players tokens are on the board.
-If no exceptions are thrown and players move is valid, GameBoardManager keeps a track of what has been changed and stores it and outputs the state of the board for the Players to see.
-The code starts at the Main class where it would ask for Input from the user to enter the names of two Human Players and the colour the first Human Player chooses.
-So when the Input is received, HumanPlayer, which is the subclass of Player initializes two player instances and stores the name of player, the token colour of the player, and initializes the number of chips as 9 and sets the number of chips on the board to 0.
-The same is the case of when (wlog) Player1 forms a mill and gets to remove opponents token, GameBoardManager validates the move and then stores the move and then outputs the state of the board.
+At this point GameBoardManager is working to see where on the board the token has been placed 
+and making a record of it, and the Player class keeps track of how many tokens the Players are 
+left with and how many of Players tokens are on the board.
+If no exceptions are thrown and players move is valid, GameBoardManager keeps a track of what 
+has been changed and stores it and outputs the state of the board for the Players to see.
+The code starts at the Main class where it would ask for Input from the user to enter the names 
+of two Human Players and the colour the first Human Player chooses.
+So when the Input is received, HumanPlayer, which is the subclass of Player initializes two player 
+instances and stores the name of player, the token colour of the player, and initializes the number 
+of chips as 9 and sets the number of chips on the board to 0.
+The same is the case of when (wlog) Player1 forms a mill and gets to remove opponents token, GameBoardManager 
+validates the move and then stores the move and then outputs the state of the board.
