@@ -7,8 +7,8 @@ public class GamePlay1 {
         GameBoardManager gameBoardManager = new GameBoardManager();
         Scanner sc = new Scanner(System.in);
 
-        HumanPlayer1 player1 = new HumanPlayer1(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
-        HumanPlayer2 player2 = new HumanPlayer2(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
+        Player player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
+        Player player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
 
         String player1_username = player1.get_username();
         String player2_username = player2.get_username();

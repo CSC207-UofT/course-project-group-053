@@ -1,4 +1,4 @@
-public abstract class Player {
+public class Player {
     String str_player_username;
     String str_player_tokencolour;
 
@@ -48,5 +48,4 @@ public abstract class Player {
         --this.int_player_numchipsonboard;
     }
 
-    public abstract boolean isHuman();
 }
