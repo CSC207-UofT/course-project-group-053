@@ -4,9 +4,8 @@ import java.util.*;
 public class Main {
     public static String Black = "B";
     public static String White = "W";
-    public static HumanPlayer1 player1;
-    public static HumanPlayer2 player2;
-
+    public static Player player1;
+    public static Player player2;
 
 
     public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException {
@@ -47,12 +46,12 @@ public class Main {
         if (color_firstinput.equals(White)) {
             color_secondinput = Black;
             // done initializing player 1
-            player1 = new HumanPlayer1(name_firstinput, White);
-            player2 = new HumanPlayer2(name_secondinput, Black);
+            player1 = new Player(name_firstinput, White);
+            player2 = new Player(name_secondinput, Black);
         }else {
             color_secondinput = White;
-            player1 = new HumanPlayer1(name_secondinput, White);
-            player2 = new HumanPlayer2(name_firstinput, Black);
+            player1 = new Player(name_secondinput, White);
+            player2 = new Player(name_firstinput, Black);
         }
 
         System.out.print("The colour for " + name_secondinput + " is " + color_secondinput + ". ");
