@@ -2,7 +2,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 
 public class GameBoard {
-    // Defines the game board used for Nine Men Morris, which holds tokens from each player
+    // Defines the game board used for Nine Men Morris, which holds objects representing our tokens
     private final HashMap<String, String[]> gameBoard;
 
     // keeps track of how many empty slots are currently on the gameboard
@@ -36,21 +36,6 @@ public class GameBoard {
 
         gameBoard = gbHash;
         gameBoardCapacity = 24;
-    }
-
-    public static void main(String[] args) {
-        // sample main method, in case you want to see how the board looks like
-        GameBoard gb = new GameBoard();
-        System.out.println(gb);
-        System.out.println("---------------------------------------------------------------");
-        System.out.println(gb.getTokenAtPosition("B8"));
-        gb.setToken("B", "B4");
-        System.out.println(gb.getTokenAtPosition("B4"));
-        System.out.println("---------------------------------------------------------------");
-        System.out.println(gb);
-        gb.removeToken("B4");
-        System.out.println("---------------------------------------------------------------");
-        System.out.println(gb);
     }
 
     @Override
@@ -95,6 +80,8 @@ public class GameBoard {
     private String[] splitCoordinates(String targetPosition) {
         return targetPosition.split("(?<=\\D)(?=\\d+\\b)");
     }
+    private void decreaseCapacity() { gameBoardCapacity++; }
+    private void increaseCapacity() { gameBoardCapacity--; }
 
     /**
      * Place a Player's token in a specified box and box position in GameBoard
@@ -110,7 +97,7 @@ public class GameBoard {
         // then, set token to given numerical index in box
         // offset index within box by 1, to account for indexing starting from zero
         gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1] = token;
-        gameBoardCapacity--;
+        decreaseCapacity();
     }
 
     /**
@@ -127,7 +114,7 @@ public class GameBoard {
         // then, set item in box back to default coordinate values (i.e: the slot is now free)
         // offset index within box by 1, to account for indexing starting from zero
         gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1] = targetPosition;
-        gameBoardCapacity++;
+        increaseCapacity();
     }
 
     /**
@@ -144,10 +131,4 @@ public class GameBoard {
         return gameBoard.get(coordinates[0])[Integer.parseInt(coordinates[1]) - 1];
     }
 
-    /**
-     * Returns the current number of empty slots on the GameBoard, an int between 0 - 24
-     *
-     * @return int representing number of empty slots on GameBoard
-     */
-    public int getGameBoardCapacity() { return gameBoardCapacity; }
 }
