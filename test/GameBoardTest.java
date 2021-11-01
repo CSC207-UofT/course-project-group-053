@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameBoardTest {
-    GameBoard<PlayerToken> gameBoard;
+    GameBoard gameBoard;
 
     @BeforeEach
-    void setUp() { gameBoard = new GameBoard<>(); }
+    void setUp() { gameBoard = new GameBoard(); }
 
     @AfterEach
     void tearDown() {
@@ -17,20 +17,20 @@ class GameBoardTest {
 
     @Test
     void setToken() {
-        HumanPlayer1 p = new HumanPlayer1("dude", "red");
-        PlayerToken t = new PlayerToken(p, "red");
-        gameBoard.setToken(t,"A1");
-        assertEquals(t, gameBoard.getTokenAtPosition("A1"), "setToken: True");
+        Player p = new Player("dude", "R");
+        Token t = new Token(p.get_username(), p.get_tokencolour());
+        gameBoard.setToken(t.toString(),"A1");
+        assertEquals(t.toString(), gameBoard.getTokenAtPosition("A1"), "setToken: True");
         assertEquals(23, gameBoard.getGameBoardCapacity(), "successfully updated capacity");
     }
 
     @Test
     void removeToken() {
         //removeTokenTest for nonempty position
-        HumanPlayer1 p = new HumanPlayer1("dude", "red");
-        PlayerToken t = new PlayerToken(p, "red");
-        gameBoard.setToken(t,"A2");
-        assertEquals(t, gameBoard.getTokenAtPosition("A2"), "setToken: True");
+        Player p = new Player("dude", "R");
+        Token t = new Token(p.get_username(), p.get_tokencolour());
+        gameBoard.setToken(t.toString(),"A2");
+        assertEquals(t.toString(), gameBoard.getTokenAtPosition("A2"), "setToken: True");
         assertEquals(24, gameBoard.getGameBoardCapacity());
 
         // remove the token we just added
@@ -46,10 +46,10 @@ class GameBoardTest {
     @Test
     void getTokenAtPosition() {
         // get token at occupied position
-        HumanPlayer1 p = new HumanPlayer1("dude", "red");
-        PlayerToken t = new PlayerToken(p, "red");
-        gameBoard.setToken(t,"A3");
-        assertEquals(t, gameBoard.getTokenAtPosition("A3"), "getTokenAtPosition: True");
+        Player p = new Player("dude", "R");
+        Token t = new Token(p.get_username(), p.get_tokencolour());
+        gameBoard.setToken(t.toString(),"A3");
+        assertEquals(t.toString(), gameBoard.getTokenAtPosition("A3"), "getTokenAtPosition: True");
 
         // get token at empty position
         assertNull(gameBoard.getTokenAtPosition("C8"));
@@ -60,9 +60,9 @@ class GameBoardTest {
         assertEquals(24, gameBoard.getGameBoardCapacity(),"getGameBoardCapacity: True");
 
         //after gameBoard--
-        HumanPlayer1 p = new HumanPlayer1("dude", "red");
-        PlayerToken t = new PlayerToken(p, "red");
-        gameBoard.setToken(t,"B1");
+        Player p = new Player("dude", "R");
+        Token t = new Token(p.get_username(), p.get_tokencolour());
+        gameBoard.setToken(t.toString(),"B1");
         assertEquals(23, gameBoard.getGameBoardCapacity(),"getGameBoardCapacity: True");
 
         //after gameBoard++
