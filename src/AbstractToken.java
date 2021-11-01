@@ -1,12 +1,12 @@
 /**
  * Abstract parent class for any object we can place on a GameBoard
  */
-public abstract class AbstractToken {
-    private final Player owner;
+public abstract class AbstractToken<T extends Player> {
+    private final T owner;
     private final String appearance;
     private boolean inMill;
 
-    public AbstractToken(Player owner, String appearance) {
+    public AbstractToken(T owner, String appearance) {
         this.owner = owner;
         this.appearance = appearance;
         this.inMill = false;
@@ -15,7 +15,7 @@ public abstract class AbstractToken {
     @Override
     public abstract String toString();
 
-    public Player getPlayer() {
+    public T getPlayer() {
         return this.owner;
     }
 
@@ -23,7 +23,7 @@ public abstract class AbstractToken {
         return this.appearance;
     }
 
-    public boolean checkInMill() {
+    public boolean inMill() {
         return this.inMill;
     }
 
