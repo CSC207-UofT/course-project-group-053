@@ -41,7 +41,7 @@ public class GameBoardManipulator {
         // 2) check if position is empty (RemoveEmptySlotException)
         // 3) if position is valid and non-empty, remove the token from gameboard
         if (checkInvalidPosition(position)) {
-            throw new InvalidPositionException();
+            throw new InvalidPositionException("Non-existent position. Please enter valid coordinate.");
         }
         else if (gb.getTokenAtPosition(position) == null) {
             // cannot remove token from an empty position
