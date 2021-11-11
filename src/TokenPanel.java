@@ -1,9 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TokenPanel extends JPanel {
-    JLabel[] tokens;
+    ArrayList<JLabel> tokens;
     String tokenColour;
 
     public TokenPanel(String colour) {
@@ -14,7 +15,7 @@ public class TokenPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBackground(Color.decode("#FF1B3A"));
 
-        tokens = new JLabel[9];
+        tokens = new ArrayList<>();
         initializeTokens();
         addTokensToPanel();
     }
@@ -30,9 +31,9 @@ public class TokenPanel extends JPanel {
         ImageIcon tokenImg = new ImageIcon(tokenFile);
         tokenImg.setImage(tokenImg.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
 
-        for (int i = 0; i < tokens.length; i++) {
-            tokens[i] = new JLabel(tokenImg);
-            tokens[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+        for (int i = 0; i < 9; i++) {
+            tokens.add(new JLabel(tokenImg));
+            tokens.get(tokens.size() - 1).setAlignmentX(Component.CENTER_ALIGNMENT);
         }
     }
 
@@ -44,8 +45,8 @@ public class TokenPanel extends JPanel {
         }
     }
 
-    public void removeToken(int tokenId){
-        this.remove(tokens[tokenId]);
+    public void removeToken(){
+        this.remove(tokens.remove(tokens.size() - 1));
         this.revalidate();
         this.repaint();
     }

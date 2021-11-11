@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
-    JButton[] tokens;
+    TokenButton[] tokens;
     GridBagLayout layout;
     GridBagConstraints gbc;
     Image gridImage;
@@ -20,14 +20,14 @@ public class GamePanel extends JPanel {
         img.setImage(img.getImage().getScaledInstance(600, 600, Image.SCALE_DEFAULT));
         gridImage = img.getImage();
 
-        tokens = new JButton[24];
+        tokens = new TokenButton[24];
         initializeTokens();
         addTokensToPanel();
     }
 
     public void initializeTokens(){
         for(int i = 0; i < tokens.length; i++){
-            tokens[i] = new JButton("");
+            tokens[i] = new TokenButton("");
             tokens[i].setPreferredSize(new Dimension(40, 40));
         }
     }
@@ -63,6 +63,10 @@ public class GamePanel extends JPanel {
         addComponents(tokens[21], 0, 6);
         addComponents(tokens[22], 3, 6);
         addComponents(tokens[23], 6, 6);
+    }
+
+    public TokenButton[] getTokenButtons(){
+        return tokens;
     }
 
     private void addComponents(Component component, int gridx, int gridy){

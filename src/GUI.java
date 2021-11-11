@@ -44,12 +44,16 @@ public class GUI extends JFrame implements ActionListener {
 
     public void addActionEvent() {
         //adding Action listener to components
-        ((LoginPanel) loginPanel).continueButton.addActionListener(this);
+        ((LoginPanel) loginPanel).continueButton.addActionListener(this::confirmButtonAction);
+
+        TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
+        for(int i = 0; i < tokenButtons.length; i++){
+            int finalI = i;
+            tokenButtons[i].addActionListener(e -> tokenButtonAction(e, finalI));
+        }
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void confirmButtonAction(ActionEvent e) {
         if(((LoginPanel) loginPanel).player1TextField.getText().equals("") ||
                 ((LoginPanel) loginPanel).player2TextField.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Usernames cannot be blank!");
@@ -58,6 +62,38 @@ public class GUI extends JFrame implements ActionListener {
         else{
             goToGameFrame();
         }
+    }
+
+    public void tokenButtonAction(ActionEvent e, int tokenIndex) {
+        String gameState = ((HeaderPanel) headerPanel).gameState.getText();
+        TokenButton tokenButton = ((GamePanel) gamePanel).getTokenButtons()[tokenIndex];
+
+
+        if (tokenButton.clickable){
+            if(gameState.equals("Player 1's turn")){
+                tokenButton.setColour("W");
+                ((TokenPanel) whiteTokenPanel).removeToken();
+                ((HeaderPanel) headerPanel).gameState.setText("Player 2's turn");
+            }
+            else if(gameState.equals("Player 2's turn")){
+                tokenButton.setColour("B");
+                ((TokenPanel) blackTokenPanel).removeToken();
+                ((HeaderPanel) headerPanel).gameState.setText("Player 1's turn");
+            }
+            tokenButton.setClickable(false);
+            tokenButton.setButtonVisual();
+            tokenButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+
+
+        gamePanel.revalidate();
+        gamePanel.repaint();
+
+        gamePanelWrapper.revalidate();
+        gamePanelWrapper.repaint();
+
+        this.revalidate();
+        this.repaint();
     }
 
     private void goToGameFrame(){
@@ -76,6 +112,11 @@ public class GUI extends JFrame implements ActionListener {
 
         this.revalidate();
         this.repaint();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 }
 
