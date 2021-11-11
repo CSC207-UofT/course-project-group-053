@@ -21,10 +21,10 @@ public class TokenPanel extends JPanel {
     private void initializeTokens() {
         String tokenFile;
         if (tokenColour.equals("B")){
-            tokenFile = "blackToken.png";
+            tokenFile = "res/blackToken.png";
         }
         else{
-            tokenFile = "whiteToken.png";
+            tokenFile = "res/whiteToken.png";
         }
 
         ImageIcon tokenImg = new ImageIcon(tokenFile);

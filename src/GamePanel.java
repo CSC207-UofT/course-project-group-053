@@ -16,7 +16,7 @@ public class GamePanel extends JPanel {
         this.setMaximumSize(new Dimension(600, 600));
         this.setLayout(layout);
 
-        ImageIcon img = new ImageIcon("gridImage.jpg");
+        ImageIcon img = new ImageIcon("res/gridImage.jpg");
         img.setImage(img.getImage().getScaledInstance(600, 600, Image.SCALE_DEFAULT));
         gridImage = img.getImage();
 
@@ -82,21 +82,5 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(gridImage, 0, 0, null);
-    }
-}
-
-class c {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setBounds(10, 10, 1500, 900);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.getContentPane().setBackground(Color.white);
-        frame.setLayout(new BorderLayout());
-
-        GamePanel gp = new GamePanel();
-        frame.add(gp, BorderLayout.CENTER);
-
-        frame.setVisible(true);
     }
 }

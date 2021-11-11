@@ -8,7 +8,7 @@ public class WelcomePanel extends JPanel{
         super();
         welcomeLabel = new JLabel("WELCOME TO NINE MEN'S MORRIS!");
 
-        ImageIcon welcomeGif = new ImageIcon("welcomeImg.gif");
+        ImageIcon welcomeGif = new ImageIcon("res/welcomeImg.gif");
         welcomeGif.setImage(welcomeGif.getImage().getScaledInstance(450, 450, Image.SCALE_DEFAULT));
         welcomeImageLabel = new JLabel(welcomeGif);
 
