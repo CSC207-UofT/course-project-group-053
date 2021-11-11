@@ -27,7 +27,8 @@ public class GamePanel extends JPanel {
 
     public void initializeTokens(){
         for(int i = 0; i < tokens.length; i++){
-            tokens[i] = new JButton(Integer.toString(i));
+            tokens[i] = new JButton("");
+            tokens[i].setPreferredSize(new Dimension(40, 40));
         }
     }
 

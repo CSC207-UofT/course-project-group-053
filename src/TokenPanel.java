@@ -37,7 +37,7 @@ public class TokenPanel extends JPanel {
     }
 
     private void addTokensToPanel(){
-        this.add(Box.createRigidArea(new Dimension(120, 40)));
+        this.add(Box.createRigidArea(new Dimension(150, 40)));
         for (JLabel token : tokens){
             this.add(token);
             this.add(Box.createRigidArea(new Dimension(0, 15)));

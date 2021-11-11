@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class GUI extends JFrame implements ActionListener {
-    JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper;
+    JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper, headerPanel;
 
     public GUI() {
         loginPanel = new LoginPanel();
@@ -16,11 +16,13 @@ public class GUI extends JFrame implements ActionListener {
         whiteTokenPanel = new TokenPanel("W");
         blackTokenPanel = new TokenPanel("B");
         gamePanel = new GamePanel();
+        headerPanel = new HeaderPanel();
 
         //gamePanelWrapper is used to fix a size for GamePanel because if
         //it was added directly into the frame it would not have a fixed size.
         gamePanelWrapper = new JPanel();
         gamePanelWrapper.setLayout(new BoxLayout(gamePanelWrapper, BoxLayout.PAGE_AXIS));
+        gamePanelWrapper.setBackground(Color.white);
 
         setSettings();
         this.add(welcomePanel, BorderLayout.WEST);
@@ -62,12 +64,15 @@ public class GUI extends JFrame implements ActionListener {
         this.remove(loginPanel);
         this.remove(welcomePanel);
 
-        gamePanelWrapper.add(Box.createRigidArea(new Dimension(0, 100)));
+        gamePanelWrapper.add(Box.createRigidArea(new Dimension(0, 80)));
         gamePanelWrapper.add(gamePanel);
 
         this.add(whiteTokenPanel, BorderLayout.WEST);
         this.add(blackTokenPanel, BorderLayout.EAST);
         this.add(gamePanelWrapper, BorderLayout.CENTER);
+        this.add(headerPanel, BorderLayout.NORTH);
+
+        this.setBackground(Color.decode("#FF1B3A"));
 
         this.revalidate();
         this.repaint();
