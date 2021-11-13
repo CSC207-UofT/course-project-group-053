@@ -23,10 +23,10 @@ public class WinnerCalculator {
         }
     }
 
-    private Player option1(HashSet<List<String>> player1Mills, HashSet<List<String>> player2Mills){
-        if (player1Mills.size() > player2Mills.size()){
+    private Player option1(int p1Houses, int p2Houses){
+        if (p1Houses > p2Houses){
             return player1;
-        }else if(player1Mills.size() < player2Mills.size()){
+        }else if(p1Houses < p2Houses){
             return player2;
         }
         return null;
