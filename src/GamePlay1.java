@@ -2,12 +2,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GamePlay1 {
-    //GameBoardManager gameBoardManager = new GameBoardManager();
-
     GameBoardManipulator gameBoardManipulator = new GameBoardManipulator();
+    CheckMill checkMill = new CheckMill();
     Scanner sc = new Scanner(System.in);
 
-    public GamePlay1(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException {
+    public GamePlay1(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException {
         Player player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
         Player player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
 
@@ -22,14 +21,23 @@ public class GamePlay1 {
 
         // while loop to run phase 1 of game, where players lay all their chips on the board
         while (!end_of_p1) {
-            //TODO: make use-case for checking Houses
-            //int player1Houses = gameBoardManager.getPlayer1Houses();
-            //int player2Houses = gameBoardManager.getPlayer2Houses();
+            int player1Houses = checkMill.getPlayerHouses(1);
+            int player2Houses = checkMill.getPlayerHouses(2);
 
             move_token(player1);
-            //remove_token(player1);
+            //if player1 has made a mill; process remove
+            if (checkMill.getPlayerHouses(1) > player1Houses) {
+                player1Houses = CheckMill.getPlayerHouses(1);
+                remove_token(player1);
+            }
+
+
             move_token(player2);
-            //remove_token(player2);
+            //if player2 has made a mill; process remove
+            if (checkMill.getPlayerHouses(2) > player2Houses) {
+                player2Houses = checkMill.getPlayerHouses(2);
+                remove_token(player2);
+            }
         }
 
     }
@@ -62,17 +70,11 @@ public class GamePlay1 {
         }
         // Now check if the player1 has created a mill
         //gameBoardManager.checkHouse();
-        //TODO: check mill/house
+        checkMill.checkMill();
 
     }
 
     public void remove_token(Player player) {
-//        int player1Houses = gameBoardManager.getPlayer1Houses();
-//        int player2Houses = gameBoardManager.getPlayer2Houses();
-        //TODO: checkHouses
-
-        //if (newly checked player's houses > previously checked houses) {
-        //playerHouses = getPlayerHouses();
         while (true) {
             System.out.println(player.get_username() + "'s turn. Choose a token to remove");
             // in gameboard manager add a function that returns a playerList of positions available

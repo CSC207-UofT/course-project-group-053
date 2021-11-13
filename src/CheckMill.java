@@ -1,14 +1,28 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class CheckMill {
     // store an empty gameboard at first
     private final GameBoard gb = new GameBoard();
-
-
     // Stores the location of mills formed by both players
-    public HashMap<Integer, Set<List<String>>> playerMills;
+    public static HashMap<Integer, Set<List<String>>> playerMills = new HashMap<>();
+
+    public CheckMill() {
+        // Stores the mills for player 1
+        // represent player mills as list of strings (ex: A1 A2 A3), and store the lists in the HashSets
+        HashSet<List<String>> player1Mills = new HashSet<>();
+
+        // Stores the mills for player 2
+        HashSet<List<String>> player2Mills = new HashSet<>();
+
+        // playerMills ends up as a hashmap, mapping player number to HashSets containing each player's mills
+        playerMills.put(1, player1Mills);
+        playerMills.put(2, player2Mills);
+    }
+
+
 
     private String getItemInGameBoard(String targetPosition) throws NonexistentPositionException {
         if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
@@ -33,6 +47,7 @@ public class CheckMill {
         if (getItemInGameBoard("A1").equals(getItemInGameBoard("A2")))
             if (getItemInGameBoard("A2").equals(getItemInGameBoard("A3")) && !getItemInGameBoard("A1").equals(GameBoard.EMPTY_SLOT_PATTERN)) {
                 millAdder("A1", new String[]{"A1", "A2", "A3"});
+                System.out.println("CheckMill_A1-A2-A3 made");
             }
         if (getItemInGameBoard("B1").equals(getItemInGameBoard("B2")) && getItemInGameBoard("B2").equals(getItemInGameBoard("B3")) && !getItemInGameBoard("B1").equals(GameBoard.EMPTY_SLOT_PATTERN)){
             millAdder("B1", new String[] {"B1", "B2", "B3"});
@@ -67,8 +82,11 @@ public class CheckMill {
         if (getItemInGameBoard("C6").equals(getItemInGameBoard("C7")) && getItemInGameBoard("C7").equals(getItemInGameBoard("C8")) && !getItemInGameBoard("C6").equals(GameBoard.EMPTY_SLOT_PATTERN)){
             millAdder("C6", new String[] {"C6", "C7", "C8"});
         }
-
-
-
     }
+
+    public static int getPlayerHouses(int player_number) {
+        System.out.println("CheckMIll_recent mill numb: " + playerMills.get(player_number).size());
+        return playerMills.get(player_number).size();
+    }
+
 }
