@@ -2,20 +2,36 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GamePlay1 {
-    GameBoardManager gameBoardManager = new GameBoardManager();
-    Scanner sc = new Scanner(System.in);
-    Boolean boolean_end_of_p1;
+    //GameBoardManager gameBoardManager = new GameBoardManager();
 
-    public GamePlay1(List<Player> playerList, Boolean boolean_end_of_p1) throws InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException {
+    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator();
+    Scanner sc = new Scanner(System.in);
+
+    public GamePlay1(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException {
         Player player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
         Player player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
 
-        // keep track of whether both players have run out of chips/tokens to place
-        // when they do, phase 1 of the game ends
-        this.boolean_end_of_p1 = (player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
+        System.out.println("Starting Game between " + player1.get_username() + " and " + player2.get_username());
 
         // print the initial gameboard state, before players make any moves
-        System.out.println(gameBoardManager.getGameBoardState());
+        //TODO: Print GameBoard
+
+        // keep track of whether both players have run out of chips/tokens to place
+        // when they do, phase 1 of the game ends
+        boolean end_of_p1 = (player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
+
+        // while loop to run phase 1 of game, where players lay all their chips on the board
+        while (!end_of_p1) {
+            //TODO: make use-case for checking Houses
+            //int player1Houses = gameBoardManager.getPlayer1Houses();
+            //int player2Houses = gameBoardManager.getPlayer2Houses();
+
+            move_token(player1);
+            //remove_token(player1);
+            move_token(player2);
+            //remove_token(player2);
+        }
+
     }
 
     public void move_token(Player player) throws InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException {
@@ -23,9 +39,16 @@ public class GamePlay1 {
             try {
                 System.out.println(player.get_username() + "'s turn. Place " + player.get_tokencolour() + " token. Choose an empty slot");
                 // player 1 inputs gameboard position to place their token in
-                String t1 = sc.nextLine();
-                gameBoardManager.processPlayerMove(player.get_tokencolour(), t1);
+                String setToken_position = sc.nextLine();
 
+                Token token = new Token(player.get_username(), player.get_tokencolour());
+
+                //TODO: make a Token
+                //InsertToken(token, position)
+                gameBoardManipulator.InsertToken(token, setToken_position);
+
+                // reduce player 1's chips by 1
+                player.dec_numchipsleft();
                 // player 1 has successfully placed down a token, so break out of the while loop
                 break;
 
@@ -33,45 +56,37 @@ public class GamePlay1 {
                 System.out.println(e.getMessage());
                 // skip the invalid token and ask for prompt again
             }
-            // reduce player 1's chips by 1
-            player.dec_numchipsleft();
 
             // print gameboard state after player 1 places down a chip
-            System.out.println(gameBoardManager.getGameBoardState());
+            //TODO: print gameboard
         }
         // Now check if the player1 has created a mill
-        gameBoardManager.checkHouse();
+        //gameBoardManager.checkHouse();
+        //TODO: check mill/house
 
     }
 
     public void remove_token(Player player) {
-        int player1Houses = gameBoardManager.getPlayer1Houses();
-        int player2Houses = gameBoardManager.getPlayer2Houses();
+//        int player1Houses = gameBoardManager.getPlayer1Houses();
+//        int player2Houses = gameBoardManager.getPlayer2Houses();
+        //TODO: checkHouses
 
-        if (gameBoardManager.getPlayer1Houses() > player1Houses) {
-            player1Houses = gameBoardManager.getPlayer1Houses();
-            while (true) {
-                System.out.println(player.get_username() + "'s turn. Choose a token to remove");
-                // in gameboard manager add a function that returns a playerList of positions available
-                String r1 = sc.nextLine();
-                try {
-                    gameBoardManager.processPlayerRemove(1, r1);
-                    break;
-                } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
-                    System.out.println(e.getMessage());
-                    // skip the invalid token and ask for prompt again
-                }
-
+        //if (newly checked player's houses > previously checked houses) {
+        //playerHouses = getPlayerHouses();
+        while (true) {
+            System.out.println(player.get_username() + "'s turn. Choose a token to remove");
+            // in gameboard manager add a function that returns a playerList of positions available
+            String removeToken_position = sc.nextLine();
+            try {
+                gameBoardManipulator.RemoveToken(removeToken_position);
+                break;
+            } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
+                System.out.println(e.getMessage());
+                // skip the invalid token and ask for prompt again
             }
-            //shows state after removing opponents token
-            System.out.println(gameBoardManager.getGameBoardState());
-        }
-    }
 
-    public void setBoolean_end_of_p1(Boolean end_of_p1) {
-        this.boolean_end_of_p1 = end_of_p1;
-    }
-    public boolean getBoolean_end_of_p1() {
-        return this.boolean_end_of_p1;
+        }
+        //shows state after removing opponents token
+        //TODO: print gameboard
     }
 }
