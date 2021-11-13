@@ -2,11 +2,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class GamePlay1 {
-    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator();
+    GameBoardPlacer placer = new GameBoardPlacer();
+    GameBoardRemover remover = new GameBoardRemover();
+    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(placer, remover);
     CheckMill checkMill = new CheckMill();
     Scanner sc = new Scanner(System.in);
 
-    public GamePlay1(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException {
+    public GamePlay1(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException,
+            NullPointerException {
         Player player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
         Player player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
 
@@ -53,7 +56,7 @@ public class GamePlay1 {
 
                 //TODO: make a Token
                 //InsertToken(token, position)
-                gameBoardManipulator.InsertToken(token, setToken_position);
+                gameBoardManipulator.placeToken(token, setToken_position);
 
                 // reduce player 1's chips by 1
                 player.dec_numchipsleft();
@@ -80,7 +83,7 @@ public class GamePlay1 {
             // in gameboard manager add a function that returns a playerList of positions available
             String removeToken_position = sc.nextLine();
             try {
-                gameBoardManipulator.RemoveToken(removeToken_position);
+                gameBoardManipulator.removeToken(removeToken_position);
                 break;
             } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
                 System.out.println(e.getMessage());
