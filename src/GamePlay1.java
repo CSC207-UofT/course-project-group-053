@@ -5,7 +5,7 @@ public class GamePlay1 {
     GameBoardPlacer placer = new GameBoardPlacer();
     GameBoardRemover remover = new GameBoardRemover();
     GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(placer, remover);
-    CheckMill checkMill = new CheckMill();
+    CheckMill checkMill = new CheckMill(gameBoardManipulator.getGameboard());
     Scanner sc = new Scanner(System.in);
 
     public GamePlay1(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException,

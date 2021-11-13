@@ -25,6 +25,8 @@ public class GameBoardManipulator {
         remover.remove(gameboard, position);
     }
 
+    public GameBoard getGameboard() { return this.gameboard; }
+
 /*
     @Override
     public void register(Observer o) {
