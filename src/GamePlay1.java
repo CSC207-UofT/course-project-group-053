@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class GamePlay1 {
     GameBoardPlacer placer = new GameBoardPlacer();
     GameBoardRemover remover = new GameBoardRemover();
-    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(placer, remover);
-    CheckMill checkMill = new CheckMill(gameBoardManipulator.getGameboard());
+    CheckMill checkMill = new CheckMill();
+    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
     Scanner sc = new Scanner(System.in);
 
     public GamePlay1(List<Player> playerList) throws InvalidPositionException, ArrayIndexOutOfBoundsException,
@@ -63,7 +63,7 @@ public class GamePlay1 {
                 // player 1 has successfully placed down a token, so break out of the while loop
 
 
-                checkMill.checkMill(setToken_position, player.get_tokencolour());
+                checkMill.checkMill(setToken_position, player.get_tokencolour(), gameBoardManipulator.getGameboard());
                 break;
 
             } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
@@ -85,7 +85,7 @@ public class GamePlay1 {
             // in gameboard manager add a function that returns a playerList of positions available
             String removeToken_position = sc.nextLine();
             try {
-                gameBoardManipulator.removeToken(removeToken_position);
+                gameBoardManipulator.removeToken(removeToken_position, player.get_tokencolour());
                 break;
             } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
                 System.out.println(e.getMessage());

@@ -7,11 +7,14 @@ public class GameBoardManipulator {
     private final GameBoard gameboard;
     private final GameBoardPlacer placer;
     private final GameBoardRemover remover;
+    private final CheckMill millChecker;
 
-    public GameBoardManipulator(GameBoardPlacer placer, GameBoardRemover remover) {
+    public GameBoardManipulator(GameBoardPlacer placer, GameBoardRemover remover,
+                                CheckMill millChecker) {
         this.gameboard = new GameBoard();
         this.placer = placer;
         this.remover = remover;
+        this.millChecker = millChecker;
     }
 
     public void placeToken(Token token, String position) throws OccupiedSlotException,
@@ -20,9 +23,15 @@ public class GameBoardManipulator {
         placer.place(gameboard, token, position);
     }
 
-    public void removeToken(String position) throws RemoveEmptySlotException, InvalidPositionException {
+    public void removeToken(String position, String playerColor) throws RemoveEmptySlotException,
+            InvalidPositionException, RemoveMillException {
         // TODO: make sure exceptions are caught properly upstream
-        remover.remove(gameboard, position);
+        // check for remove self token first
+        if (!millChecker.checkMill2(position, playerColor, gameboard)) {
+            remover.remove(gameboard, position);
+        } else {
+            throw new RemoveMillException();
+        }
     }
 
     public GameBoard getGameboard() { return this.gameboard; }
