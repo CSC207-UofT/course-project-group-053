@@ -61,6 +61,9 @@ public class GamePlay1 {
                 // reduce player 1's chips by 1
                 player.dec_numchipsleft();
                 // player 1 has successfully placed down a token, so break out of the while loop
+
+
+                checkMill.checkMill(setToken_position, player.get_tokencolour());
                 break;
 
             } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
@@ -73,7 +76,6 @@ public class GamePlay1 {
         }
         // Now check if the player1 has created a mill
         //gameBoardManager.checkHouse();
-        checkMill.checkMill();
 
     }
 
