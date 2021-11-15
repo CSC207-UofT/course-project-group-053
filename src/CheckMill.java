@@ -1,11 +1,6 @@
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CheckMill {
-    // store an empty gameboard at first
-    private final GameBoard gb = new GameBoard();
     // Stores the location of mills formed by both players
     public static HashMap<Integer, Set<List<String>>> playerMills = new HashMap<>();
 
@@ -23,19 +18,18 @@ public class CheckMill {
     }
 
 
-
-    private String getItemInGameBoard(String targetPosition) throws NonexistentPositionException {
+    private String getItemInGameBoard(String targetPosition, GameBoard gameboard) throws NonexistentPositionException {
         if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
             // position given isn't formatted properly/doesn't exist on gameboard
             throw new NonexistentPositionException();
         } else {
-            return gb.getTokenAtPosition(targetPosition);
+            return gameboard.getTokenAtPosition(targetPosition);
         }
     }
 
-    public void millAdder(String position, String[] mill) throws InvalidPositionException {
+    public void millAdder(String position, String[] mill, GameBoard gameboard) throws InvalidPositionException {
         // checks which player the mill belongs to, and add the mill to the player's mills
-        if (getItemInGameBoard(position).equals("W")) {
+        if (getItemInGameBoard(position, gameboard).equals("W")) {
             playerMills.get(1).add(List.of(mill));
         } else {
             playerMills.get(2).add(List.of(mill));
@@ -43,45 +37,245 @@ public class CheckMill {
 
     }
 
-    public void checkMill() throws InvalidPositionException {
-        if (getItemInGameBoard("A1").equals(getItemInGameBoard("A2")))
-            if (getItemInGameBoard("A2").equals(getItemInGameBoard("A3")) && !getItemInGameBoard("A1").equals(GameBoard.EMPTY_SLOT_PATTERN)) {
-                millAdder("A1", new String[]{"A1", "A2", "A3"});
-                System.out.println("CheckMill_A1-A2-A3 made");
+    public void checkMill(String position, String colour, GameBoard gameboard) throws InvalidPositionException {
+        List<List<String>> combinations = new ArrayList<List<String>>();
+        List<String> innerList1 = new ArrayList<>();
+        innerList1.add("A1");
+        innerList1.add("A2");
+        innerList1.add("A3");
+        combinations.add(innerList1);
+
+        List<String> innerList2 = new ArrayList<>();
+        innerList2.add("B1");
+        innerList2.add("B2");
+        innerList2.add("B3");
+        combinations.add(innerList2);
+
+        List<String> innerList3 = new ArrayList<>();
+        innerList3.add("C1");
+        innerList3.add("C2");
+        innerList3.add("C3");
+        combinations.add(innerList3);
+
+        List<String> innerList4 = new ArrayList<>();
+        innerList4.add("A1");
+        innerList4.add("A4");
+        innerList4.add("A6");
+        combinations.add(innerList4);
+
+        List<String> innerList5 = new ArrayList<>();
+        innerList5.add("B1");
+        innerList5.add("B4");
+        innerList5.add("B6");
+        combinations.add(innerList5);
+
+        List<String> innerList6 = new ArrayList<>();
+        innerList6.add("C1");
+        innerList6.add("C4");
+        innerList6.add("C6");
+        combinations.add(innerList6);
+
+        List<String> innerList7 = new ArrayList<>();
+        innerList7.add("A3");
+        innerList7.add("A5");
+        innerList7.add("A8");
+        combinations.add(innerList7);
+
+        List<String> innerList8 = new ArrayList<>();
+        innerList8.add("B3");
+        innerList8.add("B5");
+        innerList8.add("B8");
+        combinations.add(innerList8);
+
+        List<String> innerList9 = new ArrayList<>();
+        innerList9.add("C3");
+        innerList9.add("C5");
+        innerList9.add("C8");
+        combinations.add(innerList9);
+
+        List<String> innerList10 = new ArrayList<>();
+        innerList10.add("A6");
+        innerList10.add("A7");
+        innerList10.add("A8");
+        combinations.add(innerList10);
+
+        List<String> innerList11 = new ArrayList<>();
+        innerList11.add("B6");
+        innerList11.add("B7");
+        innerList11.add("B8");
+        combinations.add(innerList11);
+
+        List<String> innerList12 = new ArrayList<>();
+        innerList12.add("C6");
+        innerList12.add("C7");
+        innerList12.add("C8");
+        combinations.add(innerList12);
+
+        List<String> innerList13 = new ArrayList<>();
+        innerList13.add("A2");
+        innerList13.add("B2");
+        innerList13.add("C2");
+        combinations.add(innerList13);
+
+        List<String> innerList14 = new ArrayList<>();
+        innerList14.add("A4");
+        innerList14.add("B4");
+        innerList14.add("C4");
+        combinations.add(innerList14);
+
+        List<String> innerList15 = new ArrayList<>();
+        innerList15.add("A7");
+        innerList15.add("B7");
+        innerList15.add("C7");
+        combinations.add(innerList15);
+
+        List<String> innerList16 = new ArrayList<>();
+        innerList16.add("A5");
+        innerList16.add("B5");
+        innerList16.add("C5");
+        combinations.add(innerList16);
+
+        for (List<String> lo : combinations) {
+            if (lo.contains(position)) {
+                Boolean found = false;
+                for (String o : lo) {
+                    if (getItemInGameBoard(o, gameboard) == null) {
+                        found = false;
+                        break;
+                    } else if (!getItemInGameBoard(o, gameboard).equals(colour)) {
+                        found = false;
+                        break;
+                    } else {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    millAdder(lo.get(0), new String[]{lo.get(0), lo.get(1), lo.get(2)}, gameboard);
+                }
             }
-        if (getItemInGameBoard("B1").equals(getItemInGameBoard("B2")) && getItemInGameBoard("B2").equals(getItemInGameBoard("B3")) && !getItemInGameBoard("B1").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("B1", new String[] {"B1", "B2", "B3"});
+
         }
-        if (getItemInGameBoard("C1").equals(getItemInGameBoard("C2")) && getItemInGameBoard("C2").equals(getItemInGameBoard("C3")) && !getItemInGameBoard("C1").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("C1", new String[] {"C1", "C2", "C3"});
+    }
+
+    public Boolean checkMill2(String position, String colour, GameBoard gameboard) throws InvalidPositionException {
+        List<List<String>> combinations = new ArrayList<List<String>>();
+        List<String> innerList1 = new ArrayList<>();
+        innerList1.add("A1");
+        innerList1.add("A2");
+        innerList1.add("A3");
+        combinations.add(innerList1);
+
+        List<String> innerList2 = new ArrayList<>();
+        innerList2.add("B1");
+        innerList2.add("B2");
+        innerList2.add("B3");
+        combinations.add(innerList2);
+
+        List<String> innerList3 = new ArrayList<>();
+        innerList3.add("C1");
+        innerList3.add("C2");
+        innerList3.add("C3");
+        combinations.add(innerList3);
+
+        List<String> innerList4 = new ArrayList<>();
+        innerList4.add("A1");
+        innerList4.add("A4");
+        innerList4.add("A6");
+        combinations.add(innerList4);
+
+        List<String> innerList5 = new ArrayList<>();
+        innerList5.add("B1");
+        innerList5.add("B4");
+        innerList5.add("B6");
+        combinations.add(innerList5);
+
+        List<String> innerList6 = new ArrayList<>();
+        innerList6.add("C1");
+        innerList6.add("C4");
+        innerList6.add("C6");
+        combinations.add(innerList6);
+
+        List<String> innerList7 = new ArrayList<>();
+        innerList7.add("A3");
+        innerList7.add("A5");
+        innerList7.add("A8");
+        combinations.add(innerList7);
+
+        List<String> innerList8 = new ArrayList<>();
+        innerList8.add("B3");
+        innerList8.add("B5");
+        innerList8.add("B8");
+        combinations.add(innerList8);
+
+        List<String> innerList9 = new ArrayList<>();
+        innerList9.add("C3");
+        innerList9.add("C5");
+        innerList9.add("C8");
+        combinations.add(innerList9);
+
+        List<String> innerList10 = new ArrayList<>();
+        innerList10.add("A6");
+        innerList10.add("A7");
+        innerList10.add("A8");
+        combinations.add(innerList10);
+
+        List<String> innerList11 = new ArrayList<>();
+        innerList11.add("B6");
+        innerList11.add("B7");
+        innerList11.add("B8");
+        combinations.add(innerList11);
+
+        List<String> innerList12 = new ArrayList<>();
+        innerList12.add("C6");
+        innerList12.add("C7");
+        innerList12.add("C8");
+        combinations.add(innerList12);
+
+        List<String> innerList13 = new ArrayList<>();
+        innerList13.add("A2");
+        innerList13.add("B2");
+        innerList13.add("C2");
+        combinations.add(innerList13);
+
+        List<String> innerList14 = new ArrayList<>();
+        innerList14.add("A4");
+        innerList14.add("B4");
+        innerList14.add("C4");
+        combinations.add(innerList14);
+
+        List<String> innerList15 = new ArrayList<>();
+        innerList15.add("A7");
+        innerList15.add("B7");
+        innerList15.add("C7");
+        combinations.add(innerList15);
+
+        List<String> innerList16 = new ArrayList<>();
+        innerList16.add("A5");
+        innerList16.add("B5");
+        innerList16.add("C5");
+        combinations.add(innerList16);
+
+        for (List<String> lo : combinations) {
+            if (lo.contains(position)) {
+                Boolean found = false;
+                for (String o : lo) {
+                    if (getItemInGameBoard(o, gameboard) == null) {
+                        found = false;
+                        break;
+                    } else if (!getItemInGameBoard(o, gameboard).equals(colour)) {
+                        found = false;
+                        break;
+                    } else {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    return found;
+                }
+            }
+
         }
-        if (getItemInGameBoard("A1").equals(getItemInGameBoard("A4")) && getItemInGameBoard("A4").equals(getItemInGameBoard("A6")) && !getItemInGameBoard("A1").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("A1", new String[] {"A1", "A4", "A6"});
-        }
-        if (getItemInGameBoard("B1").equals(getItemInGameBoard("B4")) && getItemInGameBoard("B4").equals(getItemInGameBoard("B6")) && !getItemInGameBoard("B1").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("B1", new String[] {"B1", "B4", "B6"});
-        }
-        if (getItemInGameBoard("C1").equals(getItemInGameBoard("C4")) && getItemInGameBoard("C4").equals(getItemInGameBoard("C6")) && !getItemInGameBoard("C1").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("C1", new String[] {"C1", "C4", "C6"});
-        }
-        if (getItemInGameBoard("A3").equals(getItemInGameBoard("A5")) && getItemInGameBoard("A5").equals(getItemInGameBoard("A8")) && !getItemInGameBoard("A3").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("A3", new String[] {"A3", "A5", "A8"});
-        }
-        if (getItemInGameBoard("B3").equals(getItemInGameBoard("B5")) && getItemInGameBoard("B5").equals(getItemInGameBoard("B8")) && !getItemInGameBoard("B3").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("B3", new String[] {"B3", "B5", "B8"});
-        }
-        if (getItemInGameBoard("C3").equals(getItemInGameBoard("C5")) && getItemInGameBoard("C5").equals(getItemInGameBoard("C8")) && !getItemInGameBoard("C3").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("C1", new String[] {"C3", "C5", "C8"});
-        }
-        if (getItemInGameBoard("A6").equals(getItemInGameBoard("A7")) && getItemInGameBoard("A7").equals(getItemInGameBoard("A8")) && !getItemInGameBoard("A6").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("A6", new String[] {"A6", "A7", "A8"});
-        }
-        if (getItemInGameBoard("B6").equals(getItemInGameBoard("B7")) && getItemInGameBoard("B7").equals(getItemInGameBoard("B8")) && !getItemInGameBoard("B6").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("B6", new String[] {"B6", "B7", "B8"});
-        }
-        if (getItemInGameBoard("C6").equals(getItemInGameBoard("C7")) && getItemInGameBoard("C7").equals(getItemInGameBoard("C8")) && !getItemInGameBoard("C6").equals(GameBoard.EMPTY_SLOT_PATTERN)){
-            millAdder("C6", new String[] {"C6", "C7", "C8"});
-        }
+        return false;
     }
 
     public static int getPlayerHouses(int player_number) {
