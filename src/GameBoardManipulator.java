@@ -4,7 +4,7 @@
 // This class is both a Facade and a Subject class (as part of Observer design pattern)
 public class GameBoardManipulator {
     // Design GameBoardManipulator as a facade class for manipulating tokens on a GameBoard (add, remove, slide tokens)
-    private final GameBoard gameboard;
+    private GameBoard gameboard;
     private final GameBoardPlacer placer;
     private final GameBoardRemover remover;
     private final CheckMill millChecker;
@@ -35,6 +35,7 @@ public class GameBoardManipulator {
     }
 
     public GameBoard getGameboard() { return this.gameboard; }
+    public void setGameboard(GameBoard loadedBoard) {this.gameboard = loadedBoard;}
 
 /*
     @Override
