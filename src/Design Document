@@ -57,13 +57,17 @@ way. As of right now, there are some factors of the code that could be replaced 
 can run smoother. Specifically right now, we spent most of our time trying to resolve how to connect the GUI that
 has been created with main. We were able to do so. We are also trying to look for solutions as to how we can adjust
 the old code we had to newer extensions we are adding in a way that adheres to clean architecture and is efficient.
-In addition, we are now going to spend time working on removing tokens for the GUI's.
+In addition, we are now going to spend time working on removing tokens for the GUI's. For Phase 2, we hope to add
+more features such as playerstats being displayed and removing tokens and sliding tokens on the GUI in addition to
+having a winner page to show when a player has won and messages when players have made a mill and when
+they lose a token etc. We also hope to implement the sliding in the game.
 
 What has worked well so far with the design:
 Implementing the extensions did not cause any serious errors that would hurt the skeleton of the game
 from phase 0. In addition, the GUI and the remaining portions from the game that were to be implemented
 in Phase 1 were done. All new classes and/or methods that were added were with the view to make the code
-more efficient and clean, which has also been implemented on. Adding the GUI to main,
+more efficient and clean, which has also been implemented on. Adding the GUI to main has also worked
+well in terms of implementing the GUI in itself and then connecting it to main.
 
 What each team member has worked on and plans to work on:
 
