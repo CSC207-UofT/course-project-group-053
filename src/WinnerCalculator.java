@@ -5,7 +5,7 @@ public class WinnerCalculator {
 
     // Creates and stores a GameBoard instance, and processes Player moves on the GameBoard
     private final GameBoard gb = new GameBoard();
-    private final CheckMill cm = new CheckMill();
+    private final CheckMill cm = new CheckMill(gb);
 
     public static Player player1;
     public static Player player2;
