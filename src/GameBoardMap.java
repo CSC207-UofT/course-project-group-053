@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class GameBoardMap {
 
-    private GameBoard gameBoard;
-    private Token token;
+    //private GameBoard gameBoard
+    //private Token token;
 
     //Keeps track of tokens stored at each position on the game board. Key is position and value is token.
     public HashMap<String, Token> token_placement =  new HashMap<String, Token>();
@@ -24,9 +24,9 @@ public class GameBoardMap {
     //with three values for where the mills are made in terms of position.
     public HashMap<String, ArrayList<String>>  username_mill_positions = new HashMap<String, ArrayList<String>>();
 
-    public GameBoardMap() {
-        this.gameBoard = new GameBoard();
-        this.token = new Token();
+    //public GameBoardMap() {
+        //this.gameBoard = new GameBoard();
+        //this.token = new Token();
 
         // Once we get the token in GameBoard to be an instance of the Token Class, then the
         // following code can be implemented.
@@ -36,8 +36,3 @@ public class GameBoardMap {
                 //token = gameBoard.getTokenAtPosition(entry.getKey());
                 //username_positions.put(token.owner, entry.getValue())
 
-
-            }
-        }
-    }
-}

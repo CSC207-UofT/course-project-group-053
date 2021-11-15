@@ -1,3 +1,23 @@
+SOLID principles and our project:
+
+S(single-responsibility principle): each one of our classes (some of which are Player, Token, GameBoard,
+GameBoardManager etc.) all are only responsible for handling one aspect of the code. For a more
+specific example, we have implemented GameBoardPlacer and GameBoardRemover as different classes
+responsible for placing tokens on the GameBoard and also removing them instead of GameBoard being
+responsible for doing both those things.
+
+O(open-closed principle): Our entity classes all have space to be extended but are more rigid
+when it comes to being modified. Specifically, GameBoardManipulator is open to adding more methods
+if needed without needing to change the current methods that are implemented.
+
+L (liskov substitution principle): Not a lot of our classes use inheritance and so this principle is not
+applied to us. The classes of ours that do use inheritance are a lot of the errors that arise
+from invalid moves and those are implemented by keeping the Liskov substitution principle in mind.
+
+Interface segregation principle:
+
+Dependency inversion principle:
+
 Summary of design patterns:
 
 Facade: Used to fix GameBoardManipulator (formerly GameBoardManager) to follow
@@ -9,20 +29,20 @@ Observer: Didn't have time to implement, but originally planned to implement usi
 so GameBoardMap is updated with new positions occupied by tokens and new mills formed by players whenever GameBoardManipulator
 changes the GameBoard. Now, we plan to implement this in Phase 2.
 
-
 Progress report:
 Some of the open questions that we have revolve more around how to connect various part of the code in a coherent
 way. As of right now, there are some factors of the code that could be replaced with specific classes so the code
-can run smoother. As on example, specifically right now, we are trying to resolve how to connect the GUI that has
-been created with main. We are also trying to look for solutions as to how we can adjust the old code we had to
-newer extensions we are adding in a way that adheres to clean architecture and is effective.
+can run smoother. Specifically right now, we spent most of our time trying to resolve how to connect the GUI that
+has been created with main. We were able to do so. We are also trying to look for solutions as to how we can adjust
+the old code we had to newer extensions we are adding in a way that adheres to clean architecture and is efficient.
+In addition, we are now going to spend time working on removing tokens for the GUI's.
 
 
 What has worked well so far with the design:
 Implementing the extensions did not cause any serious errors that would hurt the skeleton of the game
 from phase 0. In addition, the GUI and the remaining portions from the game that were to be implemented
 in Phase 1 were done. All new classes and/or methods that were added were with the view to make the code
-more efficient and clean, which has also been implemented on.
+more efficient and clean, which has also been implemented on. Adding the GUI to main,
 
 What each team member has worked on and plans to work on:
 
