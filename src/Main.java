@@ -8,37 +8,10 @@ public class Main {
     public static Player player2;
 
 
-    public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException {
+    public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException, SavedSuccessfully, LoadedSuccessfully {
         List<Player> playerList = Start();
-        GamePlay1 gamePlay1 = new GamePlay1(playerList, true);
 
-        player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
-        player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
-
-        String player1_username = player1.get_username();
-        String player2_username = player2.get_username();
-        String player1_tokencolour = player1.get_tokencolour();
-        String player2_tokencolour = player2.get_tokencolour();
-
-        System.out.println("Starting Game between " + player1_username + " and " + player2_username);
-
-        // while loop to run phase 1 of game, where players lay all their chips on the board
-        while (!gamePlay1.getBoolean_end_of_p1()) {
-            gamePlay1.move_token(player1);
-            // Then let the player1 remove player2's token
-            // Do it until the move is valid. If not valid pass
-            // Then show the current state again
-            gamePlay1.remove_token(player1);
-
-            // Now check if the player2 has created a mill
-            // Then let the player1 remove player2's token
-            // Do it until the move is valid. If not valid pass
-            gamePlay1.move_token(player2);
-
-            gamePlay1.remove_token(player2);
-
-            gamePlay1.setBoolean_end_of_p1(player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
-        }
+        new GamePlay1(playerList);
 
 
     }
@@ -50,7 +23,7 @@ public class Main {
     public static List<Player> Start(){
         Scanner sc = new Scanner(System.in);
         System.out.print("Initializing Nine Men Morris \r\n");
-
+        //TODO: let player load game after initialising
         //Setting for player
         System.out.println("1. Type name of the Human Player: \r\n");
         String name_firstinput = sc.nextLine();
