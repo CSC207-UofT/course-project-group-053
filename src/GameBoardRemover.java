@@ -6,19 +6,19 @@ public class GameBoardRemover {
      * @param position String representation of a token to place on the GameBoard, in format [ABC][1-8]
      * @return String representing the token that was removed from gameboard
      */
-    public void remove(GameBoard gb, String position) throws InvalidPositionException, RemoveEmptySlotException {
+    public String remove(GameBoard gb, String position) throws NonexistentPositionException, RemoveEmptySlotException {
         // 1) check if position is valid (InvalidPositionException)
         // 2) check if position is empty (RemoveEmptySlotException)
         // 3) if position is valid and non-empty, remove the token from gameboard
         if (! checkValidPosition(position)) {
-            throw new InvalidPositionException("Non-existent position. Please enter valid coordinate.");
+            throw new NonexistentPositionException();
         }
         else if (checkPositionUnoccupied(gb, position)) {
             // cannot remove token from an empty position
             throw new RemoveEmptySlotException();
         }
         else {
-            gb.removeToken(position);
+            return gb.removeToken(position);
         }
     }
 

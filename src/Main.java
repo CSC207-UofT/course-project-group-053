@@ -8,7 +8,7 @@ public class Main {
     public static Player player2;
 
 
-    public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException {
+    public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException, SavedSuccessfully, LoadedSuccessfully {
         List<Player> playerList = Start();
 
         new GamePlay1(playerList);
@@ -23,7 +23,7 @@ public class Main {
     public static List<Player> Start(){
         Scanner sc = new Scanner(System.in);
         System.out.print("Initializing Nine Men Morris \r\n");
-
+        //TODO: let player load game after initialising
         //Setting for player
         System.out.println("1. Type name of the Human Player: \r\n");
         String name_firstinput = sc.nextLine();

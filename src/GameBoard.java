@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class GameBoard {
+public class GameBoard implements Serializable {
     // Defines the game board used for Nine Men Morris, which holds the strings representing tokens placed on the
     // gameboard
-    private final HashMap<String, String> gameBoard;
+    public final HashMap<String, String> gameBoard;
 
     // keeps track of how many empty slots are currently on the gameboard
     private int gameBoardCapacity;
@@ -61,7 +62,7 @@ public class GameBoard {
         String removedToken = getTokenAtPosition(targetPosition);
         gameBoard.put(targetPosition, null);  // remove token from target gameboard coordinate, by storing null
         increaseCapacity();
-        return removedToken;  // return id of the token that was removed
+        return removedToken;  // return String of the token that was removed
     }
 
     /**
