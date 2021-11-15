@@ -56,9 +56,9 @@ What each team member has worked on and plans to work on:
 
 Aliza:
 Worked on creating Check Mill, a class which checks whether a mill has been made in the game and Winner
-Calculator which specifies who won the game. Will focus more on Phase 2 with testing the game
-to find any bugs in addition to working on the stats of the players that could be displayed
-in a GUI as well.
+Calculator which specifies who won the game. Also worked on the UML models. Will focus more on Phase 2
+with testing the gameto find any bugs in addition to working on the stats of the players that could
+be displayed in a GUI as well.
 
 Aalina: Working on GameBoardMap and trying to resolve issues with unifying the code to try and resolve
 issues with GameBoardMap and make it as efficient as possible. Also worked on progress reports and the
