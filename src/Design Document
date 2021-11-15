@@ -1,3 +1,9 @@
+Updated specification:
+The main features that we have added for Phase 1 are the GUI of the login page and the game board,
+connecting that to the code that we had for Phase 0, implementing the loading and saving of the game
+as well as implementing a class to determine who wins the game. We have also added an sql database
+which is not integrated as yet but is intended to be used for PlayerStats.
+
 SOLID principles and our project:
 
 S(single-responsibility principle): each one of our classes (some of which are Player, Token, GameBoard,
