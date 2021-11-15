@@ -279,7 +279,6 @@ public class CheckMill {
     }
 
     public static int getPlayerHouses(int player_number) {
-        System.out.println("CheckMIll_recent mill numb: " + playerMills.get(player_number).size());
         return playerMills.get(player_number).size();
     }
 
