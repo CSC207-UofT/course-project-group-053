@@ -4,6 +4,14 @@ connecting that to the code that we had for Phase 0, implementing the loading an
 as well as implementing a class to determine who wins the game. We have also added an sql database
 which is not integrated as yet but is intended to be used for PlayerStats.
 
+Major design decisions:
+We decided to implement the GUI and connect it to main later. In addition, we decided to fix
+a lot of the design problems we had in Phase 0 such as changing GameBoardManager to
+GameBoardManipulator as well as adding classes such as CheckMill to check when a mill was
+made on the GameBoard and WinnerCalculator for checking when a player had one. We implemented
+these while keeping clean architecture in mind especially the single-responsibility principle
+of the SOLID principles.
+
 SOLID principles and our project:
 
 S(single-responsibility principle): each one of our classes (some of which are Player, Token, GameBoard,
@@ -26,6 +34,12 @@ Dependency inversion principle: Our code generally follows this principle as mor
 classes depend on less abstract classes. For example, Token does not depend on GamePlayManipulator
 as Token is a less abstract class.
 
+Packaging:
+Our packaging unfortunately did not go as planned as the code was breaking when we decided to package
+but our packaging was based on clean architecture. We created packages for each clean architecture layer
+we used in our project, such as entity, use cases and gateways. We also added packages for exceptions and
+interfaces used in our program.
+
 Summary of design patterns:
 
 Facade: Used to fix GameBoardManipulator (formerly GameBoardManager) to follow
@@ -44,7 +58,6 @@ can run smoother. Specifically right now, we spent most of our time trying to re
 has been created with main. We were able to do so. We are also trying to look for solutions as to how we can adjust
 the old code we had to newer extensions we are adding in a way that adheres to clean architecture and is efficient.
 In addition, we are now going to spend time working on removing tokens for the GUI's.
-
 
 What has worked well so far with the design:
 Implementing the extensions did not cause any serious errors that would hurt the skeleton of the game
@@ -67,9 +80,10 @@ GUI so it can be made more interactive.
 
 Jason:
 Worked on GameBoardManipulator, a newer version of GameBoardManager. Created the Token class and worked
-on PlayerDataGateway using a sql database. Has worked on and will continue to work on packaging and
-testing to make sure that the code is clean and does not break when packaged in addition to checking
-that its functionality remains intact at all times (with Aliza).
+on PlayerDataGateway using a sql database. Also worked on the UML diagram with Aliza. Has worked on
+and will continue to work on packaging and testing to make sure that the code is clean and does not
+break when packaged in addition to checking that its functionality remains intact at all times
+(with Aliza).
 
 Mary:
 Making changes in GamePlay1, which is the controller to follow clean architecture. For Phase 2,
