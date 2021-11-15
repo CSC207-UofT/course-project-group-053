@@ -1,4 +1,6 @@
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     String str_player_username;
     String str_player_tokencolour;
 

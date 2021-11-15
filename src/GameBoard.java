@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class GameBoard {
+public class GameBoard implements Serializable {
     // Defines the game board used for Nine Men Morris, which holds the strings representing tokens placed on the
     // gameboard
     private final HashMap<String, String> gameBoard;

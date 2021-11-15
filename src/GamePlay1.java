@@ -145,5 +145,6 @@ public class GamePlay1 {
         //TODO: print gameboard
         //TODO: change duplicate code to suitable method
         //TODO: add loading at start of game and add loading of player names etc as well
+        //TODO: save which player's turn it was and start from that player's turn when gamestate is loaded. Might have to rework gameplay1 slightly
     }
 }
