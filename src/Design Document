@@ -14,9 +14,11 @@ L (liskov substitution principle): Not a lot of our classes use inheritance and 
 applied to us. The classes of ours that do use inheritance are a lot of the errors that arise
 from invalid moves and those are implemented by keeping the Liskov substitution principle in mind.
 
-Interface segregation principle:
+Interface segregation principle: Not a lot of interfaces were used in our code.
 
-Dependency inversion principle:
+Dependency inversion principle: Our code generally follows this principle as more abstract
+classes depend on less abstract classes. For example, Token does not depend on GamePlayManipulator
+as Token is a less abstract class.
 
 Summary of design patterns:
 
@@ -65,12 +67,12 @@ that its functionality remains intact at all times (with Aliza).
 
 Mary:
 Making changes in GamePlay1, which is the controller to follow clean architecture. For Phase 2,
-Mary and Felipe are also going to work on finding a way to connect the GUI to main in order to
-make the game as interactive as possible.
+Mary and Felipe are also going to work on finding a way to remove tokens on the GUI in addition
+to focusing on more UI/UX principles.
 
 Felipe:
-Mainly worked on the GUI and has implemented the login page and the GUI for the game board. Both Felipe
-and Mary will work on connecting the GUI to main for a more interactive game experience.
+Mainly worked on the GUI and has implemented the login page and the GUI for the game board. Also
+worked on implementing the GUI to connect to main.
 
 Saksham:
 Worked on saving and loading the game. For Phase 2, will work more on making sure that all coding
