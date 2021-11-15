@@ -1,0 +1,47 @@
+Progress report:
+Some of the open questions that we have revolve more around how to connect various part of the code in a coherent
+way. As of right now, there are some factors of the code that could be replaced with specific classes so the code
+can run smoother. As on example, specifically right now, we are trying to resolve how to connect the GUI that has
+been created with main. We are also trying to look for solutions as to how we can adjust the old code we had to
+newer extensions we are adding in a way that adheres to clean architecture and is effective.
+
+
+What has worked well so far with the design:
+Implementing the extensions did not cause any serious errors that would hurt the skeleton of the game
+from phase 0. In addition, the GUI and the remaining portions from the game that were to be implemented
+in Phase 1 were done. All new classes and/or methods that were added were with the view to make the code
+more efficient and clean, which has also been implemented on.
+
+What each team member has worked on and plans to work on:
+
+Aliza:
+Worked on creating Check Mill, a class which checks whether a mill has been made in the game and Winner
+Calculator which specifies who won the game. Will focus more on Phase 2 with testing the game
+to find any bugs in addition to working on the stats of the players that could be displayed
+in a GUI as well.
+
+Aalina: Working on GameBoardMap and trying to resolve issues with unifying the code to try and resolve
+issues with GameBoardMap and make it as efficient as possible. Also worked on progress reports and the
+design document. Will continue to work on GameBoardMap and also on features that can be added to the
+GUI so it can be made more interactive.
+
+Jason:
+Worked on GameBoardManipulator, a newer version of GameBoardManager. Created the Token class and worked
+on PlayerDataGateway using a sql database. Has worked on and will continue to work on packaging and
+testing to make sure that the code is clean and does not break when packaged in addition to checking
+that its functionality remains intact at all times (with Aliza).
+
+Mary:
+Making changes in GamePlay1, which is the controller to follow clean architecture. For Phase 2,
+Mary and Felipe are also going to work on finding a way to connect the GUI to main in order to
+make the game as interactive as possible.
+
+Felipe:
+Mainly worked on the GUI and has implemented the login page and the GUI for the game board. Both Felipe
+and Mary will work on connecting the GUI to main for a more interactive game experience.
+
+Saksham:
+Worked on saving and loading the game. For Phase 2, will work more on making sure that all coding
+principles are being followed and will work on clean architecture models in addition to developing
+the GUIs for the game.
+
