@@ -12,6 +12,12 @@ made on the GameBoard and WinnerCalculator for checking when a player had one. W
 these while keeping clean architecture in mind especially the single-responsibility principle
 of the SOLID principles.
 
+Packaging:
+Our packaging unfortunately did not go as planned as the code was breaking when we decided to package
+but our packaging was based on clean architecture. We created packages for each clean architecture layer
+we used in our project, such as entity, use cases and gateways. We also added packages for exceptions and
+interfaces used in our program.
+
 SOLID principles and our project:
 
 S(single-responsibility principle): each one of our classes (some of which are Player, Token, GameBoard,
@@ -33,12 +39,6 @@ Interface segregation principle: Not a lot of interfaces were used in our code.
 Dependency inversion principle: Our code generally follows this principle as more abstract
 classes depend on less abstract classes. For example, Token does not depend on GamePlayManipulator
 as Token is a less abstract class.
-
-Packaging:
-Our packaging unfortunately did not go as planned as the code was breaking when we decided to package
-but our packaging was based on clean architecture. We created packages for each clean architecture layer
-we used in our project, such as entity, use cases and gateways. We also added packages for exceptions and
-interfaces used in our program.
 
 Summary of design patterns:
 
