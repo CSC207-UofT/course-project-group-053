@@ -1,3 +1,15 @@
+Summary of design patterns:
+
+Facade: Used to fix GameBoardManipulator (formerly GameBoardManager) to follow
+the single responsibility principle of SOLID. GameBoardManipulator was broken into smaller classes
+that could perform its functionality so if anything needed to change, we changed those classes only and
+nothing else.
+
+Observer: Didn't have time to implement, but originally planned to implement using GameBoardMap and GameBoardManipulator,
+so GameBoardMap is updated with new positions occupied by tokens and new mills formed by players whenever GameBoardManipulator
+changes the GameBoard. Now, we plan to implement this in Phase 2.
+
+
 Progress report:
 Some of the open questions that we have revolve more around how to connect various part of the code in a coherent
 way. As of right now, there are some factors of the code that could be replaced with specific classes so the code
