@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameBoardManipulatorTest {
-    GameBoardManipulator gbm = new GameBoardManipulator(new GameBoardPlacer(), new GameBoardRemover());
+    GameBoardManipulator gbm = new GameBoardManipulator(new GameBoardPlacer(), new GameBoardRemover(), new CheckMill());
 
     @BeforeEach
     void setUp() {
-        this.gbm = new GameBoardManipulator(new GameBoardPlacer(), new GameBoardRemover());
+        this.gbm = new GameBoardManipulator(new GameBoardPlacer(), new GameBoardRemover(), new CheckMill());
     }
 
     @Test
@@ -64,8 +64,9 @@ class GameBoardManipulatorTest {
 
         // remove existing token from gameboard
         try {
-            gbm.removeToken("A1");
-            assertNull(gbm.getGameboard().getTokenAtPosition("A1"));
+            gbm.removeToken("A1", "B");
+            GameBoard gb = gbm.getGameboard();
+            assertNull(gb.getTokenAtPosition("A1"));
         } catch (Exception e) {
             System.out.println("Something went wrong...");
             System.out.println(e.getMessage());
@@ -73,7 +74,7 @@ class GameBoardManipulatorTest {
 
         // remove token from non-existent position
         try {
-            gbm.removeToken("BABABABABABA");
+            gbm.removeToken("BABABABABABA", "W");
         } catch (NonexistentPositionException e) {
             System.out.println("NonexistentPositionException caught properly");
         } catch (Exception e) {
@@ -83,7 +84,7 @@ class GameBoardManipulatorTest {
 
         // remove token from empty position
         try {
-            gbm.removeToken("A1");
+            gbm.removeToken("A1", "B");
         } catch (RemoveEmptySlotException e) {
             System.out.println("RemoveEmptySlotException caught properly");
         } catch (Exception e) {
