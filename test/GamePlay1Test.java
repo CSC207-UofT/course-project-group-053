@@ -17,7 +17,7 @@ class GamePlay1Test {
         player2 = new Player("Player2", "B");
 
         playerList = List.of(new Player[]{player1, player2});
-        gamePlay1 = new GamePlay1(playerList);
+        gamePlay1 = new GamePlay1("Player1", "Player2");
     }
 
     @AfterEach

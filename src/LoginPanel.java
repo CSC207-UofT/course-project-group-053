@@ -65,4 +65,16 @@ public class LoginPanel extends JPanel {
         this.add(continueButton);
         this.add(Box.createRigidArea(new Dimension(300, 200)));
     }
+
+    public String getPlayerUsername(int playerNum){
+        if(playerNum == 1){
+            return player1TextField.getText();
+        }
+        else if(playerNum == 2){
+            return player2TextField.getText();
+        }
+        else{
+            return "";
+        }
+    }
 }

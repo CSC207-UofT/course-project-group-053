@@ -8,7 +8,7 @@ public class HeaderPanel extends JPanel {
     private final int PIXELS = 5;
     private static final long serialVersionUID = 1L;
 
-    public HeaderPanel(){
+    public HeaderPanel(String player1Name, String player2Name){
         super();
 
         createDropShadowPanel();
@@ -17,9 +17,9 @@ public class HeaderPanel extends JPanel {
         header.setLayout(new BorderLayout());
         header.setBackground(Color.decode("#FF1B3A"));
 
-        player1 = new JLabel("  Player 1");
-        player2 = new JLabel("Player 2  ");
-        gameState = new JLabel("Player 1's turn");
+        player1 = new JLabel("  " + player1Name);
+        player2 = new JLabel(player2Name + "  ");
+        gameState = new JLabel(player1Name + "'s turn to add a token");
 
         setLabelSettings();
 

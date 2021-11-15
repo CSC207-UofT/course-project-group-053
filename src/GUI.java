@@ -6,13 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.HashMap;
 
-public class GUI extends JFrame implements ActionListener {
+
+public class GUI extends JFrame implements ActionListener, DataAdapter<String, Integer> {
     JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper, headerPanel;
+    GamePlay1 gamePlay;
 
     public GUI() {
         loginPanel = new LoginPanel();
@@ -20,7 +19,7 @@ public class GUI extends JFrame implements ActionListener {
         whiteTokenPanel = new TokenPanel("W");
         blackTokenPanel = new TokenPanel("B");
         gamePanel = new GamePanel();
-        headerPanel = new HeaderPanel();
+        //gamePlay and headerPanel must be initialized later
 
         //gamePanelWrapper is used to fix a size for GamePanel because if
         //it was added directly into the frame it would not have a fixed size.
@@ -106,20 +105,67 @@ public class GUI extends JFrame implements ActionListener {
         String gameState = ((HeaderPanel) headerPanel).gameState.getText();
         TokenButton tokenButton = ((GamePanel) gamePanel).getTokenButtons()[tokenIndex];
 
-        if (tokenButton.clickable){
-            if(gameState.equals("Player 1's turn")){
+            if(gameState.equals(gamePlay.getPlayerName(1) + "'s turn to add a token") & tokenButton.addable){
                 tokenButton.setColour("W");
                 ((TokenPanel) whiteTokenPanel).removeToken();
-                ((HeaderPanel) headerPanel).gameState.setText("Player 2's turn");
+
+                int currentPlayerHouses = gamePlay.getPlayerHouses(1);
+                gamePlay.move_token(1, adaptData(tokenIndex));
+                if(gamePlay.playerMadeMill(currentPlayerHouses, 1)){
+                    ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(1) + "'s turn to remove a token");
+                }
+                else{
+                    ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(2) + "'s turn to add a token");
+                }
+                tokenButton.setAddable(false);
+                tokenButton.setRemovable(true);
+                tokenButton.setButtonVisual();
             }
-            else if(gameState.equals("Player 2's turn")){
+
+            else if(gameState.equals(gamePlay.getPlayerName(2) + "'s turn to add a token") & tokenButton.addable){
                 tokenButton.setColour("B");
                 ((TokenPanel) blackTokenPanel).removeToken();
-                ((HeaderPanel) headerPanel).gameState.setText("Player 1's turn");
+
+                int currentPlayerHouses = gamePlay.getPlayerHouses(2);
+                gamePlay.move_token(2, adaptData(tokenIndex));
+                if(gamePlay.playerMadeMill(currentPlayerHouses, 2)){
+                    ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(2) + "'s turn to remove a token");
+                }
+                else{
+                    ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(1) + "'s turn to add a token");
+                }
+                tokenButton.setAddable(false);
+                tokenButton.setRemovable(true);
+                tokenButton.setButtonVisual();
             }
-            tokenButton.setClickable(false);
-            tokenButton.setButtonVisual();
-            tokenButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+            if(gameState.equals(gamePlay.getPlayerName(1) + "'s turn to remove a token") & tokenButton.removable){
+                tokenButton.setColour("");
+
+                gamePlay.remove_token(2, adaptData(tokenIndex));
+
+                ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(2) + "'s turn to add a token");
+                tokenButton.setAddable(true);
+                tokenButton.setRemovable(false);
+                tokenButton.setButtonVisual();
+            }
+            else if(gameState.equals(gamePlay.getPlayerName(2) + "'s turn to remove a token") & tokenButton.removable){
+                tokenButton.setColour("");
+
+                gamePlay.remove_token(1, adaptData(tokenIndex));
+
+                ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(1) + "'s turn to add a token");
+                tokenButton.setAddable(true);
+                tokenButton.setRemovable(false);
+                tokenButton.setButtonVisual();
+            }
+
+        gamePlay.updateEndOfP1();
+
+        if(gamePlay.endOfP1){
+            tokenButton.setAddable(false);
+            tokenButton.setRemovable(false);
+            ((HeaderPanel) headerPanel).setGameState(gamePlay.getWinner());
         }
 
         gamePanel.revalidate();
@@ -130,6 +176,7 @@ public class GUI extends JFrame implements ActionListener {
 
         this.revalidate();
         this.repaint();
+        System.out.println(gamePlay.player1.get_numchipsleft() + "  " + gamePlay.player2.get_numchipsleft());
     }
 
     /**
@@ -138,6 +185,11 @@ public class GUI extends JFrame implements ActionListener {
      * Updates the frame to show the changes.
      */
     private void goToGameFrame(){
+        gamePlay = new GamePlay1(((LoginPanel) loginPanel).getPlayerUsername(1),
+                ((LoginPanel) loginPanel).getPlayerUsername(2));
+
+        headerPanel = new HeaderPanel(gamePlay.getPlayerName(1), gamePlay.getPlayerName(2));
+
         this.remove(loginPanel);
         this.remove(welcomePanel);
 
@@ -159,10 +211,37 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
     }
-}
 
-class b {
-    public static void main(String[] args) {
-        GUI frame = new GUI();
+    @Override
+    public String adaptData(Integer data) {
+        HashMap<Integer, String> guiDataToGameData = new HashMap();
+        guiDataToGameData.put(0, "A1");
+        guiDataToGameData.put(1, "A2");
+        guiDataToGameData.put(2, "A3");
+        guiDataToGameData.put(9, "A4");
+        guiDataToGameData.put(14, "A5");
+        guiDataToGameData.put(21, "A6");
+        guiDataToGameData.put(22, "A7");
+        guiDataToGameData.put(23, "A8");
+
+        guiDataToGameData.put(3, "B1");
+        guiDataToGameData.put(4, "B2");
+        guiDataToGameData.put(5, "B3");
+        guiDataToGameData.put(10, "B4");
+        guiDataToGameData.put(13, "B5");
+        guiDataToGameData.put(18, "B6");
+        guiDataToGameData.put(19, "B7");
+        guiDataToGameData.put(20, "B8");
+
+        guiDataToGameData.put(6, "C1");
+        guiDataToGameData.put(7, "C2");
+        guiDataToGameData.put(8, "C3");
+        guiDataToGameData.put(11, "C4");
+        guiDataToGameData.put(12, "C5");
+        guiDataToGameData.put(15, "C6");
+        guiDataToGameData.put(16, "C7");
+        guiDataToGameData.put(17, "C8");
+
+        return guiDataToGameData.get(data);
     }
 }
