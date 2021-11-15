@@ -5,6 +5,14 @@ import java.sql.*;
 public class PlayerDataGateway{
     public static String DATABASE_URL = "jdbc:sqlite:src/data/users_test.db";
 
+    /**
+     * Updates database entry for existing player logging into a game, or creates a new entry for a new player logging
+     * into the game.
+     *
+     * @param username String username of player of interest
+     * @return boolean for whether the username was for a new player or not
+     * @throws SQLException For when something sketchy happens with the SQL commands
+     */
     public boolean logInUser(String username) throws SQLException {
         Connection conn = DriverManager.getConnection(DATABASE_URL);
         String checkUserCmd = String.format("SELECT * FROM users WHERE username = \"%s\";", username);
@@ -57,9 +65,10 @@ public class PlayerDataGateway{
     }
 
     /**
-     * Precondition: User has already been logged into game, and so is already in dataset
-     * @param username
-     * @throws SQLException
+     * Retrieves a hashmap, representing all columns of data for a user in the database.
+     * Precondition: username is already registered in the database
+     * @param username String for username of the user of interest
+     * @throws SQLException Something sketchy happened with the SQL commands
      */
     public void getUserStats(String username) throws SQLException {
         // open connection to database
@@ -154,15 +163,15 @@ public class PlayerDataGateway{
         }
 
         // reset testing database
-//        try {
-//            Connection conn = DriverManager.getConnection(DATABASE_URL);
-//            PreparedStatement statement = conn.prepareStatement("DROP TABLE users;");
-//            statement.executeUpdate();
-//            conn.close();
-//            statement.close();
-//
-//        } catch (SQLException e) {
-//            System.out.print(e.getMessage());
-//        }
+        try {
+            Connection conn = DriverManager.getConnection(DATABASE_URL);
+            PreparedStatement statement = conn.prepareStatement("DROP TABLE users;");
+            statement.executeUpdate();
+            conn.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.print(e.getMessage());
+        }
     }
 }

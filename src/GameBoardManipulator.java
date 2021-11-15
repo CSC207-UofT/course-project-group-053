@@ -25,23 +25,7 @@ public class GameBoardManipulator {
         remover.remove(gameboard, position);
     }
 
-/*
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
+    public GameBoard getGameboard() {
+        return gameboard;
     }
-*/
-
-/*    @Override
-    public void unregister(Observer o) {
-        int observerIndex = observers.indexOf(o);
-        observers.remove(observerIndex);
-    }
-
-    @Override
-    public void notifyObserver(String playerName, String position, boolean addedToken) {
-        for (Observer o : observers) {
-            o.update(playerName, position, addedToken);
-        }
-    }*/
 }
