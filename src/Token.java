@@ -2,7 +2,7 @@
  * Parent class for any object we can place on a GameBoard
  */
 public class Token {
-    private final String owner;  // username of player who owns this token
+    public final String owner;  // username of player who owns this token
     private final char color;  // character representing the token (ex: B, W, R, etc...)
     private boolean inMill;
 
