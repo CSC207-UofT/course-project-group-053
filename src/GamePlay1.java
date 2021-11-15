@@ -63,7 +63,7 @@ public class GamePlay1 {
                 // player 1 has successfully placed down a token, so break out of the while loop
 
 
-                checkMill.checkMill(setToken_position, player.get_tokencolour());
+                checkMill.check_addMill(setToken_position, player.get_tokencolour());
                 break;
 
             } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
