@@ -1,6 +1,10 @@
 package data;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PlayerDataGateway{
     public static String DATABASE_URL = "jdbc:sqlite:src/data/users_test.db";
@@ -34,6 +38,13 @@ public class PlayerDataGateway{
         return isNewUser;
     }
 
+    /**
+     * Update database entry for a user after a round of Nine Men Morris.
+     * If the user won, add one to their number of wins, and update win rate for all users.
+     *
+     * @param username String for user's username in the database
+     * @param wonRound boolean indicating if this user won the match
+     */
     public void updateUserAfterGame(String username, boolean wonRound) throws SQLException {
         Connection conn = DriverManager.getConnection(DATABASE_URL);
 
@@ -66,22 +77,25 @@ public class PlayerDataGateway{
 
     /**
      * Retrieves a hashmap, representing all columns of data for a user in the database.
+     *
      * Precondition: username is already registered in the database
+     *
      * @param username String for username of the user of interest
      * @throws SQLException Something sketchy happened with the SQL commands
      */
-    public void getUserStats(String username) throws SQLException {
-        // open connection to database
-        // create statement object
-        // run query to get ResultSet for user entry in database
-        // return hashmap of user data
+    public Map<String, Object> getUserStats(String username) throws SQLException {
         Connection conn = DriverManager.getConnection(DATABASE_URL);
-        String userLookup = String.format("SELECT * FROM users WHERE username \"%s\";", username);
+        String userLookup = String.format("SELECT * FROM users WHERE username = \"%s\";", username);
         PreparedStatement statement = conn.prepareStatement(userLookup);
         ResultSet userStats = statement.executeQuery();
 
+        Map<String, Object> resultsHash = resultSetToList(userStats).get(0);
+
         conn.close();
         statement.close();
+        userStats.close();
+
+        return resultsHash;
     }
 
     /**
@@ -110,31 +124,32 @@ public class PlayerDataGateway{
         statement.close();
     }
 
+    /**
+     * Converts a ResultSet of a SQL query result to a list of hashmaps, with each hashmap being a row, with column names
+     * as keys and column values as values.
+     *
+     * This function was copied from https://gist.github.com/cworks/4175942
+     *
+     */
+    private List<Map<String, Object>> resultSetToList(ResultSet rs) throws SQLException {
+        ResultSetMetaData md = rs.getMetaData();
+        int columns = md.getColumnCount();
+        List<Map<String, Object>> rows = new ArrayList<>();
+        while (rs.next()){
+            Map<String, Object> row = new HashMap<>(columns);
+            for(int i = 1; i <= columns; ++i){
+                row.put(md.getColumnName(i), rs.getObject(i));
+            }
+            rows.add(row);
+        }
+        return rows;
+    }
+
     /*
     Struggling to write proper unit tests for this class, so I'm using this main method as a crude sanity check for my
     code.
      */
     public static void main(String[] args) {
-        // setting up test database
-        try {
-            Connection conn = DriverManager.getConnection(DATABASE_URL);
-            Statement statement = conn.createStatement();
-            String setUpCommand = "CREATE TABLE users (\n" +
-                "username TEXT NOT NULL PRIMARY KEY,\n" +
-                "num_games INTEGER NOT NULL DEFAULT 1,\n" +
-                "num_wins INTEGER NOT NULL DEFAULT 0,\n" +
-                "win_rate REAL NOT NULL DEFAULT 0.0,\n" +
-                "last_login DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP\n" +
-                ");";
-            statement.executeUpdate(setUpCommand);
-            conn.close();
-            statement.close();
-
-        } catch (SQLException e) {
-            System.out.print(e.getMessage());
-        }
-
-
         // try logging in new and existing users
         PlayerDataGateway gateway = new PlayerDataGateway();
 
@@ -156,22 +171,27 @@ public class PlayerDataGateway{
             gateway.updateUserAfterGame("joe", true);  // win rate is 1
 
             gateway.logInUser("joe");
-            gateway.updateUserAfterGame("joe", false);  // win rate is now  1/2
+            gateway.updateUserAfterGame("joe", false);  // win rate is now 1/2
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        // reset testing database
+        // try getting stats for a player
+        try {
+            gateway.getUserStats("bruh");  // debugged this method, hashmap turns out fine
+            gateway.getUserStats("joe");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        // reset testing database, removing rows we just added
         try {
             Connection conn = DriverManager.getConnection(DATABASE_URL);
-            PreparedStatement statement = conn.prepareStatement("DROP TABLE users;");
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM users WHERE username = \"joe\" OR username = \"bruh\";");
             statement.executeUpdate();
-            conn.close();
-            statement.close();
-
         } catch (SQLException e) {
-            System.out.print(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }

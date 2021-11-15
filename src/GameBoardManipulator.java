@@ -35,25 +35,6 @@ public class GameBoardManipulator {
     }
 
     public GameBoard getGameboard() { return this.gameboard; }
+
     public void setGameboard(GameBoard loadedBoard) {this.gameboard = loadedBoard;}
-
-/*
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-*/
-
-/*    @Override
-    public void unregister(Observer o) {
-        int observerIndex = observers.indexOf(o);
-        observers.remove(observerIndex);
-    }
-
-    @Override
-    public void notifyObserver(String playerName, String position, boolean addedToken) {
-        for (Observer o : observers) {
-            o.update(playerName, position, addedToken);
-        }
-    }*/
 }
