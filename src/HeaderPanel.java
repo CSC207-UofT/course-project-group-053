@@ -48,6 +48,8 @@ public class HeaderPanel extends JPanel {
         gameState.setText(state);
     }
 
+    //the following methods to create a shadow effect were adapted from
+    //stackoverflow.com/questions/13368103/jpanel-drop-shadow
     public void createDropShadowPanel() {
         Border border = BorderFactory.createEmptyBorder(0, 0, PIXELS, 0);
         this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(), border));

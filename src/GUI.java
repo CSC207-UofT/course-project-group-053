@@ -1,3 +1,7 @@
+/*
+ * GUI is a subclass of JFrame where the game is displayed. An object of this class is created to run the game.
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,7 +36,10 @@ public class GUI extends JFrame implements ActionListener {
         addActionEvent();//calling addActionEvent() method
     }
 
-
+    /**
+     * Helper method for constructor. Set the title, bounds, background, layout
+     * and closing operation for the GUI JFrame and makes sure it cannot be resized.
+     */
     private void setSettings(){
         this.setTitle("Nine Men's Morris");
         this.setBounds(10, 10, 1500, 900);
@@ -42,32 +49,62 @@ public class GUI extends JFrame implements ActionListener {
         this.setLayout(new BorderLayout());
     }
 
+    /**
+     * Defines a specific action listener for each button.
+     * It does so by overriding actionPerformer for each button
+     * Inside actionPerformed it calls a helper method.
+     */
     public void addActionEvent() {
-        //adding Action listener to components
-        ((LoginPanel) loginPanel).continueButton.addActionListener(this::confirmButtonAction);
+        ((LoginPanel) loginPanel).continueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               confirmButtonAction(e);
+            }
+        });
 
         TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
         for(int i = 0; i < tokenButtons.length; i++){
-            int finalI = i;
-            tokenButtons[i].addActionListener(e -> tokenButtonAction(e, finalI));
+            int finalI = i; //needs to make i final to add action listener to the ith tokenButton
+            tokenButtons[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    tokenButtonAction(e, finalI);
+                }
+            });
         }
     }
 
+    /**
+     * Helper method for confirmButton actionPerformed.
+     * Get the text in both text fields and check if any of them are empty.
+     * If so, pop a message dialog saying that they cannot be blank.
+     * Otherwise, update the frame to show the actual game.
+     *
+     * @param e   the ActionEvent object from actionPerformed
+     */
     public void confirmButtonAction(ActionEvent e) {
         if(((LoginPanel) loginPanel).player1TextField.getText().equals("") ||
                 ((LoginPanel) loginPanel).player2TextField.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Usernames cannot be blank!");
         }
-        // else if for when the username already exists; to be implemented after
         else{
             goToGameFrame();
         }
     }
 
+    /**
+     * Helper method for tokenButton actionPerformed.
+     * Get the text in both text fields and check if any of them are empty.
+     * If so, pop a message dialog saying that they cannot be blank.
+     * Otherwise, update the frame to show the actual game.
+     *
+     * @param e   the ActionEvent object from actionPerformed
+     * @param tokenIndex    the index of the desired tokenButton in the array
+     *                      returned by getTokenButtons
+     */
     public void tokenButtonAction(ActionEvent e, int tokenIndex) {
         String gameState = ((HeaderPanel) headerPanel).gameState.getText();
         TokenButton tokenButton = ((GamePanel) gamePanel).getTokenButtons()[tokenIndex];
-
 
         if (tokenButton.clickable){
             if(gameState.equals("Player 1's turn")){
@@ -85,7 +122,6 @@ public class GUI extends JFrame implements ActionListener {
             tokenButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-
         gamePanel.revalidate();
         gamePanel.repaint();
 
@@ -96,6 +132,11 @@ public class GUI extends JFrame implements ActionListener {
         this.repaint();
     }
 
+    /**
+     * Helper method for confirmButtonAction. Deletes all current JPanels in the frame.
+     * add the JPanels of the actual game and changes the frame's background colour.
+     * Updates the frame to show the changes.
+     */
     private void goToGameFrame(){
         this.remove(loginPanel);
         this.remove(welcomePanel);
