@@ -62,7 +62,7 @@ public class GameBoard implements Serializable {
         String removedToken = getTokenAtPosition(targetPosition);
         gameBoard.put(targetPosition, null);  // remove token from target gameboard coordinate, by storing null
         increaseCapacity();
-        return removedToken;  // return id of the token that was removed
+        return removedToken;  // return String of the token that was removed
     }
 
     /**
