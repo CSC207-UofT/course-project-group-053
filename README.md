@@ -1,6 +1,3 @@
-## Replace this README.md!
+## Running Nine Men's Morris.
 
-This is a standard README.md file for you to replace. You'll want to include your own content here!
-
-MD (Markdown) files use [Markdown formatting](https://guides.github.com/features/mastering-markdown/): 
-these look very much like .txt files, so you can write them in a very similar way.
+To run the game, one can either use the `Main` class in the main branch, which will display the game through the console, or run the `Main` class in the GUI_skeleton branch, which will display it through a GUI. As of now, we decided not to use only the GUI because, unlike the console display, it does not implement the loading and saving part of the game. Note, moreover, that though there is a GUI class in the main branch, it is not the most current one and lacks many features. The most current one has not been merged into the main branch because it required signficant changes in other classes, especially GamePlay1. Such changes would conflict with the way the console version runs, and this is why GUI_skeleton has not been merged with main.
