@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 
@@ -14,6 +15,15 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     GamePlay1 gamePlay;
 
     public GUI() {
+        initiateGUI();
+    }
+
+    /**
+     * Initiates all instance attributes of GUI except gamePlay and headerPanel, since they require
+     * information that the user will give later. Calls helper method to set the preferred JFrame settings.
+     * Adds the panels for the starting part (welcomePanel and loginPanel).
+     */
+    private void initiateGUI(){
         loginPanel = new LoginPanel();
         welcomePanel = new WelcomePanel();
         whiteTokenPanel = new TokenPanel("W");
@@ -36,7 +46,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     }
 
     /**
-     * Helper method for constructor. Set the title, bounds, background, layout
+     * Helper method for initiateGUI. Set the title, bounds, background, layout
      * and closing operation for the GUI JFrame and makes sure it cannot be resized.
      */
     private void setSettings(){
@@ -142,22 +152,28 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
             if(gameState.equals(gamePlay.getPlayerName(1) + "'s turn to remove a token") & tokenButton.removable){
                 tokenButton.setColour("");
 
-                gamePlay.remove_token(2, adaptData(tokenIndex));
-
-                ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(2) + "'s turn to add a token");
-                tokenButton.setAddable(true);
-                tokenButton.setRemovable(false);
-                tokenButton.setButtonVisual();
+                if(gamePlay.remove_token(2, adaptData(tokenIndex)).equals("")){
+                    ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(2) + "'s turn to add a token");
+                    tokenButton.setAddable(true);
+                    tokenButton.setRemovable(false);
+                    tokenButton.setButtonVisual();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, gamePlay.remove_token(2, adaptData(tokenIndex)));
+                }
             }
             else if(gameState.equals(gamePlay.getPlayerName(2) + "'s turn to remove a token") & tokenButton.removable){
                 tokenButton.setColour("");
 
-                gamePlay.remove_token(1, adaptData(tokenIndex));
-
-                ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(1) + "'s turn to add a token");
-                tokenButton.setAddable(true);
-                tokenButton.setRemovable(false);
-                tokenButton.setButtonVisual();
+                if(gamePlay.remove_token(1, adaptData(tokenIndex)).equals("")){
+                    ((HeaderPanel) headerPanel).setGameState(gamePlay.getPlayerName(1) + "'s turn to add a token");
+                    tokenButton.setAddable(true);
+                    tokenButton.setRemovable(false);
+                    tokenButton.setButtonVisual();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, gamePlay.remove_token(1, adaptData(tokenIndex)));
+                }
             }
 
         gamePlay.updateEndOfP1();
@@ -166,6 +182,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
             tokenButton.setAddable(false);
             tokenButton.setRemovable(false);
             ((HeaderPanel) headerPanel).setGameState(gamePlay.getWinner());
+            callNewGameDialog();
         }
 
         gamePanel.revalidate();
@@ -176,7 +193,6 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         this.revalidate();
         this.repaint();
-        System.out.println(gamePlay.player1.get_numchipsleft() + "  " + gamePlay.player2.get_numchipsleft());
     }
 
     /**
@@ -207,11 +223,53 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         this.repaint();
     }
 
+    /**
+     * Removes all current frames and initiates the GUI again by calling the same helper method
+     * used in the constructor.
+     */
+    private void restart(){
+        gamePanelWrapper.remove(Box.createRigidArea(new Dimension(0, 80)));
+        gamePanelWrapper.remove(gamePanel);
+
+        this.remove(whiteTokenPanel);
+        this.remove(blackTokenPanel);
+        this.remove(gamePanelWrapper);
+        this.remove(headerPanel);
+
+        initiateGUI();
+
+        this.revalidate();
+        this.repaint();
+    }
+
+    /**
+     * Creates a JOptionPane to ask the user whether or not to restart the game.
+     */
+    private void callNewGameDialog(){
+        int answer = JOptionPane.showConfirmDialog(this,
+                "Would you like to start a new game?",
+                "Game Over",
+                JOptionPane.YES_NO_OPTION);
+        if (answer == JOptionPane.YES_OPTION) {
+            restart();
+        }
+        else if (answer == JOptionPane.NO_OPTION) {
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)); //close GUI
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
+    /**
+     * Convert between the button indexing format used in GUI ([0-23])
+     * to the one used in gamePlay ([A-C][1-8]).
+     *
+     * @param data index in the list of button stored in gamePlay
+     * @return String of the button's position in the [A-C][1-8] format
+     */
     @Override
     public String adaptData(Integer data) {
         HashMap<Integer, String> guiDataToGameData = new HashMap();
