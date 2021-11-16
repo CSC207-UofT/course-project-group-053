@@ -38,7 +38,7 @@ public class CheckMill {
     }
 
     public void checkMill(String position, String colour, GameBoard gameboard) throws InvalidPositionException {
-        List<List<String>> combinations = new ArrayList<List<String>>();
+        List<List<String>> combinations = new ArrayList<>();
         List<String> innerList1 = new ArrayList<>();
         innerList1.add("A1");
         innerList1.add("A2");
@@ -137,7 +137,7 @@ public class CheckMill {
 
         for (List<String> lo : combinations) {
             if (lo.contains(position)) {
-                Boolean found = false;
+                boolean found = false;
                 for (String o : lo) {
                     if (getItemInGameBoard(o, gameboard) == null) {
                         found = false;
@@ -158,7 +158,7 @@ public class CheckMill {
     }
 
     public Boolean checkMill2(String position, String colour, GameBoard gameboard) throws InvalidPositionException {
-        List<List<String>> combinations = new ArrayList<List<String>>();
+        List<List<String>> combinations = new ArrayList<>();
         List<String> innerList1 = new ArrayList<>();
         innerList1.add("A1");
         innerList1.add("A2");
@@ -257,7 +257,7 @@ public class CheckMill {
 
         for (List<String> lo : combinations) {
             if (lo.contains(position)) {
-                Boolean found = false;
+                boolean found = false;
                 for (String o : lo) {
                     if (getItemInGameBoard(o, gameboard) == null) {
                         found = false;
@@ -278,7 +278,7 @@ public class CheckMill {
         return false;
     }
 
-    public static int getPlayerHouses(int player_number) {
+    public int getPlayerHouses(int player_number) {
         return playerMills.get(player_number).size();
     }
 
