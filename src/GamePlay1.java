@@ -3,7 +3,6 @@ public class GamePlay1 {
     GameBoardRemover remover;
     CheckMill checkMill;
     GameBoardManipulator gameBoardManipulator;
-    GameBoardManager gameBoardManager;
     WinnerCalculator winnerCalculator;
     boolean endOfP1;
     Player player1, player2;
@@ -13,7 +12,6 @@ public class GamePlay1 {
         remover = new GameBoardRemover();
         checkMill = new CheckMill();
         gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
-        gameBoardManager = new GameBoardManager();
         endOfP1 = false;
         player1 = new Player(player1Name, "W");
         player2 = new Player(player2Name, "B");
@@ -106,6 +104,13 @@ public class GamePlay1 {
         endOfP1 = player1.int_player_numchipsonboard == 0 & player2.int_player_numchipsleft == 0;
     }
 
+    /**
+     * Removes token at position removeTokenPosition.
+     *
+     * @param playerNum indicates whether it is player1 or player2
+     * @param removeTokenPosition position in the form of [A-C][1-8] of the token to be removed
+     * @return empty string if token was removed; excpetion message otherwise.
+     */
     public String remove_token(int playerNum, String removeTokenPosition) {
         Player player;
         if (playerNum == 1) {
@@ -114,38 +119,38 @@ public class GamePlay1 {
             player = player2;
         }
 
-            try {
-                if (removeTokenPosition.equals("save")) {
-                    boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
-                    try {
-                        GameState.save(save_file, "gamestate1.save");
-                        saved_data = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't save:" + e.getMessage());
-                    }
-                    if (saved_data) {
-                        throw new SavedSuccessfully("Game saved successfully");
-                    }
+        try {
+            if (removeTokenPosition.equals("save")) {
+                boolean saved_data = false;
+                GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
+                try {
+                    GameState.save(save_file, "gamestate1.save");
+                    saved_data = true;
+                } catch (Exception e) {
+                    System.out.println("Couldn't save:" + e.getMessage());
                 }
-                if (removeTokenPosition.equals("load")) {
-                    boolean loaded_data = false;
-                    try {
-                        GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                        gameBoardManipulator.setGameboard(saveData.savedGameboard);
-                        loaded_data = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't load:" + e.getMessage());
-                    }
-                    if (loaded_data) {
-                        throw new LoadedSuccessfully("Game loaded successfully");
-                    }
+                if (saved_data) {
+                    throw new SavedSuccessfully("Game saved successfully");
                 }
-                gameBoardManipulator.removeToken(removeTokenPosition, player.get_tokencolour());
-            } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
-                return e.getMessage();
-                // skip the invalid token and ask for prompt again
             }
+            if (removeTokenPosition.equals("load")) {
+                boolean loaded_data = false;
+                try {
+                    GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
+                    gameBoardManipulator.setGameboard(saveData.savedGameboard);
+                    loaded_data = true;
+                } catch (Exception e) {
+                    System.out.println("Couldn't load:" + e.getMessage());
+                }
+                if (loaded_data) {
+                    throw new LoadedSuccessfully("Game loaded successfully");
+                }
+            }
+            gameBoardManipulator.removeToken(removeTokenPosition, player.get_tokencolour());
+        } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
+            return e.getMessage();
+            // skip the invalid token and ask for prompt again
+        }
         return "";
         //shows state after removing opponents token
         //TODO: print gameboard

@@ -53,7 +53,8 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         this.setTitle("Nine Men's Morris");
         this.setBounds(10, 10, 1500, 900);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
+        this.setMinimumSize(new Dimension(1500, 900));
+        this.setResizable(true);
         this.getContentPane().setBackground(Color.white);
         this.setLayout(new BorderLayout());
     }
