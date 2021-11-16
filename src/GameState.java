@@ -10,7 +10,7 @@ public class GameState {
      */
 
     /**
-     * @param data: the data we want to save
+     * @param data: the Gateways.data we want to save
      * @param filename: filename with the path where we want to save
      * @throws Exception:
      * TODO: make exception for failure to save
@@ -23,8 +23,8 @@ public class GameState {
 
     /**
      *
-     * @param filename: filename with the path where we want to load the data from
-     * @return ois: the save data that was loaded
+     * @param filename: filename with the path where we want to load the Gateways.data from
+     * @return ois: the save Gateways.data that was loaded
      * @throws Exception
      * TODO: make exception for failure to save
      */

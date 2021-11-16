@@ -1,4 +1,4 @@
-package data;
+package Gateways;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayerDataGateway{
-    public static String DATABASE_URL = "jdbc:sqlite:src/data/users_test.db";
+    public static String DATABASE_URL = "jdbc:sqlite:src/Gateways.data/users_test.db";
 
     /**
      * Updates database entry for existing player logging into a game, or creates a new entry for a new player logging
@@ -76,7 +76,7 @@ public class PlayerDataGateway{
     }
 
     /**
-     * Retrieves a hashmap, representing all columns of data for a user in the database.
+     * Retrieves a hashmap, representing all columns of Gateways.data for a user in the database.
      *
      * Precondition: username is already registered in the database
      *
@@ -156,8 +156,7 @@ public class PlayerDataGateway{
         try {
             gateway.logInUser("bruh");
             gateway.logInUser("joe");
-            gateway.logInUser("bruh");
-            gateway.logInUser("bruh");
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -186,12 +185,12 @@ public class PlayerDataGateway{
         }
 
         // reset testing database, removing rows we just added
-        try {
-            Connection conn = DriverManager.getConnection(DATABASE_URL);
-            PreparedStatement statement = conn.prepareStatement("DELETE FROM users WHERE username = \"joe\" OR username = \"bruh\";");
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+//        try {
+//            Connection conn = DriverManager.getConnection(DATABASE_URL);
+//            PreparedStatement statement = conn.prepareStatement("DELETE FROM users WHERE username = \"joe\" OR username = \"bruh\";");
+//            statement.executeUpdate();
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
     }
 }

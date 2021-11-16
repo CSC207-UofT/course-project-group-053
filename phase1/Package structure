@@ -1,0 +1,44 @@
+Unfortunately, we haven't been able to package our code without breaking it.
+
+However, here was how we were going to package our code:
+
+Entities:
+GameBoard
+Token
+Player
+
+UseCases:
+GameBoardManipulator
+GameBoardRemover
+GameBoardPlacer
+GameBoardMap
+CheckMill
+WinnerCalculator
+
+Controllers:
+Main
+GamePlay1
+
+Presenters:
+(nothing yet)
+
+Gateways:
+PlayerDataGateway
+GameSaveData
+GameSaveState
+
+UserInterfaces:
+GamePanel
+GUI
+HeaderPanel
+LoginPanel
+TokenButton
+TokenPanel
+WelcomePanel
+
+Interfaces
+Observer (for Observer design pattern, not yet implemented)
+Subject (for Observer design pattern)
+
+Exceptions:
+all custom Exception classes in our program

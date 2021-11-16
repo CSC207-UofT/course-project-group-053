@@ -38,7 +38,7 @@ to the rules and keeping them in check since the game moves from placing tokens 
 the pre-existing tokens on the board. There are also some variations on this game 
 where skipping tokens may be allowed which is a design choice and open question that still 
 needs to be addressed (this would be our phase 3). In addition, some open questions are also 
-to what extent we want to display player data in terms of their previous statistics and how detailed 
+to what extent we want to display player Gateways.data in terms of their previous statistics and how detailed
 the chosen statistics would be. 
 
 
