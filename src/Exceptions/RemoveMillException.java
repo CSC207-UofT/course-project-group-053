@@ -5,6 +5,6 @@ package Exceptions;
  */
 public class RemoveMillException extends InvalidRemovalException {
     public RemoveMillException() {
-        super("Cannot remove chip that is part of opponent's mill");
+        super("Cannot remove chip that is part of a mill");
     }
 }
