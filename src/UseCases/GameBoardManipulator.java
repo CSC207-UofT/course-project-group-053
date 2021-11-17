@@ -1,9 +1,15 @@
+package UseCases;
+
+import Entity.GameBoard;
+import Entity.Token;
+import Exceptions.*;
+
 /**
- * Initializes and stores an instance of GameBoard, processing requests to place and remove tokens from the GameBoard.
+ * Initializes and stores an instance of Entity.GameBoard, processing requests to place and remove tokens from the Entity.GameBoard.
  */
-// This class is both a Facade and a Subject class (as part of Observer design pattern)
+// This class is both a Facade and a Interfaces.Subject class (as part of Interfaces.Observer design pattern)
 public class GameBoardManipulator {
-    // Design GameBoardManipulator as a facade class for manipulating tokens on a GameBoard (add, remove, slide tokens)
+    // Design UseCases.GameBoardManipulator as a facade class for manipulating tokens on a Entity.GameBoard (add, remove, slide tokens)
     private GameBoard gameboard;
     private final GameBoardPlacer placer;
     private final GameBoardRemover remover;

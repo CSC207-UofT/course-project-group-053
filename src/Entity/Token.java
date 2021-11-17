@@ -1,5 +1,7 @@
+package Entity;
+
 /**
- * Parent class for any object we can place on a GameBoard
+ * Parent class for any object we can place on a Entity.GameBoard
  */
 public class Token {
     public final String owner;  // username of player who owns this token

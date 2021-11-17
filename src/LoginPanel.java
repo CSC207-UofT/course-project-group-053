@@ -10,10 +10,10 @@ public class LoginPanel extends JPanel {
     public LoginPanel(){
         super();
 
-        player1Label = new JLabel("Enter Player 1's username:");
+        player1Label = new JLabel("Enter Entity.Player 1's username:");
         player1TextField = new JTextField();
 
-        player2Label = new JLabel("Enter Player 2's username:");
+        player2Label = new JLabel("Enter Entity.Player 2's username:");
         player2TextField = new JTextField();
 
         continueButton = new JButton("CONTINUE");

@@ -1,11 +1,18 @@
+package UseCases;
+
+import Entity.GameBoard;
+import Entity.Token;
+import Exceptions.NonexistentPositionException;
+import Exceptions.OccupiedSlotException;
+
 public class GameBoardPlacer {
-    // class for GameBoardManipulator facade, placing tokens on a GameBoard instance
+    // class for UseCases.GameBoardManipulator facade, placing tokens on a Entity.GameBoard instance
 
     /**
-     * Inserts a Token into a specified position on GameBoard
+     * Inserts a Entity.Token into a specified position on Entity.GameBoard
      *
-     * @param gb GameBoard instance to place token on
-     * @param token A Token instance to place on the gameboard
+     * @param gb Entity.GameBoard instance to place token on
+     * @param token A Entity.Token instance to place on the gameboard
      * @param position String representation of gameboard coordinates to place token, in form [ABC][1-8]
      */
     public void place(GameBoard gb, Token token, String position) throws NonexistentPositionException,

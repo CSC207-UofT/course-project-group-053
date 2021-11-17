@@ -1,3 +1,5 @@
+package Exceptions;
+
 /**
  * Exception to be thrown when player tries to remove chip from opponent's mill
  */

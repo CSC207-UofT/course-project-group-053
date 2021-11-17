@@ -1,10 +1,13 @@
+import Controller.GamePlay1;
+import Entity.Player;
+import Exceptions.InvalidPositionException;
+import Exceptions.LoadedSuccessfully;
+import Exceptions.SavedSuccessfully;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GamePlay1Test {
     GamePlay1 gamePlay1;
@@ -12,7 +15,7 @@ class GamePlay1Test {
     List<Player> playerList;
 
     @BeforeEach
-    void setUp() throws InvalidPositionException {
+    void setUp() throws InvalidPositionException, SavedSuccessfully, LoadedSuccessfully {
         player1 = new Player("Player1", "W");
         player2 = new Player("Player2", "B");
 

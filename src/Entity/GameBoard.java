@@ -1,3 +1,5 @@
+package Entity;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -40,9 +42,9 @@ public class GameBoard implements Serializable {
     private void increaseCapacity() { gameBoardCapacity--; }
 
     /**
-     * Place a Player's token in a specified box and box position in GameBoard
+     * Place a Entity.Player's token in a specified box and box position in Entity.GameBoard
      *
-     * @param token unique string representing a player's token to place on GameBoard
+     * @param token unique string representing a player's token to place on Entity.GameBoard
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      */
     public void setToken(String token, String targetPosition) {
@@ -52,7 +54,7 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * Remove a Player's token from a specified box and box position in GameBoard
+     * Remove a Entity.Player's token from a specified box and box position in Entity.GameBoard
      *
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      *
@@ -66,7 +68,7 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * Retrieve the string of the token placed in a particular box, at a particular position in GameBoard.
+     * Retrieve the string of the token placed in a particular box, at a particular position in Entity.GameBoard.
      * Return null if there is not token stored at the specified position
      *
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to retrieve token

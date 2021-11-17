@@ -1,3 +1,5 @@
+package Exceptions;
+
 /**
  * Exception to be thrown when player tries to remove token from an unoccupied gameboard position.
  */

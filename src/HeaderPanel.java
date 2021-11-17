@@ -17,9 +17,9 @@ public class HeaderPanel extends JPanel {
         header.setLayout(new BorderLayout());
         header.setBackground(Color.decode("#FF1B3A"));
 
-        player1 = new JLabel("  Player 1");
-        player2 = new JLabel("Player 2  ");
-        gameState = new JLabel("Player 1's turn");
+        player1 = new JLabel("  Entity.Player 1");
+        player2 = new JLabel("Entity.Player 2  ");
+        gameState = new JLabel("Entity.Player 1's turn");
 
         setLabelSettings();
 

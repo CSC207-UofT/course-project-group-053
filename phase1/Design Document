@@ -7,8 +7,8 @@ which is not integrated as yet but is intended to be used for PlayerStats.
 Major design decisions:
 We decided to implement the GUI and connect it to main later. In addition, we decided to fix
 a lot of the design problems we had in Phase 0 such as changing GameBoardManager to
-GameBoardManipulator as well as adding classes such as CheckMill to check when a mill was
-made on the GameBoard and WinnerCalculator for checking when a player had one. We implemented
+UseCases.GameBoardManipulator as well as adding classes such as UseCases.CheckMill to check when a mill was
+made on the Entity.GameBoard and UseCases.WinnerCalculator for checking when a player had one. We implemented
 these while keeping clean architecture in mind especially the single-responsibility principle
 of the SOLID principles.
 
@@ -20,14 +20,14 @@ interfaces used in our program.
 
 SOLID principles and our project:
 
-S(single-responsibility principle): each one of our classes (some of which are Player, Token, GameBoard,
+S(single-responsibility principle): each one of our classes (some of which are Entity.Player, Entity.Token, Entity.GameBoard,
 GameBoardManager etc.) all are only responsible for handling one aspect of the code. For a more
-specific example, we have implemented GameBoardPlacer and GameBoardRemover as different classes
-responsible for placing tokens on the GameBoard and also removing them instead of GameBoard being
+specific example, we have implemented UseCases.GameBoardPlacer and UseCases.GameBoardRemover as different classes
+responsible for placing tokens on the Entity.GameBoard and also removing them instead of Entity.GameBoard being
 responsible for doing both those things.
 
 O(open-closed principle): Our entity classes all have space to be extended but are more rigid
-when it comes to being modified. Specifically, GameBoardManipulator is open to adding more methods
+when it comes to being modified. Specifically, UseCases.GameBoardManipulator is open to adding more methods
 if needed without needing to change the current methods that are implemented.
 
 L (liskov substitution principle): Not a lot of our classes use inheritance and so this principle is not
@@ -37,19 +37,19 @@ from invalid moves and those are implemented by keeping the Liskov substitution 
 Interface segregation principle: Not a lot of interfaces were used in our code.
 
 Dependency inversion principle: Our code generally follows this principle as more abstract
-classes depend on less abstract classes. For example, Token does not depend on GamePlayManipulator
-as Token is a less abstract class.
+classes depend on less abstract classes. For example, Entity.Token does not depend on GamePlayManipulator
+as Entity.Token is a less abstract class.
 
 Summary of design patterns:
 
-Facade: Used to fix GameBoardManipulator (formerly GameBoardManager) to follow
-the single responsibility principle of SOLID. GameBoardManipulator was broken into smaller classes
+Facade: Used to fix UseCases.GameBoardManipulator (formerly GameBoardManager) to follow
+the single responsibility principle of SOLID. UseCases.GameBoardManipulator was broken into smaller classes
 that could perform its functionality so if anything needed to change, we changed those classes only and
 nothing else.
 
-Observer: Didn't have time to implement, but originally planned to implement using GameBoardMap and GameBoardManipulator,
-so GameBoardMap is updated with new positions occupied by tokens and new mills formed by players whenever GameBoardManipulator
-changes the GameBoard. Now, we plan to implement this in Phase 2.
+Interfaces.Observer: Didn't have time to implement, but originally planned to implement using UseCases.GameBoardMap and UseCases.GameBoardManipulator,
+so UseCases.GameBoardMap is updated with new positions occupied by tokens and new mills formed by players whenever UseCases.GameBoardManipulator
+changes the Entity.GameBoard. Now, we plan to implement this in Phase 2.
 
 Progress report:
 Some of the open questions that we have revolve more around how to connect various part of the code in a coherent
@@ -77,20 +77,20 @@ Calculator which specifies who won the game. Also worked on the UML models. Will
 with testing the gameto find any bugs in addition to working on the stats of the players that could
 be displayed in a GUI as well.
 
-Aalina: Working on GameBoardMap and trying to resolve issues with unifying the code to try and resolve
-issues with GameBoardMap and make it as efficient as possible. Also worked on progress reports and the
-design document. Will continue to work on GameBoardMap and also on features that can be added to the
+Aalina: Working on UseCases.GameBoardMap and trying to resolve issues with unifying the code to try and resolve
+issues with UseCases.GameBoardMap and make it as efficient as possible. Also worked on progress reports and the
+design document. Will continue to work on UseCases.GameBoardMap and also on features that can be added to the
 GUI so it can be made more interactive.
 
 Jason:
-Worked on GameBoardManipulator, a newer version of GameBoardManager. Created the Token class and worked
+Worked on UseCases.GameBoardManipulator, a newer version of GameBoardManager. Created the Entity.Token class and worked
 on PlayerDataGateway using a sql database. Also worked on the UML diagram with Aliza. Has worked on
 and will continue to work on packaging and testing to make sure that the code is clean and does not
 break when packaged in addition to checking that its functionality remains intact at all times
 (with Aliza).
 
 Mary:
-Making changes in GamePlay1, which is the controller to follow clean architecture. For Phase 2,
+Making changes in Controller.GamePlay1, which is the controller to follow clean architecture. For Phase 2,
 Mary and Felipe are also going to work on finding a way to remove tokens on the GUI in addition
 to focusing on more UI/UX principles.
 
