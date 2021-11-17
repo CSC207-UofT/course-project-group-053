@@ -1,3 +1,9 @@
+package UseCases;
+
+import Entity.GameBoard;
+import Exceptions.InvalidPositionException;
+import Exceptions.NonexistentPositionException;
+
 import java.util.*;
 
 public class CheckMill {

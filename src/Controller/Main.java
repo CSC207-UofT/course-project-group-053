@@ -1,3 +1,8 @@
+package Controller;
+
+import Entity.Player;
+import Exceptions.*;
+
 import java.util.*;
 
 
@@ -8,7 +13,7 @@ public class Main {
     public static Player player2;
 
 
-    public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException, SavedSuccessfully, LoadedSuccessfully {
+    public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException, LoadedSuccessfully, SavedSuccessfully {
         List<Player> playerList = Start();
 
         new GamePlay1(playerList);
@@ -18,14 +23,14 @@ public class Main {
     /**
      * Setting name and color for players
      *
-     * @return Player[]{player1, player2}
+     * @return Entity.Player[]{player1, player2}
      */
     public static List<Player> Start(){
         Scanner sc = new Scanner(System.in);
         System.out.print("Initializing Nine Men Morris \r\n");
         //TODO: let player load game after initialising
         //Setting for player
-        System.out.println("1. Type name of the Human Player: \r\n");
+        System.out.println("1. Type name of the Human Entity.Player: \r\n");
         String name_firstinput = sc.nextLine();
         System.out.print("Choose Colour for: " + name_firstinput + ". Type B for Black or W for white \r\n");
         String color_firstinput = sc.nextLine();
@@ -37,7 +42,7 @@ public class Main {
         }
 
         //Setting for other player
-        System.out.print("2. Type name of another Human Player: \r\n");
+        System.out.print("2. Type name of another Human Entity.Player: \r\n");
         String name_secondinput = sc.nextLine();
 
         String color_secondinput;

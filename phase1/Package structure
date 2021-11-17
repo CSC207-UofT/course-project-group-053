@@ -3,28 +3,28 @@ Unfortunately, we haven't been able to package our code without breaking it.
 However, here was how we were going to package our code:
 
 Entities:
-GameBoard
-Token
-Player
+Entity.GameBoard
+Entity.Token
+Entity.Player
 
 UseCases:
-GameBoardManipulator
-GameBoardRemover
-GameBoardPlacer
-GameBoardMap
-CheckMill
-WinnerCalculator
+UseCases.GameBoardManipulator
+UseCases.GameBoardRemover
+UseCases.GameBoardPlacer
+UseCases.GameBoardMap
+UseCases.CheckMill
+UseCases.WinnerCalculator
 
 Controllers:
-Main
-GamePlay1
+Controller.Main
+Controller.GamePlay1
 
 Presenters:
 (nothing yet)
 
 Gateways:
 PlayerDataGateway
-GameSaveData
+Gateways.data.GameSaveData
 GameSaveState
 
 UserInterfaces:
@@ -37,8 +37,8 @@ TokenPanel
 WelcomePanel
 
 Interfaces
-Observer (for Observer design pattern, not yet implemented)
-Subject (for Observer design pattern)
+Interfaces.Observer (for Interfaces.Observer design pattern, not yet implemented)
+Interfaces.Subject (for Interfaces.Observer design pattern)
 
 Exceptions:
 all custom Exception classes in our program

@@ -1,9 +1,11 @@
-import java.util.HashSet;
-import java.util.List;
+package UseCases;
+
+import Entity.GameBoard;
+import Entity.Player;
 
 public class WinnerCalculator {
 
-    // Creates and stores a GameBoard instance, and processes Player moves on the GameBoard
+    // Creates and stores a Entity.GameBoard instance, and processes Entity.Player moves on the Entity.GameBoard
     private final GameBoard gb = new GameBoard();
     private final CheckMill cm = new CheckMill();
 

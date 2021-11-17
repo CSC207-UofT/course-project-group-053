@@ -1,4 +1,15 @@
-import java.util.Arrays;
+package Controller;
+
+import Entity.Player;
+import Entity.Token;
+import Exceptions.*;
+import Gateways.data.GameSaveData;
+import Gateways.data.GameState;
+import UseCases.CheckMill;
+import UseCases.GameBoardManipulator;
+import UseCases.GameBoardPlacer;
+import UseCases.GameBoardRemover;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +27,7 @@ public class GamePlay1 {
         System.out.println("Starting Game between " + player1.get_username() + " and " + player2.get_username());
 
         // print the initial gameboard state, before players make any moves
-        //TODO: Print GameBoard
+        //TODO: Print Entity.GameBoard
 
         // keep track of whether both players have run out of chips/tokens to place
         // when they do, phase 1 of the game ends
@@ -79,7 +90,7 @@ public class GamePlay1 {
 
                 Token token = new Token(player.get_username(), player.get_tokencolour());
 
-                //TODO: make a Token
+                //TODO: make a Entity.Token
                 //InsertToken(token, position)
                 gameBoardManipulator.placeToken(token, setToken_position);
 
@@ -91,7 +102,7 @@ public class GamePlay1 {
                 checkMill.checkMill(setToken_position, player.get_tokencolour(), gameBoardManipulator.getGameboard());
                 break;
 
-            } catch (LoadedSuccessfully | SavedSuccessfully |InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
+            } catch (LoadedSuccessfully | SavedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
                 System.out.println(e.getMessage());
                 // skip the invalid token and ask for prompt again
             }
@@ -135,7 +146,7 @@ public class GamePlay1 {
                 }
                 gameBoardManipulator.removeToken(removeToken_position, player.get_tokencolour());
                 break;
-            } catch (SavedSuccessfully | LoadedSuccessfully |InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
+            } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
                 System.out.println(e.getMessage());
                 // skip the invalid token and ask for prompt again
             }

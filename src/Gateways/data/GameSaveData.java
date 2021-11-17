@@ -1,3 +1,8 @@
+package Gateways.data;
+
+import Entity.GameBoard;
+import Entity.Player;
+
 import java.io.Serializable;
 
 public class GameSaveData implements Serializable {

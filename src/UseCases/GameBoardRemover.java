@@ -1,14 +1,20 @@
+package UseCases;
+
+import Entity.GameBoard;
+import Exceptions.NonexistentPositionException;
+import Exceptions.RemoveEmptySlotException;
+
 public class GameBoardRemover {
-    // class for GameBoardManipulator facade, removing tokens from a GameBoard instance
+    // class for UseCases.GameBoardManipulator facade, removing tokens from a Entity.GameBoard instance
 
     /**
      * Removes a token from position on gameboard
-     * @param position String representation of a token to place on the GameBoard, in format [ABC][1-8]
+     * @param position String representation of a token to place on the Entity.GameBoard, in format [ABC][1-8]
      * @return String representing the token that was removed from gameboard
      */
     public String remove(GameBoard gb, String position) throws NonexistentPositionException, RemoveEmptySlotException {
-        // 1) check if position is valid (InvalidPositionException)
-        // 2) check if position is empty (RemoveEmptySlotException)
+        // 1) check if position is valid (Exceptions.InvalidPositionException)
+        // 2) check if position is empty (Exceptions.RemoveEmptySlotException)
         // 3) if position is valid and non-empty, remove the token from gameboard
         if (! checkValidPosition(position)) {
             throw new NonexistentPositionException();

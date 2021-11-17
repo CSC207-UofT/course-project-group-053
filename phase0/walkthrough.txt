@@ -1,28 +1,28 @@
-The code starts at the Main class where it would ask for Input from the user to 
-enter the names of two Human Players and the colour the first Human Player chooses. 
-The second colour is automatically assigned to the other Human Player as there are 
+The code starts at the Controller.Main class where it would ask for Input from the user to
+enter the names of two Human Players and the colour the first Human Entity.Player chooses.
+The second colour is automatically assigned to the other Human Entity.Player as there are
 only two players and two colours. So when the Input is received, HumanPlayer, 
-which is the subclass of Player initializes two player instances and stores the 
+which is the subclass of Entity.Player initializes two player instances and stores the
 name of player, the token colour of the player, and initializes the number of chips 
 as 9 and sets the number of chips on the board to 0. Now the players have been initialized,
-the next task of Main is to call upon GamePlay1 (this indicaates Phase1 of the game).
+the next task of Controller.Main is to call upon Controller.GamePlay1 (this indicaates Phase1 of the game).
 
-GamePlay1 is another public class that starts by storing player information and then outputs 
+Controller.GamePlay1 is another public class that starts by storing player information and then outputs
 what the initial state of the gameboard looks like. GameBoardManager is responsible for providing 
-the string representation of the class GameBoard. The class GameBoard creates the grid representing 
-a board for Nine Men Morris. Now the game has been initialised and next we have GamePlay1 ask each 
-Player to place a token. At this point GameBoardManager is working to see where on the board the 
-token has been placed and making a record of it, and the Player class keeps track of how many tokens
+the string representation of the class Entity.GameBoard. The class Entity.GameBoard creates the grid representing
+a board for Nine Men Morris. Now the game has been initialised and next we have Controller.GamePlay1 ask each
+Entity.Player to place a token. At this point GameBoardManager is working to see where on the board the
+token has been placed and making a record of it, and the Entity.Player class keeps track of how many tokens
 the Players are left with and how many of Players tokens are on the board.
 
-Everytime a Player places a token, GameBoardManager has to process the player move. 
+Everytime a Entity.Player places a token, GameBoardManager has to process the player move.
 By processing it first checks if the move is valid. Exceptions are thrown if the move 
-is invalid and the Player is informed about their invalid move and asked to move again. 
+is invalid and the Entity.Player is informed about their invalid move and asked to move again.
 If no exceptions are thrown and players move is valid, GameBoardManager keeps a track of 
 what has been changed and stores it and outputs the state of the board for the Players to
 see. The same is the case of when (wlog) Player1 forms a mill and gets to remove opponents
 token, GameBoardManager validates the move and then stores the move and then outputs the state
 of the board.
 
-The game ends the second GamePlay1 class recognises that both the Players now have 0 
+The game ends the second Controller.GamePlay1 class recognises that both the Players now have 0
 tokens left. When this happens the game comes to an end.
