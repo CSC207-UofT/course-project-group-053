@@ -15,7 +15,7 @@ public class Main {
 
 
     public static void main(String[] args) throws InvalidPositionException, RemoveEmptySlotException, RemoveSelfTokenException, RemoveMillException, LoadedSuccessfully, SavedSuccessfully {
-        List<Player> playerList = Start();
+//        List<Player> playerList = Start();
 
         GUI game = new GUI();
 
