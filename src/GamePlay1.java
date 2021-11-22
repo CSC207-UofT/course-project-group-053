@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class GamePlay1 {
     GameBoardPlacer placer;
     GameBoardRemover remover;
@@ -13,6 +16,20 @@ public class GamePlay1 {
         checkMill = new CheckMill();
         gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
         endOfP1 = false;
+        player1 = new Player(player1Name, "W");
+        player2 = new Player(player2Name, "B");
+        winnerCalculator = new WinnerCalculator(this, player1, player2);
+    }
+
+    public GamePlay1(){
+        placer = new GameBoardPlacer();
+        remover = new GameBoardRemover();
+        checkMill = new CheckMill();
+        gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
+        endOfP1 = false;
+    }
+
+    public void setPlayers(String player1Name, String player2Name){
         player1 = new Player(player1Name, "W");
         player2 = new Player(player2Name, "B");
         winnerCalculator = new WinnerCalculator(this, player1, player2);
@@ -40,6 +57,19 @@ public class GamePlay1 {
         }
     }
 
+    public ArrayList<String> getTokenCoordinates(String colour){
+        ArrayList<String> tokenCoordinates = new ArrayList<>();
+        ArrayList<String> gameboardKeys = gameBoardManipulator.getKeys();
+        for(String key : gameboardKeys) {
+            if (gameBoardManipulator.getCorrespondendValue(key) != null){
+                if(gameBoardManipulator.getCorrespondendValue(key).equals(colour)){
+                    tokenCoordinates.add(key);
+                }
+            }
+        }
+        return tokenCoordinates;
+    }
+
     public void move_token(int playerNum, String setTokenPosition) throws ArrayIndexOutOfBoundsException, NullPointerException {
         Player player;
         if (playerNum == 1) {
@@ -50,34 +80,6 @@ public class GamePlay1 {
 
         while (true) {
             try {
-                if (setTokenPosition.equals("save")) {
-                    boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
-                    try {
-                        GameState.save(save_file, "gamestate1.save");
-                        saved_data = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't save:" + e.getMessage());
-                    }
-                    if (saved_data) {
-                        throw new SavedSuccessfully("Game saved successfully");
-                    }
-                }
-                if (setTokenPosition.equals("load")) {
-                    boolean loaded_data = false;
-                    try {
-                        GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                        gameBoardManipulator.setGameboard(saveData.savedGameboard);
-                        loaded_data = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't load:" + e.getMessage());
-                    }
-                    if (loaded_data) {
-                        throw new LoadedSuccessfully("Game loaded successfully");
-                    }
-                }
-
-
                 Token token = new Token(player.get_username(), player.get_tokencolour());
 
                 //TODO: make a Token
@@ -91,7 +93,7 @@ public class GamePlay1 {
                 checkMill.checkMill(setTokenPosition, player.get_tokencolour(), gameBoardManipulator.getGameboard());
                 break;
 
-            } catch (LoadedSuccessfully | SavedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
+            } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
                 System.out.println(e.getMessage());
                 // skip the invalid token and ask for prompt again
             }
@@ -102,6 +104,29 @@ public class GamePlay1 {
 
     public void updateEndOfP1() {
         endOfP1 = player1.int_player_numchipsonboard == 0 & player2.int_player_numchipsleft == 0;
+    }
+
+    public String saveGame(){
+        boolean saved_data = false;
+        GameSaveData save_file = new GameSaveData(player1, player2, gameBoardManipulator.getGameboard());
+        try {
+            GameState.save(save_file, "gamestate1.save");
+        } catch (Exception e) {
+            return "Couldn't save:" + e.getMessage();
+        }
+        return "Game saved successfully";
+    }
+
+    public String[] loadGame(){
+        try {
+            GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
+            System.out.println(saveData.player1saved.get_username());
+            System.out.println(saveData.player2saved.get_username());
+            gameBoardManipulator.setGameboard(saveData.savedGameboard);
+            return new String[]{saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerUsername(2)};
+        } catch (Exception e) {
+            return new String[]{"Couldn't load:" + e.getMessage()};
+        }
     }
 
     /**

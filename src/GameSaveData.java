@@ -14,4 +14,11 @@ public class GameSaveData implements Serializable {
         this.player2saved = player2saved;
         this.savedGameboard = savedGameboard;
     }
+
+    public String getSavedPlayerUsername(int playerNum){
+        if(playerNum == 1){
+            return player1saved.get_username();
+        }
+        else{ return player2saved.get_username(); }
+    }
 }

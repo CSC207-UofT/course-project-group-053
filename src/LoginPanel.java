@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 public class LoginPanel extends JPanel {
     JLabel player1Label, player2Label;
     JTextField player1TextField, player2TextField;
-    JButton continueButton;
+    JButton continueButton, loadButton;
 
     public LoginPanel(){
         super();
@@ -17,6 +17,8 @@ public class LoginPanel extends JPanel {
         player2TextField = new JTextField();
 
         continueButton = new JButton("CONTINUE");
+
+        loadButton = new JButton("LOAD GAME");
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBackground(Color.white);
@@ -50,6 +52,12 @@ public class LoginPanel extends JPanel {
         continueButton.setForeground(Color.white);
         continueButton.setBackground(Color.decode("#FF1B3A"));
         continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        continueButton.setBounds(200,300,200,30);
+        loadButton.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 20));
+        loadButton.setForeground(Color.white);
+        loadButton.setBackground(Color.decode("#FF1B3A"));
+        loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
     private void addComponentsToPanel() {
@@ -63,7 +71,23 @@ public class LoginPanel extends JPanel {
         this.add(player2TextField);
         this.add(Box.createRigidArea(new Dimension(0, 50)));
         this.add(continueButton);
+        this.add(Box.createRigidArea(new Dimension(0, 70)));
+        this.add(loadButton);
         this.add(Box.createRigidArea(new Dimension(300, 200)));
+    }
+
+    /**
+     * Set text on player Textfield to be be player1 and player2.
+     * This method exists because the GUI always get the players name from
+     * the textfields, but when loading a previous game the text fields should not
+     * have to correspond to the players' names of the game being loaded.
+     *
+     * @param player1 string to fill player1TextField
+     * @param player2 string to fill player2TextField
+     **/
+    public void setPlayersUsername(String player1, String player2){
+        player1TextField.setText(player1);
+        player2TextField.setText(player2);
     }
 
     public String getPlayerUsername(int playerNum){

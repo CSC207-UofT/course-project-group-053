@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Initializes and stores an instance of GameBoard, processing requests to place and remove tokens from the GameBoard.
  */
@@ -36,5 +41,9 @@ public class GameBoardManipulator {
 
     public GameBoard getGameboard() { return this.gameboard; }
 
-    public void setGameboard(GameBoard loadedBoard) {this.gameboard = loadedBoard;}
+    public void setGameboard(GameBoard loadedBoard) { this.gameboard = loadedBoard; }
+
+    public ArrayList<String> getKeys() { return ((ArrayList<String>)gameboard.gameBoard.keySet()); }
+
+    public String getCorrespondendValue(String key) { return gameboard.gameBoard.get(key); }
 }

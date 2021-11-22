@@ -7,11 +7,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class GUI extends JFrame implements ActionListener, DataAdapter<String, Integer> {
     JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper, headerPanel;
+    JButton saveButton;
     GamePlay1 gamePlay;
 
     public GUI() {
@@ -36,6 +38,14 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         gamePanelWrapper = new JPanel();
         gamePanelWrapper.setLayout(new BoxLayout(gamePanelWrapper, BoxLayout.PAGE_AXIS));
         gamePanelWrapper.setBackground(Color.white);
+
+        gamePlay = new GamePlay1();
+
+        saveButton = new JButton("SAVE PROGRESS");
+        saveButton.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 20));
+        saveButton.setForeground(Color.white);
+        saveButton.setBackground(Color.decode("#FF1B3A"));
+        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         setSettings();
         this.add(welcomePanel, BorderLayout.WEST);
@@ -69,6 +79,29 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
             @Override
             public void actionPerformed(ActionEvent e) {
                confirmButtonAction(e);
+            }
+        });
+
+        ((LoginPanel) loginPanel).loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] gamePlayLoadedResult = gamePlay.loadGame();
+                if (gamePlayLoadedResult.length == 1){
+                    JOptionPane.showMessageDialog(null, gamePlayLoadedResult);
+                }
+
+                else {
+                    ((LoginPanel) loginPanel).setPlayersUsername(gamePlayLoadedResult[0], gamePlayLoadedResult[1]);
+                    goToGameFrame();
+                    setLoadedGame();
+                }
+            }
+        });
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, gamePlay.saveGame());
             }
         });
 
@@ -150,7 +183,8 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
                 tokenButton.setButtonVisual();
             }
 
-            if(gameState.equals(gamePlay.getPlayerName(1) + "'s turn to remove a token") & tokenButton.removable){
+            if(gameState.equals(gamePlay.getPlayerName(1) + "'s turn to remove a token")
+                    & tokenButton.removable & tokenButton.colour.equals("B")){
                 tokenButton.setColour("");
 
                 if(gamePlay.remove_token(2, adaptData(tokenIndex)).equals("")){
@@ -163,7 +197,8 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
                     JOptionPane.showMessageDialog(null, gamePlay.remove_token(2, adaptData(tokenIndex)));
                 }
             }
-            else if(gameState.equals(gamePlay.getPlayerName(2) + "'s turn to remove a token") & tokenButton.removable){
+            else if(gameState.equals(gamePlay.getPlayerName(2) + "'s turn to remove a token")
+                    & tokenButton.removable & tokenButton.colour.equals("W")){
                 tokenButton.setColour("");
 
                 if(gamePlay.remove_token(1, adaptData(tokenIndex)).equals("")){
@@ -202,7 +237,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * Updates the frame to show the changes.
      */
     private void goToGameFrame(){
-        gamePlay = new GamePlay1(((LoginPanel) loginPanel).getPlayerUsername(1),
+        gamePlay.setPlayers(((LoginPanel) loginPanel).getPlayerUsername(1),
                 ((LoginPanel) loginPanel).getPlayerUsername(2));
 
         headerPanel = new HeaderPanel(gamePlay.getPlayerName(1), gamePlay.getPlayerName(2));
@@ -210,8 +245,11 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         this.remove(loginPanel);
         this.remove(welcomePanel);
 
-        gamePanelWrapper.add(Box.createRigidArea(new Dimension(0, 80)));
+        gamePanelWrapper.add(Box.createRigidArea(new Dimension(0, 50)));
         gamePanelWrapper.add(gamePanel);
+        gamePanelWrapper.add(Box.createRigidArea(new Dimension(0, 50)));
+        gamePanelWrapper.add(saveButton);
+        gamePanelWrapper.add(Box.createRigidArea(new Dimension(0, 10)));
 
         this.add(whiteTokenPanel, BorderLayout.WEST);
         this.add(blackTokenPanel, BorderLayout.EAST);
@@ -222,6 +260,30 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         this.revalidate();
         this.repaint();
+    }
+
+    public void setLoadedGame(){
+        ArrayList<String> whiteTokenCoord = gamePlay.getTokenCoordinates("W");
+        ArrayList<String> blackTokenCoord = gamePlay.getTokenCoordinates("B");
+
+        TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
+
+        for(int i = 0; i < 24; i++){
+            if(whiteTokenCoord.contains(adaptData(i))){
+                ((TokenPanel) whiteTokenPanel).removeToken();
+                tokenButtons[i].setColour("W");
+                tokenButtons[i].setAddable(false);
+                tokenButtons[i].setRemovable(true);
+                tokenButtons[i].setButtonVisual();
+            }
+            else if(blackTokenCoord.contains(adaptData(i))){
+                ((TokenPanel) blackTokenPanel).removeToken();
+                tokenButtons[i].setColour("B");
+                tokenButtons[i].setAddable(false);
+                tokenButtons[i].setRemovable(true);
+                tokenButtons[i].setButtonVisual();
+            }
+        }
     }
 
     /**
@@ -261,7 +323,6 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
 
     /**
@@ -273,7 +334,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      */
     @Override
     public String adaptData(Integer data) {
-        HashMap<Integer, String> guiDataToGameData = new HashMap();
+        HashMap<Integer, String> guiDataToGameData = new HashMap<>();
         guiDataToGameData.put(0, "A1");
         guiDataToGameData.put(1, "A2");
         guiDataToGameData.put(2, "A3");
