@@ -52,7 +52,7 @@ public class GameBoardManipulator {
 
     public void setGameboard(GameBoard loadedBoard) { this.gameboard = loadedBoard; }
 
-    public ArrayList<String> getKeys() { return ((ArrayList<String>)gameboard.gameBoard.keySet()); }
+    public ArrayList<String> getKeys() { return gameboard.getGameBoardPositions(); }
 
-    public String getCorrespondendValue(String key) { return gameboard.gameBoard.get(key); }
+    public String getCorrespondendValue(String key) { return gameboard.getTokenAtPosition(key); }
 }

@@ -1,7 +1,9 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class GameBoard implements Serializable {
     // Defines the game board used for Nine Men Morris, which holds the strings representing tokens placed on the
@@ -78,8 +80,21 @@ public class GameBoard implements Serializable {
         return gameBoard.get(targetPosition);
     }
 
+    /**
+     * Returns integer value for number of free slots on the gameboard
+     * @return integer from [0, 24]
+     */
     public int getGameBoardCapacity() {
         return gameBoardCapacity;
+    }
+
+    /**
+     * Returns an array list of all the coordinate keys in the gameboard
+     * @return array list of strings, representing the keys in gameboard
+     */
+    public ArrayList<String> getGameBoardPositions() {
+        Set<String> keySet = gameBoard.keySet();
+        return new ArrayList<>(keySet);
     }
 
 }
