@@ -1,3 +1,5 @@
+package UserInterface;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -8,7 +10,7 @@ public class HeaderPanel extends JPanel {
     private final int PIXELS = 5;
     private static final long serialVersionUID = 1L;
 
-    public HeaderPanel(){
+    public HeaderPanel(String player1Name, String player2Name){
         super();
 
         createDropShadowPanel();
@@ -17,9 +19,9 @@ public class HeaderPanel extends JPanel {
         header.setLayout(new BorderLayout());
         header.setBackground(Color.decode("#FF1B3A"));
 
-        player1 = new JLabel("  Entity.Player 1");
-        player2 = new JLabel("Entity.Player 2  ");
-        gameState = new JLabel("Entity.Player 1's turn");
+        player1 = new JLabel("  " + player1Name);
+        player2 = new JLabel(player2Name + "  ");
+        gameState = new JLabel(player1Name + "'s turn to add a token");
 
         setLabelSettings();
 
@@ -48,6 +50,8 @@ public class HeaderPanel extends JPanel {
         gameState.setText(state);
     }
 
+    //the following methods to create a shadow effect were adapted from
+    //stackoverflow.com/questions/13368103/jpanel-drop-shadow
     public void createDropShadowPanel() {
         Border border = BorderFactory.createEmptyBorder(0, 0, PIXELS, 0);
         this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(), border));

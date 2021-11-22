@@ -7,8 +7,8 @@ public class Player implements Serializable {
     String str_player_tokencolour;
 
     //Keep track of player’s chips
-    Integer int_player_numchipsleft;
-    Integer int_player_numchipsonboard;
+    public Integer int_player_numchipsleft;
+    public Integer int_player_numchipsonboard;
 
     public Player(String str_player_username, String colour) {
         this.str_player_username = str_player_username;

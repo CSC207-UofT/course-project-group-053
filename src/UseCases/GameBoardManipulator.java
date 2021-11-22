@@ -3,13 +3,21 @@ package UseCases;
 import Entity.GameBoard;
 import Entity.Token;
 import Exceptions.*;
+import UseCases.CheckMill;
+import UseCases.GameBoardPlacer;
+import UseCases.GameBoardRemover;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
- * Initializes and stores an instance of Entity.GameBoard, processing requests to place and remove tokens from the Entity.GameBoard.
+ * Initializes and stores an instance of GameBoard, processing requests to place and remove tokens from the GameBoard.
  */
-// This class is both a Facade and a Interfaces.Subject class (as part of Interfaces.Observer design pattern)
+// This class is both a Facade and a Subject class (as part of Observer design pattern)
 public class GameBoardManipulator {
-    // Design UseCases.GameBoardManipulator as a facade class for manipulating tokens on a Entity.GameBoard (add, remove, slide tokens)
+    // Design GameBoardManipulator as a facade class for manipulating tokens on a GameBoard (add, remove, slide tokens)
     private GameBoard gameboard;
     private final GameBoardPlacer placer;
     private final GameBoardRemover remover;
@@ -42,5 +50,9 @@ public class GameBoardManipulator {
 
     public GameBoard getGameboard() { return this.gameboard; }
 
-    public void setGameboard(GameBoard loadedBoard) {this.gameboard = loadedBoard;}
+    public void setGameboard(GameBoard loadedBoard) { this.gameboard = loadedBoard; }
+
+    public ArrayList<String> getKeys() { return ((ArrayList<String>)gameboard.gameBoard.keySet()); }
+
+    public String getCorrespondendValue(String key) { return gameboard.gameBoard.get(key); }
 }

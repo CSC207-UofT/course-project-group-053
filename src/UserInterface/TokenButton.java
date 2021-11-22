@@ -1,21 +1,28 @@
+package UserInterface;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class TokenButton extends JButton {
     String colour;
-    boolean clickable;
+    boolean addable, removable;
 
     public TokenButton(String colour){
         super();
 
         this.setPreferredSize(new Dimension(40, 40));
         this.colour = colour;
-        this.clickable = true;
+        this.addable = true;
+        this.removable = false;
         setButtonVisual();
     }
 
-    public void setClickable(boolean clickable){
-        this.clickable = clickable;
+    public void setAddable(boolean addable){
+        this.addable = addable;
+    }
+
+    public void setRemovable(boolean removable){
+        this.removable = removable;
     }
 
     public void setColour(String colour){
