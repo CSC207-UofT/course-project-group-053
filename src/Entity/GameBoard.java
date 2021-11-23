@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class GameBoard implements Serializable {
-    // Defines the game board used for Nine Men Morris, which holds the strings representing tokens placed on the
-    // gameboard
+    // Defines the game board used for Nine Men Morris, which holds the strings representing tokens placed on the game board
     public HashMap<String, String> gameBoard;
 
-    // keeps track of how many empty slots are currently on the gameboard
+    // keeps track of how many empty slots are currently on the game board
     private int gameBoardCapacity;
 
     // regex pattern for empty slots on board
@@ -56,7 +55,7 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * Remove a Entity.Player's token from a specified box and box position in Entity.GameBoard
+     * Remove an Entity.Player's token from a specified box and box position in Entity.GameBoard
      *
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      *
@@ -71,7 +70,7 @@ public class GameBoard implements Serializable {
 
     /**
      * Retrieve the string of the token placed in a particular box, at a particular position in Entity.GameBoard.
-     * Return null if there is not token stored at the specified position
+     * Return null if there is no token stored at the specified position
      *
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to retrieve token
      *

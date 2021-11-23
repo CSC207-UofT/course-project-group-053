@@ -44,7 +44,7 @@ public class CheckMill {
     }
 
     public void checkMill(String position, String colour, GameBoard gameboard) throws InvalidPositionException {
-        List<List<String>> combinations = new ArrayList<List<String>>();
+        List<List<String>> combinations = new ArrayList<>();
         List<String> innerList1 = new ArrayList<>();
         innerList1.add("A1");
         innerList1.add("A2");
@@ -276,7 +276,7 @@ public class CheckMill {
                     }
                 }
                 if (found) {
-                    return found;
+                    return true;
                 }
             }
 

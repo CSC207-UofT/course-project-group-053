@@ -1,13 +1,10 @@
 package UseCases;
 
-import Entity.GameBoard;
 import Entity.Player;
 import Controller.GamePlay1;
 
 public class WinnerCalculator {
-
     // Creates and stores a GameBoard instance, and processes Player moves on the GameBoard
-    private final GameBoard gb;
     private final CheckMill cm;
 
     public static Player player1;
@@ -16,7 +13,6 @@ public class WinnerCalculator {
     public WinnerCalculator(GamePlay1 gp, Player player1, Player player2){
         this.player1 = player1;
         this.player2 = player2;
-        gb = gp.gameBoardManipulator.getGameBoard();
         cm = gp.checkMill;
     }
 

@@ -2,7 +2,6 @@ package UserInterface;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class LoginPanel extends JPanel {
     JLabel player1Label, player2Label;

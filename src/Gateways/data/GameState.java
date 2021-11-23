@@ -6,11 +6,10 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Class for saving and loading the objects created during gameplay
+ */
 public class GameState {
-    /**
-     * Class for saving and loading the objects created during gameplay
-     */
-
     /**
      * @param data: the Gateways.data we want to save
      * @param filename: filename with the path where we want to save
