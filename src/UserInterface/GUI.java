@@ -7,7 +7,6 @@ import Exceptions.InvalidPositionException;
 import Exceptions.LoadedSuccessfully;
 import Exceptions.SavedSuccessfully;
 import Interfaces.DataAdapter;
-import UserInterface.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +22,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     JButton saveButton;
     GamePlay1 gamePlay;
 
-    public GUI() throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
+    public GUI() {
         initiateGUI();
     }
 
@@ -32,7 +31,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * information that the user will give later. Calls helper method to set the preferred JFrame settings.
      * Adds the panels for the starting part (welcomePanel and loginPanel).
      */
-    private void initiateGUI() throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
+    private void initiateGUI() {
         loginPanel = new LoginPanel();
         welcomePanel = new WelcomePanel();
         whiteTokenPanel = new TokenPanel("W");
@@ -85,7 +84,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         ((LoginPanel) loginPanel).continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                confirmButtonAction(e);
+                confirmButtonAction();
             }
         });
 
@@ -119,12 +118,8 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        tokenButtonAction(e, finalI);
-                    } catch (SavedSuccessfully ex) {
-                        ex.printStackTrace();
-                    } catch (LoadedSuccessfully ex) {
-                        ex.printStackTrace();
-                    } catch (InvalidPositionException ex) {
+                        tokenButtonAction(finalI);
+                    } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException ex) {
                         ex.printStackTrace();
                     }
                 }
@@ -138,9 +133,8 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * If so, pop a message dialog saying that they cannot be blank.
      * Otherwise, update the frame to show the actual game.
      *
-     * @param e   the ActionEvent object from actionPerformed
      */
-    public void confirmButtonAction(ActionEvent e) {
+    public void confirmButtonAction() {
         if(((LoginPanel) loginPanel).player1TextField.getText().equals("") ||
                 ((LoginPanel) loginPanel).player2TextField.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Usernames cannot be blank!");
@@ -156,11 +150,10 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * If so, pop a message dialog saying that they cannot be blank.
      * Otherwise, update the frame to show the actual game.
      *
-     * @param e   the ActionEvent object from actionPerformed
      * @param tokenIndex    the index of the desired tokenButton in the array
      *                      returned by getTokenButtons
      */
-    public void tokenButtonAction(ActionEvent e, int tokenIndex) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
+    public void tokenButtonAction(int tokenIndex) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
         String gameState = ((HeaderPanel) headerPanel).gameState.getText();
         TokenButton tokenButton = ((GamePanel) gamePanel).getTokenButtons()[tokenIndex];
 
@@ -305,7 +298,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * Removes all current frames and initiates the GUI again by calling the same helper method
      * used in the constructor.
      */
-    private void restart() throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
+    private void restart() {
         gamePanelWrapper.remove(Box.createRigidArea(new Dimension(0, 80)));
         gamePanelWrapper.remove(gamePanel);
 
@@ -323,7 +316,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     /**
      * Creates a JOptionPane to ask the user whether or not to restart the game.
      */
-    private void callNewGameDialog() throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
+    private void callNewGameDialog() {
         int answer = JOptionPane.showConfirmDialog(this,
                 "Would you like to start a new game?",
                 "Game Over",
