@@ -19,37 +19,15 @@ public class Player implements Serializable {
         this.int_player_numchipsonboard = 0;
     }
 
-    public void reset() {
-        this.int_player_numchipsleft = 9;
-        this.int_player_numchipsonboard = 9;
-    }
-
     public String get_username() {
         return this.str_player_username;
     }
 
     public String get_tokencolour() { return this.str_player_tokencolour; }
 
-    public int get_numchipsleft() {
-        return this.int_player_numchipsleft;
-    }
-
-    public int get_numchipsonboard() {
-        return this.int_player_numchipsonboard;
-    }
-
     //decrease or increase number of chips
     public void dec_numchipsleft() {
         //used when other player gets house. with dec_numchipsonboard()
         --this.int_player_numchipsleft;
     }
-
-    public void inc_numchipsonboard() {
-        ++this.int_player_numchipsonboard;
-    }
-
-    private void dec_numchipsonboard() {
-        --this.int_player_numchipsonboard;
-    }
-
 }
