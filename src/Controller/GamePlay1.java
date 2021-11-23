@@ -28,8 +28,12 @@ public class GamePlay1 {
         checkMill = new CheckMill();
         gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
         endOfP1 = false;
+
+        // TODO - introduce PlayerManager class to bypass instantiating players directly?
         player1 = new Player(player1Name, "W");
         player2 = new Player(player2Name, "B");
+
+        // NOTE: Having WinnerCalculator depend on GamePlay1 violates clean architecture
         winnerCalculator = new WinnerCalculator(this, player1, player2);
     }
 
@@ -123,10 +127,10 @@ public class GamePlay1 {
         GameSaveData save_file = new GameSaveData(player1, player2, gameBoardManipulator.getGameboard());
         try {
             GameState.save(save_file, "gamestate1.save");
+            return "Game saved successfully";
         } catch (Exception e) {
             return "Couldn't save:" + e.getMessage();
         }
-        return "Game saved successfully";
     }
 
     public String[] loadGame(){
