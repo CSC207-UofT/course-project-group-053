@@ -3,14 +3,8 @@ package UseCases;
 import Entity.GameBoard;
 import Entity.Token;
 import Exceptions.*;
-import UseCases.CheckMill;
-import UseCases.GameBoardPlacer;
-import UseCases.GameBoardRemover;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Initializes and stores an instance of GameBoard, processing requests to place and remove tokens from the GameBoard.
@@ -33,13 +27,11 @@ public class GameBoardManipulator {
 
     public void placeToken(Token token, String position) throws OccupiedSlotException,
             NonexistentPositionException {
-        // TODO: make sure exceptions are caught properly upstream
         placer.place(gameboard, token, position);
     }
 
     public void removeToken(String position, String playerColor) throws RemoveEmptySlotException,
             InvalidPositionException, RemoveMillException {
-        // TODO: make sure exceptions are caught properly upstream
         // check for remove self token first
         if (!millChecker.checkMill2(position, playerColor, gameboard)) {
             remover.remove(gameboard, position);
@@ -48,11 +40,11 @@ public class GameBoardManipulator {
         }
     }
 
-    public GameBoard getGameboard() { return this.gameboard; }
+    public GameBoard getGameBoard() { return this.gameboard; }
 
-    public void setGameboard(GameBoard loadedBoard) { this.gameboard = loadedBoard; }
+    public void setGameBoard(GameBoard loadedBoard) { this.gameboard = loadedBoard; }
 
     public ArrayList<String> getKeys() { return gameboard.getGameBoardPositions(); }
 
-    public String getCorrespondendValue(String key) { return gameboard.getTokenAtPosition(key); }
+    public String getCorrespondentValue(String key) { return gameboard.getTokenAtPosition(key); }
 }

@@ -2,11 +2,7 @@ package UseCases;
 
 import Entity.GameBoard;
 import Entity.Player;
-import UseCases.CheckMill;
 import Controller.GamePlay1;
-
-import java.util.HashSet;
-import java.util.List;
 
 public class WinnerCalculator {
 
@@ -20,7 +16,7 @@ public class WinnerCalculator {
     public WinnerCalculator(GamePlay1 gp, Player player1, Player player2){
         this.player1 = player1;
         this.player2 = player2;
-        gb = gp.gameBoardManipulator.getGameboard();
+        gb = gp.gameBoardManipulator.getGameBoard();
         cm = gp.checkMill;
     }
 

@@ -32,7 +32,7 @@ class GameBoardManipulatorTest {
 
         try {
             gbm.placeToken(token1, "A1");
-            assertEquals("B", gbm.getGameboard().getTokenAtPosition("A1"));
+            assertEquals("B", gbm.getGameBoard().getTokenAtPosition("A1"));
         } catch (Exception e) {
             System.out.println("Something went wrong...");
         }
@@ -66,7 +66,7 @@ class GameBoardManipulatorTest {
 
         try {
             gbm.placeToken(token1, "A1");
-            assertEquals("B", gbm.getGameboard().getTokenAtPosition("A1"));
+            assertEquals("B", gbm.getGameBoard().getTokenAtPosition("A1"));
         } catch (Exception e) {
             System.out.println("Something went wrong...");
         }
@@ -74,7 +74,7 @@ class GameBoardManipulatorTest {
         // remove existing token from gameboard
         try {
             gbm.removeToken("A1", "B");
-            GameBoard gb = gbm.getGameboard();
+            GameBoard gb = gbm.getGameBoard();
             assertNull(gb.getTokenAtPosition("A1"));
         } catch (Exception e) {
             System.out.println("Something went wrong...");
