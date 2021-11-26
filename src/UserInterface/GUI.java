@@ -220,7 +220,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
             }
         }
 
-        gamePlay.updateEndOfP1();
+        gamePlay.updateEndOfPhase();
 
         if(gamePlay.endOfP1){
             tokenButton.setAddable(false);

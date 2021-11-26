@@ -12,29 +12,14 @@ import UseCases.*;
 
 import java.util.ArrayList;
 
-public class GamePlay1 {
+public class GamePlay1 extends GamePlay{
     GameBoardPlacer placer;
     GameBoardRemover remover;
     public CheckMill checkMill;
     public GameBoardManipulator gameBoardManipulator;
     WinnerCalculator winnerCalculator;
     public boolean endOfP1;
-    Player player1, player2;
 
-    public GamePlay1(String player1Name, String player2Name) throws ArrayIndexOutOfBoundsException, NullPointerException {
-        placer = new GameBoardPlacer();
-        remover = new GameBoardRemover();
-        checkMill = new CheckMill();
-        gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
-        endOfP1 = false;
-
-        // TODO - introduce PlayerManager class to bypass instantiating players directly?
-        player1 = new Player(player1Name, "W");
-        player2 = new Player(player2Name, "B");
-
-        // NOTE: Having WinnerCalculator depend on GamePlay1 violates clean architecture
-        winnerCalculator = new WinnerCalculator(this, player1, player2);
-    }
 
     public GamePlay1(){
         placer = new GameBoardPlacer();
@@ -42,35 +27,15 @@ public class GamePlay1 {
         checkMill = new CheckMill();
         gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
         endOfP1 = false;
-    }
-
-    public void setPlayers(String player1Name, String player2Name){
-        player1 = new Player(player1Name, "W");
-        player2 = new Player(player2Name, "B");
         winnerCalculator = new WinnerCalculator(this, player1, player2);
     }
 
-    public int getPlayerHouses(int playerNum) {
-        return checkMill.getPlayerHouses(playerNum);
-    }
 
-    public boolean playerMadeMill(int playerHousesBeforeMove, int playerNum) {
-        return checkMill.getPlayerHouses(playerNum) > playerHousesBeforeMove;
-    }
 
     public String getWinner() {
         return winnerCalculator.who_won();
     }
 
-    public String getPlayerName(int playerNum) {
-        if (playerNum == 1) {
-            return player1.get_username();
-        } else if (playerNum == 2) {
-            return player2.get_username();
-        } else {
-            return "";
-        }
-    }
 
     public ArrayList<String> getTokenCoordinates(String colour){
         ArrayList<String> tokenCoordinates = new ArrayList<>();
@@ -85,6 +50,7 @@ public class GamePlay1 {
         return tokenCoordinates;
     }
 
+    @Override
     public void move_token(int playerNum, String setTokenPosition) throws ArrayIndexOutOfBoundsException, NullPointerException {
         Player player;
         if (playerNum == 1) {
@@ -117,7 +83,8 @@ public class GamePlay1 {
         //gameBoardManager.checkHouse();
     }
 
-    public void updateEndOfP1() {
+    @Override
+    public void updateEndOfPhase() {
         endOfP1 = player1.int_player_numchipsonboard == 0 & player2.int_player_numchipsleft == 0;
     }
 
@@ -198,4 +165,6 @@ public class GamePlay1 {
         //TODO: add loading at start of game and add loading of player names etc as well
         //TODO: save which player's turn it was and start from that player's turn when gamestate is loaded. Might have to rework gameplay1 slightly
     }
+
+
 }
