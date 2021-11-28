@@ -27,10 +27,11 @@ public class GameBoardManipulator implements Subject {
         this.millChecker = millChecker;
     }
 
-    public void placeToken(String position, String username, Token playerToken) throws OccupiedSlotException,
+    public void placeToken(String position, Token playerToken) throws OccupiedSlotException,
             NonexistentPositionException {
+        String playerUserName = playerToken.getPlayer();
         placer.place(tokenTracker.getGameBoard(), playerToken, position);
-        notifyObservers(position, username, playerToken);
+        notifyObservers(position, playerUserName, playerToken);
     }
 
     // TODO - remove game logic from here, and put into remover class instead

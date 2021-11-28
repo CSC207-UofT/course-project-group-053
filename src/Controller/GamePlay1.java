@@ -63,7 +63,7 @@ public class GamePlay1 {
                 String setToken_position = sc.nextLine();
                 if (setToken_position.equals("save")){
                     boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(tracker.getGameBoard());
+                    GameSaveData save_file = new GameSaveData(tracker.getGameBoard(), tracker);
                     try{
                         GameState.save(save_file, "gamestate1.save");
                         saved_data = true;
@@ -76,7 +76,8 @@ public class GamePlay1 {
                     boolean loaded_data = false;
                         try {
                             GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                            gameBoardManipulator.setGameboard(saveData.savedGameboard);
+                            tracker = saveData.savedTracker;
+                            tracker.setGameBoard(saveData.savedGameboard);
                             loaded_data = true;
                         } catch (Exception e) {
                             System.out.println("Couldn't load:" + e.getMessage());
@@ -91,14 +92,14 @@ public class GamePlay1 {
 
                 //TODO: make a Entity.Token
                 //InsertToken(token, position)
-                gameBoardManipulator.placeToken(token, setToken_position);
+                gameBoardManipulator.placeToken(setToken_position, token);
 
                 // reduce player 1's chips by 1
                 player.dec_numchipsleft();
                 // player 1 has successfully placed down a token, so break out of the while loop
 
 
-                checkMill.checkMill(setToken_position, player.get_tokencolour(), gameBoardManipulator.getGameboard());
+                checkMill.checkMill(setToken_position, player.get_tokencolour(), tracker.getGameBoard());
                 break;
 
             } catch (LoadedSuccessfully | SavedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
@@ -122,7 +123,9 @@ public class GamePlay1 {
             try {
                 if (removeToken_position.equals("save")){
                     boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
+
+                    // save current gameboard and token tracker, to recover saved game in future
+                    GameSaveData save_file = new GameSaveData(tracker.getGameBoard(), tracker);
                     try{
                         GameState.save(save_file, "gamestate1.save");
                         saved_data = true;
@@ -135,7 +138,8 @@ public class GamePlay1 {
                     boolean loaded_data = false;
                     try {
                         GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                        gameBoardManipulator.setGameboard(saveData.savedGameboard);
+                        tracker = saveData.savedTracker;
+                        tracker.setGameBoard(saveData.savedGameboard);
                         loaded_data = true;
                     } catch (Exception e) {
                         System.out.println("Couldn't load:" + e.getMessage());
@@ -143,7 +147,7 @@ public class GamePlay1 {
                     if (loaded_data){throw new LoadedSuccessfully("Game loaded successfully");
                     }
                 }
-                gameBoardManipulator.removeToken(removeToken_position, player.get_tokencolour());
+                gameBoardManipulator.removeToken(removeToken_position, player.get_username(), player.get_tokencolour());
                 break;
             } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
                 System.out.println(e.getMessage());
