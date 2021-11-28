@@ -5,19 +5,17 @@ import Entity.Token;
 import Exceptions.*;
 import Gateways.data.GameSaveData;
 import Gateways.data.GameState;
-import UseCases.CheckMill;
-import UseCases.GameBoardManipulator;
-import UseCases.GameBoardPlacer;
-import UseCases.GameBoardRemover;
+import UseCases.*;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class GamePlay1 {
+    TokenTracker tracker = new TokenTracker();
     GameBoardPlacer placer = new GameBoardPlacer();
     GameBoardRemover remover = new GameBoardRemover();
     CheckMill checkMill = new CheckMill();
-    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
+    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(tracker, placer, remover, checkMill);
     Scanner sc = new Scanner(System.in);
 
     public GamePlay1(List<Player> playerList) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException, ArrayIndexOutOfBoundsException,
@@ -65,7 +63,7 @@ public class GamePlay1 {
                 String setToken_position = sc.nextLine();
                 if (setToken_position.equals("save")){
                     boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
+                    GameSaveData save_file = new GameSaveData(tracker.getGameBoard());
                     try{
                         GameState.save(save_file, "gamestate1.save");
                         saved_data = true;
@@ -88,6 +86,7 @@ public class GamePlay1 {
                     }
 
 
+                // NOTE: think about how to remove token from here
                 Token token = new Token(player.get_username(), player.get_tokencolour());
 
                 //TODO: make a Entity.Token

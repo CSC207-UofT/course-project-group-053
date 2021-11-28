@@ -24,16 +24,13 @@ public class CheckMill {
     }
 
 
-    private String getItemInGameBoard(String targetPosition, GameBoard gameboard) throws NonexistentPositionException {
-        if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
-            // position given isn't formatted properly/doesn't exist on gameboard
-            throw new NonexistentPositionException();
-        } else {
-            return gameboard.getTokenAtPosition(targetPosition);
-        }
+    private String getItemInGameBoard(String targetPosition, GameBoard gameboard) {
+        // GameBoardRemover has already checked if targetPosition is valid, before this method is called
+        // So, don't need to throw InvalidPositionException here
+        return gameboard.getTokenAtPosition(targetPosition);
     }
 
-    public void millAdder(String position, String[] mill, GameBoard gameboard) throws InvalidPositionException {
+    public void millAdder(String position, String[] mill, GameBoard gameboard) {
         // checks which player the mill belongs to, and add the mill to the player's mills
         if (getItemInGameBoard(position, gameboard).equals("W")) {
             playerMills.get(1).add(List.of(mill));
@@ -163,7 +160,7 @@ public class CheckMill {
         }
     }
 
-    public Boolean checkMill2(String position, String colour, GameBoard gameboard) throws InvalidPositionException {
+    public Boolean checkMill2(String position, String colour, GameBoard gameboard) {
         List<List<String>> combinations = new ArrayList<List<String>>();
         List<String> innerList1 = new ArrayList<>();
         innerList1.add("A1");

@@ -1,7 +1,7 @@
 package Entity;
 
 /**
- * Tokens placed on GameBoard
+ * Tokens placed on GameBoards
  */
 public class Token {
     public final String owner;  // username of player who owns this token
