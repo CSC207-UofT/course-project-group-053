@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginPanel extends JPanel {
-    JLabel player1Label, player2Label;
+    JLabel player1Label, player2Label, loadGameLabel, dividerLabel;
     JTextField player1TextField, player2TextField;
     DefaultButton continueButton, loadButton;
 
@@ -19,7 +19,10 @@ public class LoginPanel extends JPanel {
 
         continueButton = new DefaultButton(Color.decode("#FF1B3A"), 20, 65, 250, "CONTINUE");
 
+        loadGameLabel = new JLabel("Want to continue your previous game?");
         loadButton = new DefaultButton(Color.decode("#FF1B3A"), 20, 65, 250, "LOAD GAME");
+
+        dividerLabel = new JLabel("—————————");
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBackground(Color.white);
@@ -47,10 +50,19 @@ public class LoginPanel extends JPanel {
         player2TextField.setFont(new Font("Segoe UI Semilight", Font.PLAIN, 20));
         player2TextField.setMaximumSize(new Dimension(350, 30));
         player2TextField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        loadGameLabel.setBounds(50,150,100,25);
+        loadGameLabel.setFont(new Font("Segoe UI Light", Font.PLAIN, 25));
+        loadGameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        dividerLabel.setBounds(50,150,100,25);
+        dividerLabel.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 30));
+        dividerLabel.setForeground(Color.lightGray);
+        dividerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
     private void addComponentsToPanel() {
-        this.add(Box.createRigidArea(new Dimension(0, 300)));
+        this.add(Box.createRigidArea(new Dimension(0, 200)));
         this.add(player1Label);
         this.add(Box.createRigidArea(new Dimension(0, 10)));
         this.add(player1TextField);
@@ -60,7 +72,11 @@ public class LoginPanel extends JPanel {
         this.add(player2TextField);
         this.add(Box.createRigidArea(new Dimension(0, 50)));
         this.add(continueButton);
-        this.add(Box.createRigidArea(new Dimension(0, 70)));
+        this.add(Box.createRigidArea(new Dimension(0, 30)));
+        this.add(dividerLabel);
+        this.add(Box.createRigidArea(new Dimension(0, 30)));
+        this.add(loadGameLabel);
+        this.add(Box.createRigidArea(new Dimension(0, 20)));
         this.add(loadButton);
         this.add(Box.createRigidArea(new Dimension(300, 200)));
     }

@@ -13,7 +13,7 @@ public class WelcomePanel extends JPanel{
         tutorialLabel = new JLabel("Don't know how to play?");
 
         tutorialButton = new DefaultButton(Color.white, 25, 80,
-                365, "WATCH A TUTORIAL");
+                355, "WATCH A TUTORIAL");
 
         ImageIcon welcomeGif = new ImageIcon("res/welcomeImg.gif");
         welcomeGif.setImage(welcomeGif.getImage().getScaledInstance(400, 400, Image.SCALE_DEFAULT));

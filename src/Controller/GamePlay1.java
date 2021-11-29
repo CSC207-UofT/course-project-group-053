@@ -19,21 +19,16 @@ public class GamePlay1 {
     public GameBoardManipulator gameBoardManipulator;
     WinnerCalculator winnerCalculator;
     public boolean endOfP1;
-    Player player1, player2;
+    public PlayerManager playerManager;
 
-    public GamePlay1(String player1Name, String player2Name) throws ArrayIndexOutOfBoundsException, NullPointerException {
+    public GamePlay1(String player1Username, String player2Username) throws ArrayIndexOutOfBoundsException, NullPointerException {
         placer = new GameBoardPlacer();
         remover = new GameBoardRemover();
         checkMill = new CheckMill();
         gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
         endOfP1 = false;
 
-        // TODO - introduce PlayerManager class to bypass instantiating players directly?
-        player1 = new Player(player1Name, "W");
-        player2 = new Player(player2Name, "B");
-
-        // NOTE: Having WinnerCalculator depend on GamePlay1 violates clean architecture
-        winnerCalculator = new WinnerCalculator(this, player1, player2);
+        setPlayers(player1Username, player2Username);
     }
 
     public GamePlay1(){
@@ -42,12 +37,12 @@ public class GamePlay1 {
         checkMill = new CheckMill();
         gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
         endOfP1 = false;
+        setPlayers("", "");
     }
 
-    public void setPlayers(String player1Name, String player2Name){
-        player1 = new Player(player1Name, "W");
-        player2 = new Player(player2Name, "B");
-        winnerCalculator = new WinnerCalculator(this, player1, player2);
+    public void setPlayers(String player1Username, String player2Username){
+        playerManager = new PlayerManager(player1Username, "W", player2Username, "B");
+        winnerCalculator = new WinnerCalculator(this, playerManager.getPlayer(1), playerManager.getPlayer(2));
     }
 
     public int getPlayerHouses(int playerNum) {
@@ -64,9 +59,9 @@ public class GamePlay1 {
 
     public String getPlayerName(int playerNum) {
         if (playerNum == 1) {
-            return player1.get_username();
+            return playerManager.getPlayerUsername(1);
         } else if (playerNum == 2) {
-            return player2.get_username();
+            return playerManager.getPlayerUsername(2);
         } else {
             return "";
         }
@@ -86,44 +81,32 @@ public class GamePlay1 {
     }
 
     public void move_token(int playerNum, String setTokenPosition) throws ArrayIndexOutOfBoundsException, NullPointerException {
-        Player player;
-        if (playerNum == 1) {
-            player = player1;
-        } else {
-            player = player2;
-        }
-
         while (true) {
             try {
-                Token token = new Token(player.get_username(), player.get_tokencolour());
-
-                //TODO: make a Token
-                //InsertToken(token, position)
+                Token token = new Token(playerManager.getPlayerUsername(playerNum), playerManager.getPlayerTokenColour(playerNum));
                 gameBoardManipulator.placeToken(token, setTokenPosition);
 
                 // reduce player 1's chips by 1
-                player.dec_numchipsleft();
-                // player 1 has successfully placed down a token, so break out of the while loop
+                playerManager.decreasePlayerTokensLeft(playerNum);
 
-                checkMill.checkMill(setTokenPosition, player.get_tokencolour(), gameBoardManipulator.getGameBoard());
+                checkMill.checkMill(setTokenPosition, playerManager.getPlayerTokenColour(playerNum), gameBoardManipulator.getGameBoard());
+
+                // player has successfully placed down a token, so break out of the while loop
                 break;
-
             } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
                 System.out.println(e.getMessage());
                 // skip the invalid token and ask for prompt again
             }
         }
-        // Now check if the player1 has created a mill
-        //gameBoardManager.checkHouse();
     }
 
     public void updateEndOfP1() {
-        endOfP1 = player1.int_player_numchipsonboard == 0 & player2.int_player_numchipsleft == 0;
+        endOfP1 = !playerManager.playersHaveTokensLeft();
     }
 
-    public String saveGame(){
-        boolean saved_data = false;
-        GameSaveData save_file = new GameSaveData(player1, player2, gameBoardManipulator.getGameBoard());
+    public String saveGame(String gameState){
+        GameSaveData save_file = new GameSaveData(playerManager.getPlayer(1),
+                playerManager.getPlayer(2), gameBoardManipulator.getGameBoard(), gameState);
         try {
             GameState.save(save_file, "gamestate1.save");
             return "Game saved successfully";
@@ -135,10 +118,18 @@ public class GamePlay1 {
     public String[] loadGame(){
         try {
             GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-            System.out.println(saveData.player1saved.get_username());
-            System.out.println(saveData.player2saved.get_username());
             gameBoardManipulator.setGameBoard(saveData.savedGameboard);
-            return new String[]{saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerUsername(2)};
+
+            playerManager.setPlayer(1, saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerTokensRemaining(1));
+            playerManager.setPlayer(2, saveData.getSavedPlayerUsername(2), saveData.getSavedPlayerTokensRemaining(2));
+            winnerCalculator = new WinnerCalculator(this, playerManager.getPlayer(1), playerManager.getPlayer(2));
+
+            return new String[]{playerManager.getPlayerUsername(1),
+                    playerManager.getPlayerUsername(2),
+                    Integer.toString(playerManager.getTokensRemaining(1)),
+                    Integer.toString(playerManager.getTokensRemaining(2)),
+                    saveData.getSavedGameState()};
+
         } catch (Exception e) {
             return new String[]{"Couldn't load:" + e.getMessage()};
         }
@@ -152,13 +143,6 @@ public class GamePlay1 {
      * @return empty string if token was removed; excpetion message otherwise.
      */
     public String remove_token(int playerNum, String removeTokenPosition) {
-        Player player;
-        if (playerNum == 1) {
-            player = player1;
-        } else {
-            player = player2;
-        }
-
         try {
             if (removeTokenPosition.equals("save")) {
                 boolean saved_data = false;
@@ -186,16 +170,11 @@ public class GamePlay1 {
                     throw new LoadedSuccessfully("Game loaded successfully");
                 }
             }
-            gameBoardManipulator.removeToken(removeTokenPosition, player.get_tokencolour());
+            gameBoardManipulator.removeToken(removeTokenPosition, playerManager.getPlayerTokenColour(playerNum));
         } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
             return e.getMessage();
             // skip the invalid token and ask for prompt again
         }
         return "";
-        //shows state after removing opponents token
-        //TODO: print gameboard
-        //TODO: change duplicate code to suitable method
-        //TODO: add loading at start of game and add loading of player names etc as well
-        //TODO: save which player's turn it was and start from that player's turn when gamestate is loaded. Might have to rework gameplay1 slightly
     }
 }

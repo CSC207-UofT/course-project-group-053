@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class GUI extends JFrame implements ActionListener, DataAdapter<String, Integer> {
     JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper, headerPanel;
-    JButton saveButton;
+    DefaultButton saveButton;
     JFrame tutorialPopup;
     GamePlay1 gamePlay;
 
@@ -53,11 +53,8 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         gamePlay = new GamePlay1();
 
-        saveButton = new JButton("SAVE PROGRESS");
-        saveButton.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 20));
-        saveButton.setForeground(Color.white);
-        saveButton.setBackground(Color.decode("#FF1B3A"));
-        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveButton = new DefaultButton(Color.decode("#FF1B3A"),20, 65,
+                250, "SAVE PROGRESS");
 
         setSettings();
         this.add(welcomePanel, BorderLayout.WEST);
@@ -89,30 +86,12 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     public void addActionEvent() {
         ((LoginPanel) loginPanel).continueButton.addActionListener(e -> confirmButtonAction());
 
-        ((LoginPanel) loginPanel).loadButton.addActionListener(e -> {
-            String[] gamePlayLoadedResult = gamePlay.loadGame();
-            if (gamePlayLoadedResult.length == 1){
-                JOptionPane.showMessageDialog(null, gamePlayLoadedResult);
-            }
+        ((LoginPanel) loginPanel).loadButton.addActionListener(e -> loadButtonAction());
 
-            else {
-                ((LoginPanel) loginPanel).setPlayersUsername(gamePlayLoadedResult[0], gamePlayLoadedResult[1]);
-                goToGameFrame();
-                setLoadedGame();
-            }
-        });
+        saveButton.addActionListener(e -> JOptionPane.showMessageDialog(null,
+                gamePlay.saveGame(((HeaderPanel) headerPanel).gameState.getText())));
 
-        saveButton.addActionListener(e -> JOptionPane.showMessageDialog(null, gamePlay.saveGame()));
-
-        ((WelcomePanel) welcomePanel).tutorialButton.addActionListener(e -> {
-            tutorialPopup = new JFrame();
-            tutorialPopup.setContentPane(new JLabel(new ImageIcon("res/tutorial1.gif")));
-            tutorialPopup.setTitle("Tutorial");
-            tutorialPopup.setBounds(10, 10, 1280, 720);
-            tutorialPopup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            tutorialPopup.setResizable(false);
-            tutorialPopup.setVisible(true);
-        });
+        ((WelcomePanel) welcomePanel).tutorialButton.addActionListener(e -> tutorialButtonAction());
 
         TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
         for(int i = 0; i < tokenButtons.length; i++){
@@ -134,14 +113,50 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * Otherwise, update the frame to show the actual game.
      *
      */
-    public void confirmButtonAction() {
+    private void confirmButtonAction() {
         if(((LoginPanel) loginPanel).player1TextField.getText().equals("") ||
                 ((LoginPanel) loginPanel).player2TextField.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Usernames cannot be blank!");
         }
         else{
+            gamePlay.setPlayers(((LoginPanel) loginPanel).getPlayerUsername(1),
+                    ((LoginPanel) loginPanel).getPlayerUsername(2));
+            headerPanel = new HeaderPanel(gamePlay.getPlayerName(1), gamePlay.getPlayerName(2));
             goToGameFrame();
         }
+    }
+
+    private void loadButtonAction(){
+        String[] gamePlayLoadedResult = gamePlay.loadGame();
+        if (gamePlayLoadedResult.length == 1){
+            JOptionPane.showMessageDialog(null, gamePlayLoadedResult);
+        }
+
+        else {
+            ((LoginPanel) loginPanel).setPlayersUsername(gamePlayLoadedResult[0], gamePlayLoadedResult[1]);
+            //update the available tokens to be placed
+            for (int i = 9; i > Integer.parseInt(gamePlayLoadedResult[2]); i--){
+                ((TokenPanel) whiteTokenPanel).removeToken();
+            }
+            for (int i = 9; i > Integer.parseInt(gamePlayLoadedResult[3]); i--){
+                ((TokenPanel) blackTokenPanel).removeToken();
+            }
+
+            headerPanel = new HeaderPanel(gamePlay.getPlayerName(1), gamePlay.getPlayerName(2));
+            ((HeaderPanel) headerPanel).setGameState(gamePlayLoadedResult[4]);
+            setLoadedGameBoard();
+            goToGameFrame();
+        }
+    }
+
+    private void tutorialButtonAction(){
+        tutorialPopup = new JFrame();
+        tutorialPopup.setContentPane(new JLabel(new ImageIcon("res/tutorial1.gif")));
+        tutorialPopup.setTitle("Tutorial");
+        tutorialPopup.setBounds(10, 10, 1280, 720);
+        tutorialPopup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        tutorialPopup.setResizable(false);
+        tutorialPopup.setVisible(true);
     }
 
     /**
@@ -153,7 +168,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * @param tokenIndex    the index of the desired tokenButton in the array
      *                      returned by getTokenButtons
      */
-    public void tokenButtonAction(int tokenIndex) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
+    private void tokenButtonAction(int tokenIndex) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
         String gameState = ((HeaderPanel) headerPanel).gameState.getText();
         TokenButton tokenButton = ((GamePanel) gamePanel).getTokenButtons()[tokenIndex];
 
@@ -245,11 +260,6 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * Updates the frame to show the changes.
      */
     private void goToGameFrame(){
-        gamePlay.setPlayers(((LoginPanel) loginPanel).getPlayerUsername(1),
-                ((LoginPanel) loginPanel).getPlayerUsername(2));
-
-        headerPanel = new HeaderPanel(gamePlay.getPlayerName(1), gamePlay.getPlayerName(2));
-
         this.remove(loginPanel);
         this.remove(welcomePanel);
 
@@ -268,9 +278,11 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         this.revalidate();
         this.repaint();
+        System.out.println(gamePlay.playerManager.getTokensRemaining(1));
+        System.out.println(gamePlay.playerManager.getTokensRemaining(2));
     }
 
-    public void setLoadedGame(){
+    public void setLoadedGameBoard(){
         ArrayList<String> whiteTokenCoord = gamePlay.getTokenCoordinates("W");
         ArrayList<String> blackTokenCoord = gamePlay.getTokenCoordinates("B");
 
@@ -278,14 +290,12 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         for(int i = 0; i < 24; i++){
             if(whiteTokenCoord.contains(adaptData(i))){
-                ((TokenPanel) whiteTokenPanel).removeToken();
                 tokenButtons[i].setColour("W");
                 tokenButtons[i].setAddable(false);
                 tokenButtons[i].setRemovable(true);
                 tokenButtons[i].setButtonVisual();
             }
             else if(blackTokenCoord.contains(adaptData(i))){
-                ((TokenPanel) blackTokenPanel).removeToken();
                 tokenButtons[i].setColour("B");
                 tokenButtons[i].setAddable(false);
                 tokenButtons[i].setRemovable(true);

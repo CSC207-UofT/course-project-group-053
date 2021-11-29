@@ -25,9 +25,7 @@ public class Player implements Serializable {
 
     public String get_tokencolour() { return this.str_player_tokencolour; }
 
-    //decrease or increase number of chips
-    public void dec_numchipsleft() {
-        //used when other player gets house. with dec_numchipsonboard()
-        --this.int_player_numchipsleft;
+    public void set_username(String playerUsername) {
+        this.str_player_username = playerUsername;
     }
 }

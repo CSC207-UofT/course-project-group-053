@@ -15,11 +15,11 @@ public class GamePanel extends JPanel {
         layout = new GridBagLayout();
         gbc = new GridBagConstraints();
 
-        this.setMaximumSize(new Dimension(600, 600));
+        this.setMaximumSize(new Dimension(550, 550));
         this.setLayout(layout);
 
         ImageIcon img = new ImageIcon("res/gridImage.jpg");
-        img.setImage(img.getImage().getScaledInstance(600, 600, Image.SCALE_DEFAULT));
+        img.setImage(img.getImage().getScaledInstance(550, 550, Image.SCALE_DEFAULT));
         gridImage = img.getImage();
 
         tokens = new TokenButton[24];
