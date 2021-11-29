@@ -222,10 +222,10 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         gamePlay.updateEndOfPhase();
 
-        if(gamePlay.endOfP1){
+        if(gamePlay.endOfPhase){
             tokenButton.setAddable(false);
             tokenButton.setRemovable(false);
-            ((HeaderPanel) headerPanel).setGameState(gamePlay.getWinner());
+//            ((HeaderPanel) headerPanel).setGameState(gamePlay.getWinner());
             callNewGameDialog();
         }
 

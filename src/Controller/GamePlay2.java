@@ -2,10 +2,7 @@ package Controller;
 
 import Entity.Player;
 import Entity.Token;
-import Exceptions.InvalidPositionException;
-import Exceptions.InvalidRemovalException;
-import Exceptions.LoadedSuccessfully;
-import Exceptions.SavedSuccessfully;
+import Exceptions.*;
 import Gateways.data.GameSaveData;
 import Gateways.data.GameState;
 import UseCases.*;
@@ -36,22 +33,7 @@ public class GamePlay2 extends GamePlay{
         return winnerCalculator.who_won();
     }
 
-
-    public ArrayList<String> getTokenCoordinates(String colour){
-        ArrayList<String> tokenCoordinates = new ArrayList<>();
-        ArrayList<String> gameboardKeys = gameBoardManipulator.getKeys();
-        for(String key : gameboardKeys) {
-            if (gameBoardManipulator.getCorrespondentValue(key) != null){
-                if(gameBoardManipulator.getCorrespondentValue(key).equals(colour)){
-                    tokenCoordinates.add(key);
-                }
-            }
-        }
-        return tokenCoordinates;
-    }
-
-    @Override
-    public void move_token(int playerNum, String setTokenPosition) throws ArrayIndexOutOfBoundsException, NullPointerException {
+    public void slide_token(int playerNum, String removeTokenPosition,String setTokenPosition) throws ArrayIndexOutOfBoundsException, NullPointerException {
         Player player;
         if (playerNum == 1) {
             player = player1;
@@ -63,18 +45,15 @@ public class GamePlay2 extends GamePlay{
             try {
                 Token token = new Token(player.get_username(), player.get_tokencolour());
 
-                //TODO: make a Token
-                //InsertToken(token, position)
                 gameBoardManipulator.placeToken(token, setTokenPosition);
+                gameBoardManipulator.removeToken(removeTokenPosition, player.get_tokencolour());
 
-                // reduce player 1's chips by 1
-                player.dec_numchipsleft();
                 // player 1 has successfully placed down a token, so break out of the while loop
 
                 checkMill.checkMill(setTokenPosition, player.get_tokencolour(), gameBoardManipulator.getGameBoard());
                 break;
 
-            } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
+            } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | RemoveEmptySlotException | RemoveMillException e) {
                 System.out.println(e.getMessage());
                 // skip the invalid token and ask for prompt again
             }
@@ -86,29 +65,6 @@ public class GamePlay2 extends GamePlay{
     @Override
     public void updateEndOfPhase() {
         endOfP2 = player1.int_player_numchipsonboard == 0 & player2.int_player_numchipsleft == 0;
-    }
-
-    public String saveGame(){
-        boolean saved_data = false;
-        GameSaveData save_file = new GameSaveData(player1, player2, gameBoardManipulator.getGameBoard());
-        try {
-            GameState.save(save_file, "gamestate1.save");
-            return "Game saved successfully";
-        } catch (Exception e) {
-            return "Couldn't save:" + e.getMessage();
-        }
-    }
-
-    public String[] loadGame(){
-        try {
-            GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-            System.out.println(saveData.player1saved.get_username());
-            System.out.println(saveData.player2saved.get_username());
-            gameBoardManipulator.setGameBoard(saveData.savedGameboard);
-            return new String[]{saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerUsername(2)};
-        } catch (Exception e) {
-            return new String[]{"Couldn't load:" + e.getMessage()};
-        }
     }
 
     /**

@@ -43,7 +43,7 @@ public class GameBoard implements Serializable {
     private void increaseCapacity() { gameBoardCapacity--; }
 
     /**
-     * Place a Entity.Player's token in a specified box and box position in Entity.GameBoard
+     * Place an Entity.Player's token in a specified box and box position in Entity.GameBoard
      *
      * @param token unique string representing a player's token to place on Entity.GameBoard
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
@@ -95,5 +95,4 @@ public class GameBoard implements Serializable {
         Set<String> keySet = gameBoard.keySet();
         return new ArrayList<>(keySet);
     }
-
 }

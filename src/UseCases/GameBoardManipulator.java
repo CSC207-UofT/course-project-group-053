@@ -30,6 +30,7 @@ public class GameBoardManipulator {
         placer.place(gameboard, token, position);
     }
 
+
     public void removeToken(String position, String playerColor) throws RemoveEmptySlotException,
             InvalidPositionException, RemoveMillException {
         // check for remove self token first
