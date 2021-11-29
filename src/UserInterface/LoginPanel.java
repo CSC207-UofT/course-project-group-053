@@ -6,7 +6,7 @@ import java.awt.*;
 public class LoginPanel extends JPanel {
     JLabel player1Label, player2Label;
     JTextField player1TextField, player2TextField;
-    JButton continueButton, loadButton;
+    DefaultButton continueButton, loadButton;
 
     public LoginPanel(){
         super();
@@ -17,9 +17,9 @@ public class LoginPanel extends JPanel {
         player2Label = new JLabel("Enter Player 2's username:");
         player2TextField = new JTextField();
 
-        continueButton = new JButton("CONTINUE");
+        continueButton = new DefaultButton(Color.decode("#FF1B3A"), 20, 65, 250, "CONTINUE");
 
-        loadButton = new JButton("LOAD GAME");
+        loadButton = new DefaultButton(Color.decode("#FF1B3A"), 20, 65, 250, "LOAD GAME");
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBackground(Color.white);
@@ -47,18 +47,6 @@ public class LoginPanel extends JPanel {
         player2TextField.setFont(new Font("Segoe UI Semilight", Font.PLAIN, 20));
         player2TextField.setMaximumSize(new Dimension(350, 30));
         player2TextField.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        continueButton.setBounds(200,300,200,30);
-        continueButton.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 20));
-        continueButton.setForeground(Color.white);
-        continueButton.setBackground(Color.decode("#FF1B3A"));
-        continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        continueButton.setBounds(200,300,200,30);
-        loadButton.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 20));
-        loadButton.setForeground(Color.white);
-        loadButton.setBackground(Color.decode("#FF1B3A"));
-        loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
     private void addComponentsToPanel() {

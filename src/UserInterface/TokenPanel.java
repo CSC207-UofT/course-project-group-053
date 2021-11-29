@@ -20,6 +20,7 @@ public class TokenPanel extends JPanel {
         initializeTokens();
         addTokensToPanel();
     }
+
     private void initializeTokens() {
         String tokenFile;
         if (tokenColour.equals("B")){

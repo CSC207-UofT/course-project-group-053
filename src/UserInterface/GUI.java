@@ -8,11 +8,14 @@ import Exceptions.LoadedSuccessfully;
 import Exceptions.SavedSuccessfully;
 import Interfaces.DataAdapter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,6 +23,7 @@ import java.util.HashMap;
 public class GUI extends JFrame implements ActionListener, DataAdapter<String, Integer> {
     JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper, headerPanel;
     JButton saveButton;
+    JFrame tutorialPopup;
     GamePlay1 gamePlay;
 
     public GUI() {
@@ -27,8 +31,10 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     }
 
     /**
-     * Initiates all instance attributes of GUI except gamePlay and headerPanel, since they require
-     * information that the user will give later. Calls helper method to set the preferred JFrame settings.
+     * Initiates all instance attributes of GUI except gamePlay, headerPanel and tutorial Popup, since the
+     * first two require information that the user will give later, while the latter should only be initialized
+     * when the user chooses to watch the tutorial.
+     * Calls helper method to set the preferred JFrame settings.
      * Adds the panels for the starting part (welcomePanel and loginPanel).
      */
     private void initiateGUI() {
@@ -81,47 +87,41 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * Inside actionPerformed it calls a helper method.
      */
     public void addActionEvent() {
-        ((LoginPanel) loginPanel).continueButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                confirmButtonAction();
+        ((LoginPanel) loginPanel).continueButton.addActionListener(e -> confirmButtonAction());
+
+        ((LoginPanel) loginPanel).loadButton.addActionListener(e -> {
+            String[] gamePlayLoadedResult = gamePlay.loadGame();
+            if (gamePlayLoadedResult.length == 1){
+                JOptionPane.showMessageDialog(null, gamePlayLoadedResult);
+            }
+
+            else {
+                ((LoginPanel) loginPanel).setPlayersUsername(gamePlayLoadedResult[0], gamePlayLoadedResult[1]);
+                goToGameFrame();
+                setLoadedGame();
             }
         });
 
-        ((LoginPanel) loginPanel).loadButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String[] gamePlayLoadedResult = gamePlay.loadGame();
-                if (gamePlayLoadedResult.length == 1){
-                    JOptionPane.showMessageDialog(null, gamePlayLoadedResult);
-                }
+        saveButton.addActionListener(e -> JOptionPane.showMessageDialog(null, gamePlay.saveGame()));
 
-                else {
-                    ((LoginPanel) loginPanel).setPlayersUsername(gamePlayLoadedResult[0], gamePlayLoadedResult[1]);
-                    goToGameFrame();
-                    setLoadedGame();
-                }
-            }
-        });
-
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, gamePlay.saveGame());
-            }
+        ((WelcomePanel) welcomePanel).tutorialButton.addActionListener(e -> {
+            tutorialPopup = new JFrame();
+            tutorialPopup.setContentPane(new JLabel(new ImageIcon("res/tutorial1.gif")));
+            tutorialPopup.setTitle("Tutorial");
+            tutorialPopup.setBounds(10, 10, 1280, 720);
+            tutorialPopup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            tutorialPopup.setResizable(false);
+            tutorialPopup.setVisible(true);
         });
 
         TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
         for(int i = 0; i < tokenButtons.length; i++){
             int finalI = i; //needs to make i final to add action listener to the ith tokenButton
-            tokenButtons[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        tokenButtonAction(finalI);
-                    } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException ex) {
-                        ex.printStackTrace();
-                    }
+            tokenButtons[i].addActionListener(e -> {
+                try {
+                    tokenButtonAction(finalI);
+                } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException ex) {
+                    ex.printStackTrace();
                 }
             });
         }
