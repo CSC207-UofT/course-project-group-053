@@ -15,11 +15,14 @@ public class GamePlay1 {
     GameBoardPlacer placer = new GameBoardPlacer();
     GameBoardRemover remover = new GameBoardRemover();
     CheckMill checkMill = new CheckMill();
-    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(tracker, placer, remover, checkMill);
+    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
     Scanner sc = new Scanner(System.in);
 
     public GamePlay1(List<Player> playerList) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException, ArrayIndexOutOfBoundsException,
             NullPointerException {
+        // Let GBM update token tracker as tokens are added/removed from the gameboard
+        gameBoardManipulator.register(tracker);
+
         Player player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
         Player player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
         System.out.println("Starting Game between " + player1.get_username() + " and " + player2.get_username());
@@ -92,7 +95,7 @@ public class GamePlay1 {
 
                 //TODO: make a Entity.Token
                 //InsertToken(token, position)
-                gameBoardManipulator.placeToken(setToken_position, token);
+                gameBoardManipulator.placeToken(setToken_position, token, tracker.getGameBoard());
 
                 // reduce player 1's chips by 1
                 player.dec_numchipsleft();
@@ -147,7 +150,8 @@ public class GamePlay1 {
                     if (loaded_data){throw new LoadedSuccessfully("Game loaded successfully");
                     }
                 }
-                gameBoardManipulator.removeToken(removeToken_position, player.get_username(), player.get_tokencolour());
+                gameBoardManipulator.removeToken(removeToken_position, player.get_username(), player.get_tokencolour(),
+                                                 tracker);
                 break;
             } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
                 System.out.println(e.getMessage());

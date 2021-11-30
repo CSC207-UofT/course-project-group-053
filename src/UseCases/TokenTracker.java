@@ -5,13 +5,11 @@ import Entity.Token;
 import Interfaces.Observer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Stores a gameboard and keeps track of where tokens are on the gameboard, tokens owned by each player, and where mills
- * are formed by each player
+ * Stores a gameboard and keeps track of where player tokens are on the gameboard
  */
 
 public class TokenTracker implements Observer, Serializable {
@@ -21,9 +19,6 @@ public class TokenTracker implements Observer, Serializable {
 
     // keeps track of where player tokens are on the gameboard
     private final HashMap<String, Token> playerTokenMap = new HashMap<>();
-
-    // keep track of positions occupied by each player
-    private final HashMap<String, ArrayList<String>> playerPositions = new HashMap<>();
 
     public TokenTracker() {
         Set<String> gameBoardPositions = gameBoard.getGameBoardPositions();
@@ -42,6 +37,7 @@ public class TokenTracker implements Observer, Serializable {
         return gameBoard;
     }
 
+    // TODO - maybe can stop saving gameboards, and instead only have to save tracker, since tracker stores gameboard
     /**
      * Set gameBoard to a preconfigured GameBoard object
      *
@@ -56,30 +52,27 @@ public class TokenTracker implements Observer, Serializable {
      *
      * @param username String for username of the player making the move
      * @param position Position on gameboard where player is trying to remove a token
-     * @return boolean that is true if specified position has player's own token
+     * @return boolean True if specified position has one of player's own token
      */
     public boolean isSelfToken(String username, String position) {
-        // NOTE TO SELF: make GameBoardRemover call this method later
-        ArrayList<String> playerPositions = this.playerPositions.get(username);
-        return playerPositions.contains(position);
+        Token tokenAtPosition = playerTokenMap.get(position);
+
+        if (tokenAtPosition == null) {
+            // no token placed at position, so cannot be a self token
+            return false;
+        } else {
+            return tokenAtPosition.getPlayer().equals(username);
+        }
     }
 
+    public Token getToken(String position) { return playerTokenMap.get(position); }
+
     @Override
-    // add token
-    public void update(String position, String username, Token playerToken) {
+    // player added token to gameboard
+    public void update(String position, Token playerToken) {
         // add token to token map
         // add token for player in player tokens
         addTokenMap(position, playerToken);
-        addPlayerPosition(username, position);
-    }
-
-    private void addPlayerPosition(String username, String position) {
-        if (!playerPositions.containsKey(username)) {
-            // initialize new array list of occupied positions for this player
-            playerPositions.put(username, new ArrayList<>());
-        }
-        // add newly occupied position by player to playerPositions
-        playerPositions.get(username).add(position);
     }
 
     private void addTokenMap(String position, Token playerToken) {
@@ -87,47 +80,13 @@ public class TokenTracker implements Observer, Serializable {
     }
 
     @Override
-    // remove token
-    public void update(String position, String username) {
+    // player removed token from gameboard
+    public void update(String position) {
         removeTokenMap(position);
-        removePlayerPosition(username, position);
-    }
-
-    /* By this time this method will be called, both players will already be set as keys in playerPositions
-     */
-    private void removePlayerPosition(String username, String position) {
-        Set<String> playerUsernames = playerPositions.keySet();
-
-        for (String player: playerUsernames) {
-            // remove the token from the opponent player
-            if (!player.equals(username)) {
-                // remove token from opponent
-                playerPositions.get(player).remove(position);
-                break;
-            }
-        }
     }
 
     private void removeTokenMap(String position) {
         // remove token from position in playerTokenMap by setting associated value to null
         playerTokenMap.put(position, null);
-    }
-
-    @Override
-    // slide token
-    public void update(String[] oldToNewPosition) {
-        slideTokenMap(oldToNewPosition);
-    }
-
-    private void slideTokenMap(String[] oldToNewPosition) {
-        String oldPosition = oldToNewPosition[0];
-        String newPosition = oldToNewPosition[1];
-
-        // remove old token from playerTokenMap, where it was before sliding
-        Token oldToken = playerTokenMap.get(oldPosition);
-        playerTokenMap.put(oldPosition, null);
-
-        // move player token to new position after sliding
-        playerTokenMap.put(newPosition, oldToken);
     }
 }
