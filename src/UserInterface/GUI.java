@@ -18,11 +18,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 
 public class GUI extends JFrame implements ActionListener, DataAdapter<String, Integer> {
-    JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper, headerPanel;
-    DefaultButton saveButton;
+    JPanel loginPanel, welcomePanel, whiteTokenPanel, blackTokenPanel, gamePanel, gamePanelWrapper, headerPanel, leaderboardPanel;
+    DefaultButton saveButton, newGameButton, exitButton;
     JFrame tutorialPopup;
     GamePlay1 gamePlay;
 
@@ -31,9 +33,9 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     }
 
     /**
-     * Initiates all instance attributes of GUI except gamePlay, headerPanel and tutorial Popup, since the
-     * first two require information that the user will give later, while the latter should only be initialized
-     * when the user chooses to watch the tutorial.
+     * Initiates all instance attributes of GUI except gamePlay, headerPanel,
+     * and tutorial Popup, since the first two require information that the user/gateways will give later,
+     * while the latter should only be initialized when the user chooses to watch the tutorial.
      * Calls helper method to set the preferred JFrame settings.
      * Adds the panels for the starting part (welcomePanel and loginPanel).
      */
@@ -43,6 +45,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         whiteTokenPanel = new TokenPanel("W");
         blackTokenPanel = new TokenPanel("B");
         gamePanel = new GamePanel();
+        leaderboardPanel = new LeaderboardPanel();
         //gamePlay and headerPanel must be initialized later
 
         //gamePanelWrapper is used to fix a size for GamePanel because if
@@ -104,6 +107,10 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
                 }
             });
         }
+
+        ((LeaderboardPanel) leaderboardPanel).exitGameButton.addActionListener(e ->
+                this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING))); //close GUI;
+        ((LeaderboardPanel) leaderboardPanel).newGameButton.addActionListener(e -> restart());
     }
 
     /**
@@ -235,15 +242,6 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
             }
         }
 
-        gamePlay.updateEndOfP1();
-
-        if(gamePlay.endOfP1){
-            tokenButton.setAddable(false);
-            tokenButton.setRemovable(false);
-            ((HeaderPanel) headerPanel).setGameState(gamePlay.getWinner());
-            callNewGameDialog();
-        }
-
         gamePanel.revalidate();
         gamePanel.repaint();
 
@@ -252,6 +250,21 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         this.revalidate();
         this.repaint();
+
+        gamePlay.updateEndOfP1();
+        if(gamePlay.endOfP1 & (tokenButton.addable | tokenButton.removable)){
+            TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
+            for (TokenButton button : tokenButtons) {
+                button.setAddable(false);
+                button.setRemovable(false);
+                button.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            ((HeaderPanel) headerPanel).setGameState(gamePlay.getWinner());
+            ((LeaderboardPanel) leaderboardPanel).setTopPlayers(new String[]{"Player 1", "Player 2", "Player 3",
+                    "Player 4", "Player 5", "Player 6", "Player 7", "Player 8", "Player 9", "Player 10"});
+            goToLeaderboardFrame();
+        }
     }
 
     /**
@@ -278,8 +291,20 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
 
         this.revalidate();
         this.repaint();
-        System.out.println(gamePlay.playerManager.getTokensRemaining(1));
-        System.out.println(gamePlay.playerManager.getTokensRemaining(2));
+    }
+
+    public void goToLeaderboardFrame() {
+        this.remove(whiteTokenPanel);
+        this.remove(blackTokenPanel);
+        this.remove(gamePanelWrapper);
+
+        gamePanelWrapper.remove(saveButton);
+
+        this.add(gamePanelWrapper, BorderLayout.CENTER);
+        this.add(leaderboardPanel, BorderLayout.EAST);
+
+        this.revalidate();
+        this.repaint();
     }
 
     public void setLoadedGameBoard(){
@@ -309,34 +334,13 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * used in the constructor.
      */
     private void restart() {
-        gamePanelWrapper.remove(Box.createRigidArea(new Dimension(0, 80)));
-        gamePanelWrapper.remove(gamePanel);
-
-        this.remove(whiteTokenPanel);
-        this.remove(blackTokenPanel);
-        this.remove(gamePanelWrapper);
+        this.remove(leaderboardPanel);
         this.remove(headerPanel);
 
         initiateGUI();
 
         this.revalidate();
         this.repaint();
-    }
-
-    /**
-     * Creates a JOptionPane to ask the user whether or not to restart the game.
-     */
-    private void callNewGameDialog() {
-        int answer = JOptionPane.showConfirmDialog(this,
-                "Would you like to start a new game?",
-                "Game Over",
-                JOptionPane.YES_NO_OPTION);
-        if (answer == JOptionPane.YES_OPTION) {
-            restart();
-        }
-        else if (answer == JOptionPane.NO_OPTION) {
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)); //close GUI
-        }
     }
 
     @Override
