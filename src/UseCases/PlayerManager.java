@@ -19,12 +19,30 @@ public class PlayerManager {
         }
     }
 
+    public void updateNumPlayerTokensOnBoard(int playerNum, int amount){
+        if(playerNum == 1){
+            player1.int_player_numchipsonboard = player1.int_player_numchipsonboard + amount;
+        }
+        else{
+            player2.int_player_numchipsonboard = player2.int_player_numchipsonboard + amount;
+        }
+    }
+
     public String getPlayerTokenColour(int playerNum){
         if(playerNum == 1){
             return player1.get_tokencolour();
         }
         else{
             return player2.get_tokencolour();
+        }
+    }
+
+    public int getPlayerNumOfTokens(int playerNum){
+        if(playerNum == 1){
+            return player1.int_player_numchipsonboard;
+        }
+        else{
+            return player2.int_player_numchipsonboard;
         }
     }
 
@@ -67,6 +85,6 @@ public class PlayerManager {
     }
 
     public boolean playersHaveTokensLeft(){
-        return !(player1.int_player_numchipsonboard == 0 & player2.int_player_numchipsleft == 0);
+        return !(player1.int_player_numchipsleft == 0 & player2.int_player_numchipsleft == 0);
     }
 }

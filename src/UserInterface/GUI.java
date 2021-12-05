@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimerTask;
@@ -179,6 +180,8 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         String gameState = ((HeaderPanel) headerPanel).gameState.getText();
         TokenButton tokenButton = ((GamePanel) gamePanel).getTokenButtons()[tokenIndex];
 
+
+
         if(gameState.equals(gamePlay.getPlayerName(1) + "'s turn to add a token") & tokenButton.addable){
             tokenButton.setColour("W");
             ((TokenPanel) whiteTokenPanel).removeToken();
@@ -267,6 +270,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         }
     }
 
+
     /**
      * Helper method for confirmButtonAction. Deletes all current JPanels in the frame.
      * add the JPanels of the actual game and changes the frame's background colour.
@@ -335,6 +339,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      */
     private void restart() {
         this.remove(leaderboardPanel);
+        this.remove(gamePanelWrapper);
         this.remove(headerPanel);
 
         initiateGUI();

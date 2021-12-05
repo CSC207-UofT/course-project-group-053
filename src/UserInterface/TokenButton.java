@@ -17,6 +17,8 @@ public class TokenButton extends JButton {
         setButtonVisual();
     }
 
+    public String getColour(){ return this.colour; }
+
     public void setAddable(boolean addable){
         this.addable = addable;
     }

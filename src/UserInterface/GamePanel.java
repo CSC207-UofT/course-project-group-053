@@ -2,6 +2,8 @@ package UserInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
     TokenButton[] tokens;
@@ -69,6 +71,20 @@ public class GamePanel extends JPanel {
 
     public TokenButton[] getTokenButtons(){
         return tokens;
+    }
+
+    public ArrayList<TokenButton> getPlayerTokenButtons(int playerNum){
+        ArrayList<TokenButton> playerTokenButtons = new ArrayList<>();
+        String colour;
+        if (playerNum == 1){ colour = "W"; }
+        else { colour = "B"; }
+
+        for (TokenButton token : tokens) {
+            if (token.getColour().equals(colour)) {
+                playerTokenButtons.add(token);
+            }
+        }
+        return playerTokenButtons;
     }
 
     private void addComponents(Component component, int gridx, int gridy){

@@ -9,8 +9,12 @@ import Exceptions.SavedSuccessfully;
 import Gateways.data.GameSaveData;
 import Gateways.data.GameState;
 import UseCases.*;
+import UserInterface.GamePanel;
+import UserInterface.TokenButton;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GamePlay1 {
     GameBoardPlacer placer;
@@ -86,8 +90,9 @@ public class GamePlay1 {
                 Token token = new Token(playerManager.getPlayerUsername(playerNum), playerManager.getPlayerTokenColour(playerNum));
                 gameBoardManipulator.placeToken(token, setTokenPosition);
 
-                // reduce player 1's chips by 1
+                // reduce player 1's chips by 1 and update chips on board
                 playerManager.decreasePlayerTokensLeft(playerNum);
+                playerManager.updateNumPlayerTokensOnBoard(playerNum, 1);
 
                 checkMill.checkMill(setTokenPosition, playerManager.getPlayerTokenColour(playerNum), gameBoardManipulator.getGameBoard());
 
@@ -170,11 +175,24 @@ public class GamePlay1 {
                     throw new LoadedSuccessfully("Game loaded successfully");
                 }
             }
-            gameBoardManipulator.removeToken(removeTokenPosition, playerManager.getPlayerTokenColour(playerNum));
+            gameBoardManipulator.removeToken(removeTokenPosition, playerManager.getPlayerTokenColour(playerNum), isSpecialCase(playerNum));
+            if(isSpecialCase(playerNum)){ checkMill.removeTokenFromMill(removeTokenPosition, playerNum); }
+            playerManager.updateNumPlayerTokensOnBoard(playerNum, -1);
+
         } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
             return e.getMessage();
             // skip the invalid token and ask for prompt again
         }
         return "";
+    }
+
+    private boolean isSpecialCase(int playerNum){
+        String colour;
+        if(playerNum == 1){ colour = "W"; }
+        else { colour = "B"; }
+        System.out.println(checkMill.getPlayerHousesIndexes(colour));
+        System.out.println(playerManager.getPlayerNumOfTokens(playerNum));
+        System.out.println();
+        return playerManager.getPlayerNumOfTokens(playerNum) == checkMill.getPlayerHousesIndexes(colour).size();
     }
 }
