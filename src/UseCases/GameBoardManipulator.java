@@ -49,12 +49,31 @@ public class GameBoardManipulator implements Subject {
         }
     }
 
+    /**
+     * Place a Token on a gameboard, as requested by a player
+     * @param position Gameboard coordinates, in form [ABC][1-8], to place the token
+     * @param playerToken Token that player wants to place
+     * @param gb GameBoard for inserting the token into
+     * @throws OccupiedSlotException If player tries to place token in non-empty position
+     * @throws NonexistentPositionException If player specifies non-existent position in gameboard
+     */
     public void placeToken(String position, Token playerToken, GameBoard gb) throws OccupiedSlotException,
             NonexistentPositionException {
         placer.place(gb, playerToken, position);
         notifyObservers(position, playerToken);
     }
 
+    /**
+     * Removes a Token from a specified position on a gameboard, as requested by a player
+     * @param position Gameboard coordinates, in form [ABC][1-8], to remove a token from
+     * @param playerUserName Username of the requesting player
+     * @param playerColor Token color/string of the requesting player (i.e: "B" or "W")
+     * @param tracker TokenTracker to check for self tokens a player tries to remove
+     * @throws RemoveEmptySlotException If player tries to remove token from empty position
+     * @throws InvalidPositionException If player tries to remove token from non-existent position
+     * @throws RemoveMillException If player tries to remove token that belongs in an opponent's mill
+     * @throws RemoveSelfTokenException If player tries to remove their own token
+     */
     public void removeToken(String position, String playerUserName, String playerColor, TokenTracker tracker) throws RemoveEmptySlotException,
             InvalidPositionException, RemoveMillException, RemoveSelfTokenException {
         remover.remove(position, playerColor, playerUserName, tracker, millChecker);

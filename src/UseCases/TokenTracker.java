@@ -64,6 +64,11 @@ public class TokenTracker implements Observer, Serializable {
         }
     }
 
+    /**
+     * Retrieves a Token from a specified gameboard position. Returns null if no Token is placed there.
+     * @param position GameBoard coordinates, in form [ABC][1-8
+     * @return Token that was placed at position in gameboard, or null
+     */
     public Token getToken(String position) { return playerTokenMap.get(position); }
 
     @Override
