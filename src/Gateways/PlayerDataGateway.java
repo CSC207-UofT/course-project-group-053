@@ -14,10 +14,9 @@ public class PlayerDataGateway{
      * into the game.
      *
      * @param username String username of player of interest
-     * @return boolean for whether the username was for a new player or not
      * @throws SQLException For when something sketchy happens with the SQL commands
      */
-    public boolean logInUser(String username) throws SQLException {
+    public void logInUser(String username) throws SQLException {
         Connection conn = DriverManager.getConnection(DATABASE_URL);
         String checkUserCmd = String.format("SELECT * FROM users WHERE username = \"%s\";", username);
         PreparedStatement statement = conn.prepareStatement(checkUserCmd);
@@ -35,7 +34,6 @@ public class PlayerDataGateway{
         statement.close();
         result.close();
 
-        return isNewUser;
     }
 
     /**
@@ -83,7 +81,7 @@ public class PlayerDataGateway{
      * @param username String for username of the user of interest
      * @throws SQLException Something sketchy happened with the SQL commands
      */
-    public Map<String, Object> getUserStats(String username) throws SQLException {
+    public void getUserStats(String username) throws SQLException {
         Connection conn = DriverManager.getConnection(DATABASE_URL);
         String userLookup = String.format("SELECT * FROM users WHERE username = \"%s\";", username);
         PreparedStatement statement = conn.prepareStatement(userLookup);
@@ -95,7 +93,6 @@ public class PlayerDataGateway{
         statement.close();
         userStats.close();
 
-        return resultsHash;
     }
 
     /**

@@ -2,6 +2,7 @@ package UserInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class LeaderboardPanel extends JPanel {
     JLabel[] topPlayersListLabel;
@@ -34,9 +35,9 @@ public class LeaderboardPanel extends JPanel {
         this.setBackground(Color.white);
     }
 
-    public void setTopPlayers(String[] topPlayers){
-        for (int i = 0; i < topPlayers.length; i++) {
-            topPlayersListLabel[i].setText((i+1) + " - " + topPlayers[i]);
+    public void setTopPlayers(ArrayList<String> topPlayers){
+        for (int i = 0; i < topPlayers.size(); i++) {
+            topPlayersListLabel[i].setText((i+1) + " - " + topPlayers.get(i));
         }
         addComponentsToPanel();
     }

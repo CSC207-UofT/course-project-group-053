@@ -190,9 +190,6 @@ public class GamePlay1 {
         String colour;
         if(playerNum == 1){ colour = "W"; }
         else { colour = "B"; }
-        System.out.println(checkMill.getPlayerHousesIndexes(colour));
-        System.out.println(playerManager.getPlayerNumOfTokens(playerNum));
-        System.out.println();
         return playerManager.getPlayerNumOfTokens(playerNum) == checkMill.getPlayerHousesIndexes(colour).size();
     }
 }
