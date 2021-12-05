@@ -114,10 +114,10 @@ public class PlayerDataGateway{
      */
     private void logInExistingUser(String username, Connection conn) throws SQLException {
         String updateUserCommand = "UPDATE users\n" +
-                                   "SET num_games = num_games + 1,\n" +
-                                   "last_login = CURRENT_TIMESTAMP\n" +
-                                   "WHERE\n" +
-                                   String.format("username = \"%s\";", username);
+                "SET num_games = num_games + 1,\n" +
+                "last_login = CURRENT_TIMESTAMP\n" +
+                "WHERE\n" +
+                String.format("username = \"%s\";", username);
 
         PreparedStatement statement = conn.prepareStatement(updateUserCommand);
         statement.executeUpdate();
@@ -150,47 +150,6 @@ public class PlayerDataGateway{
     code.
      */
     public static void main(String[] args) {
-        // try logging in new and existing users
-        PlayerDataGateway gateway = new PlayerDataGateway();
 
-        try {
-            gateway.logInUser("bruh");
-            gateway.logInUser("joe");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-
-        // try updating player stats after wins and losses of games
-        try {
-            gateway.updateUserAfterGame("bruh", false);  // win rate still 0
-            gateway.updateUserAfterGame("bruh", true);  // win rate now 1/3
-            gateway.updateUserAfterGame("bruh", true);  // win rate now 2/3
-            gateway.updateUserAfterGame("joe", true);  // win rate is 1
-
-            gateway.logInUser("joe");
-            gateway.updateUserAfterGame("joe", false);  // win rate is now 1/2
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        // try getting stats for a player
-        try {
-            gateway.getUserStats("bruh");  // debugged this method, hashmap turns out fine
-            gateway.getUserStats("joe");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        // reset testing database, removing rows we just added
-//        try {
-//            Connection conn = DriverManager.getConnection(DATABASE_URL);
-//            PreparedStatement statement = conn.prepareStatement("DELETE FROM users WHERE username = \"joe\" OR username = \"bruh\";");
-//            statement.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
     }
 }

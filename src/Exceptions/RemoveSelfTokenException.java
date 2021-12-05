@@ -5,6 +5,6 @@ package Exceptions;
  */
 public class RemoveSelfTokenException extends InvalidRemovalException {
     public RemoveSelfTokenException() {
-        super("Entity.Player cannot remove your own token from the gameboard.");
+        super("Player cannot remove own token from the gameboard.");
     }
 }

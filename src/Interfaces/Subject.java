@@ -1,8 +1,8 @@
 package Interfaces;
+import Entity.Token;
 
 public interface Subject {
     void register(Observer o);
-    void unregister(Observer o);
-    void notifyObserver(String playerName, String position, boolean addedToken);
-    void notifyObserver(String playerName, String[] newMill);
+    void notifyObservers(String position, Token playerToken);
+    void notifyObservers(String position);
 }

@@ -1,16 +1,19 @@
 package Entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 public class GameBoard implements Serializable {
-    // Defines the game board used for Nine Men Morris, which holds the strings representing tokens placed on the game board
+    // Defines the game board used for Nine Men Morris, which holds the strings representing tokens placed on the
+    // gameboard
     public HashMap<String, String> gameBoard;
 
-    // keeps track of how many empty slots are currently on the game board
+    // keeps track of how many empty slots are currently on the gameboard
     private int gameBoardCapacity;
+
+    // all gameboard positions possible
+    private final Set<String> gameBoardPositions;
 
     // regex pattern for empty slots on board
     public static String EMPTY_SLOT_PATTERN = "[ABC][1-8]";
@@ -37,6 +40,9 @@ public class GameBoard implements Serializable {
 
         gameBoard = gbHash;
         gameBoardCapacity = 24;
+
+        // all possible gameboard positions
+        gameBoardPositions = gameBoard.keySet();
     }
 
     private void decreaseCapacity() { gameBoardCapacity++; }
@@ -55,7 +61,7 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * Remove an Entity.Player's token from a specified box and box position in Entity.GameBoard
+     * Remove a Entity.Player's token from a specified box and box position in Entity.GameBoard
      *
      * @param targetPosition string representing coordinates in gameBoard (ex: A8, C4) to place token
      *
@@ -80,20 +86,19 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * Returns integer value for number of free slots on the gameboard
-     * @return integer from [0, 24]
+     * Returns how many empty slots are on the gameboard.
+     * @return Integer number of empty slots available on gameboard
      */
     public int getGameBoardCapacity() {
         return gameBoardCapacity;
     }
 
     /**
-     * Returns an array list of all the coordinate keys in the gameboard
-     * @return array list of strings, representing the keys in gameboard
+     * Returns the set of all positions in the gameboard
+     * @return Set of strings for gameboard positions
      */
-    public ArrayList<String> getGameBoardPositions() {
-        Set<String> keySet = gameBoard.keySet();
-        return new ArrayList<>(keySet);
+    public Set<String> getGameBoardPositions() {
+        return gameBoardPositions;
     }
 
 }

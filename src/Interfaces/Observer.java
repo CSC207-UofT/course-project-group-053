@@ -1,7 +1,10 @@
 package Interfaces;
+import Entity.Token;
 
 public interface Observer {
-    // Interfaces.Subject calls notifyObserver(), which calls update for each Interfaces.Observer it is responsible for
-    void update(String playerName, String position, boolean addedToken);  // update added or removed token
-    void update(String playerName, String[] newMill);  // update new mill
+    // for updating after player adds token to gameboard, assuming valid token placement
+    void update(String position, Token playerToken);
+
+    // for updating after player removes token from gameboard, assuming valid token removal
+    void update(String position);
 }
