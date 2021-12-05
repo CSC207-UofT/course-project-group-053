@@ -21,7 +21,7 @@ public class GameBoardRemover {
         if (!checkValidPosition(position)) {
             // non-existent gameboard coordinates given
             throw new NonexistentPositionException();
-        } else if (!checkPositionUnoccupied(gb, position)) {
+        } else if (checkPositionUnoccupied(gb, position)) {
             // tried to remove token from slot with no tokens
             throw new RemoveEmptySlotException();
         } else if (tracker.isSelfToken(playerUserName, position)) {

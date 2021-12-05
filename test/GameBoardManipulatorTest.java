@@ -1,4 +1,3 @@
-import Entity.GameBoard;
 import Entity.Token;
 import Exceptions.NonexistentPositionException;
 import Exceptions.OccupiedSlotException;
@@ -10,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Tests for GameBoardManipulator to make sure GameBoardPlacer + GameBoardRemover work properly, and that TokenTracker
+// is updated appropriately by GameBoardManipulator
 class GameBoardManipulatorTest {
     TokenTracker tracker;
     GameBoardPlacer placer;
@@ -133,14 +134,26 @@ class GameBoardManipulatorTest {
 
         // remove self token
         try {
+            // place down token first, and check its been placed properly
             Token token = new Token("bruh", "B");
             gbm.placeToken("A4", token, tracker.getGameBoard());
             assertEquals("B", tracker.getGameBoard().getTokenAtPosition("A4"));
             assertEquals("bruh", tracker.getToken("A4").getPlayer());
             assertEquals("B", tracker.getToken("A4").toString());
+
+            // try to have player remove their own token
+            gbm.removeToken("A4", "bruh", "B", tracker);
+        }
+        catch (RemoveSelfTokenException e) {
+            // check that self token was not removed
+            assertEquals("B", tracker.getGameBoard().getTokenAtPosition("A4"));
+            assertEquals("bruh", tracker.getToken("A4").getPlayer());
+            assertEquals("B", tracker.getToken("A4").toString());
+
+            System.out.println("Successfully caught RemoveSelfTokenException");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            fail("Unexpected exception thrown in removeToken case 3)");
+            fail("Unexpected exception caught when trying to remove self token");
         }
     }
 }

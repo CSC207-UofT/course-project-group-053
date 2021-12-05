@@ -11,7 +11,6 @@ import java.util.Set;
 /**
  * Stores a gameboard and keeps track of where player tokens are on the gameboard
  */
-
 public class TokenTracker implements Observer, Serializable {
 
     // store and keep track of a GameBoard
