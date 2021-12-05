@@ -28,13 +28,13 @@ Gateways.data.GameSaveData
 GameSaveState
 
 UserInterfaces:
-GamePanel
-GUI
-HeaderPanel
-LoginPanel
-TokenButton
-TokenPanel
-WelcomePanel
+UserInterface.GamePanel
+UserInterface.GUI
+UserInterface.HeaderPanel
+UserInterface.LoginPanel
+UserInterface.TokenButton
+UserInterface.TokenPanel
+UserInterface.WelcomePanel
 
 Interfaces
 Interfaces.Observer (for Interfaces.Observer design pattern, not yet implemented)

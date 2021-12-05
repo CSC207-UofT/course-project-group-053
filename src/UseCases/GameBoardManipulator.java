@@ -4,12 +4,14 @@ import Entity.GameBoard;
 import Entity.Token;
 import Exceptions.*;
 
+import java.util.ArrayList;
+
 /**
- * Initializes and stores an instance of Entity.GameBoard, processing requests to place and remove tokens from the Entity.GameBoard.
+ * Initializes and stores an instance of GameBoard, processing requests to place and remove tokens from the GameBoard.
  */
-// This class is both a Facade and a Interfaces.Subject class (as part of Interfaces.Observer design pattern)
+// This class is both a Facade and a Subject class (as part of Observer design pattern)
 public class GameBoardManipulator {
-    // Design UseCases.GameBoardManipulator as a facade class for manipulating tokens on a Entity.GameBoard (add, remove, slide tokens)
+    // Design GameBoardManipulator as a facade class for manipulating tokens on a GameBoard (add, remove, slide tokens)
     private GameBoard gameboard;
     private final GameBoardPlacer placer;
     private final GameBoardRemover remover;
@@ -25,22 +27,24 @@ public class GameBoardManipulator {
 
     public void placeToken(Token token, String position) throws OccupiedSlotException,
             NonexistentPositionException {
-        // TODO: make sure exceptions are caught properly upstream
         placer.place(gameboard, token, position);
     }
 
-    public void removeToken(String position, String playerColor) throws RemoveEmptySlotException,
+    public void removeToken(String position, String playerColor, boolean exception) throws RemoveEmptySlotException,
             InvalidPositionException, RemoveMillException {
-        // TODO: make sure exceptions are caught properly upstream
         // check for remove self token first
-        if (!millChecker.checkMill2(position, playerColor, gameboard)) {
+        if (!millChecker.checkMill2(position, playerColor, gameboard) | exception) {
             remover.remove(gameboard, position);
         } else {
             throw new RemoveMillException();
         }
     }
 
-    public GameBoard getGameboard() { return this.gameboard; }
+    public GameBoard getGameBoard() { return this.gameboard; }
 
-    public void setGameboard(GameBoard loadedBoard) {this.gameboard = loadedBoard;}
+    public void setGameBoard(GameBoard loadedBoard) { this.gameboard = loadedBoard; }
+
+    public ArrayList<String> getKeys() { return gameboard.getGameBoardPositions(); }
+
+    public String getCorrespondentValue(String key) { return gameboard.getTokenAtPosition(key); }
 }

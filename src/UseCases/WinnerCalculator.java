@@ -1,24 +1,25 @@
 package UseCases;
 
-import Entity.GameBoard;
 import Entity.Player;
+import Controller.GamePlay1;
 
 public class WinnerCalculator {
-
-    // Creates and stores a Entity.GameBoard instance, and processes Entity.Player moves on the Entity.GameBoard
-    private final GameBoard gb = new GameBoard();
-    private final CheckMill cm = new CheckMill();
+    // Creates and stores a GameBoard instance, and processes Player moves on the GameBoard
+    private final CheckMill cm;
 
     public static Player player1;
     public static Player player2;
 
+    public WinnerCalculator(GamePlay1 gp, Player player1, Player player2){
+        this.player1 = player1;
+        this.player2 = player2;
+        cm = gp.checkMill;
+    }
+
     public String who_won() {
         Player first = option1(cm.getPlayerHouses(1), cm.getPlayerHouses(2));
-        Player second = option2();
         if (first != null) {
-            return first.get_username();
-        }else if (second != null){
-            return second.get_username();
+            return first.get_username() + " won";
         }
         else{
             return "It's a Tie";
@@ -33,15 +34,4 @@ public class WinnerCalculator {
         }
         return null;
     }
-
-    private Player option2(){
-        if (player1.get_numchipsonboard() > player2.get_numchipsleft()){
-            return player1;
-        }else if(player1.get_numchipsonboard() < player2.get_numchipsonboard()){
-            return player2;
-        }
-        return null;
-    }
-
-
 }
