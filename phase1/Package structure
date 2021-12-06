@@ -11,7 +11,7 @@ UseCases:
 UseCases.GameBoardManipulator
 UseCases.GameBoardRemover
 UseCases.GameBoardPlacer
-UseCases.GameBoardMap
+UseCases.TokenTracker
 UseCases.CheckMill
 UseCases.WinnerCalculator
 
