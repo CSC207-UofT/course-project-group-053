@@ -4,17 +4,35 @@ For each Principle of Universal Design, write 2-5 sentences or point form notes 
 If you do not have any such features you can either:(a) Describe features that you could implement in the future that would adhere to principle or 
 (b) Explain why the principle does not apply to a program like yours.
 
-Principle 1: Equitable Use.
+Principle 1: Equitable Use. (Not implemented):
+We can add an action-to-speech so that people with sight disabilities can play along. We can offer translated tutorial for people who are not familiar with english
+language. 
 
-Principle 2: Flexibility in Use.
+Principle 2: Flexibility in Use. (Do not require):
+Since this game is played using a mouse, user's left/right handedness, accuracy and precision would depend on the mouse. Except for that since the game has to do
+with clicking on spots (for selecting, placing, and removing tokens), the tokens and the placeholders are made visibly bigger to improve accuracy and precision of
+the aforementioned actions.
+
 Principle 3: Simple and Intuitive Use.
+The use of language is simple and a tutorial on how to play the game is included which makes the game use simple and intuitive. Messages such as whose turn it is,
+and what the player has to do are given to further simplify the game.
+
 Principle 4: Perceptible Information.
+There is a use of pcitures to represent the tokens and the gameboard with high contrasting colours. The tokens are black and white on a red gameboard which makes 
+everything easy to distinguish. 
+
 Principle 5: Tolerance for Error.
+If a player makes a wrong move, the move is not registered and a warning is given explaining why the move was not registered. This gives the player another chance
+to make the correct move. This warning and another chance is given until and unless the player makes a valid move. Hence, there is a tolerance for error.
+
 Principle 6: Low Physical Effort.
+This game uses low physical effort since all one person has to do is enter their names and tap on the tokens and/or the gameboard to play. This calls for less 
+physical effort and maintained neutral body position.
+
+
 Principle 7: Size and Space for Approach and Use.
-
-
-
+The tokens for both the players are kept at seperate distinguishable places for the user to approach, reach, and use regardless of user's body size, 
+posture, or mobility.
 
 
 
@@ -30,5 +48,6 @@ is a board game that is played between two players. The game can be challenging 
 Write a paragraph about whether or not your program is less likely to be used by certain demographics. 
 For example, a program that converts txt files to files that can be printed by a braille printer are less likely to be used by people who do not read braille.
 
-This game is less likely to be played by people with sight and hearing disabilities since as of now the moves in the game as not read out and it does not have a 
-version that supports braille. This game also cannot be played for children under a certain age, since the rules can a be a bit hard to follow.
+This game is less likely to be played by people with sight since as of now the moves in the game as not read out and it does not have a 
+version that supports braille. This game also cannot be played for children under a certain age, since the rules can a be a bit hard to follow. The game is also
+limited to user who can understand English, since the rules, tutorials, messages are all given out in English Language.
