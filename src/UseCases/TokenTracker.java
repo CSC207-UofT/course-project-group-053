@@ -16,15 +16,18 @@ import java.util.Set;
 public class TokenTracker implements Observer, Serializable {
 
     // store and keep track of a GameBoard
-    private GameBoard gameBoard = new GameBoard();
+    private GameBoard gameBoard;
 
     // store all valid gameboard positions
-    private final Set<String> gbPositions = gameBoard.getGameBoardPositions();
+    private final Set<String> gbPositions;
 
     // keeps track of where player tokens are on the gameboard
-    private final HashMap<String, Token> playerTokenMap = new HashMap<>();
+    private final HashMap<String, Token> playerTokenMap;
 
     public TokenTracker() {
+        gameBoard = new GameBoard();
+        gbPositions = gameBoard.getGameBoardPositions();
+        playerTokenMap = new HashMap<>();
         Set<String> gameBoardPositions = gameBoard.getGameBoardPositions();
         for (String position : gameBoardPositions) {
             // initialize all positions as null, until tokens are placed in them

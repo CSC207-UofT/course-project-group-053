@@ -6,6 +6,7 @@ import Controller.GamePlay1;
 import Exceptions.InvalidPositionException;
 import Exceptions.LoadedSuccessfully;
 import Exceptions.SavedSuccessfully;
+import Gateways.LeaderboardDataGateway;
 import Interfaces.DataAdapter;
 
 import javax.imageio.ImageIO;
@@ -103,7 +104,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
             tokenButtons[i].addActionListener(e -> {
                 try {
                     tokenButtonAction(finalI);
-                } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException ex) {
+                } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | IOException ex) {
                     ex.printStackTrace();
                 }
             });
@@ -176,11 +177,9 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
      * @param tokenIndex    the index of the desired tokenButton in the array
      *                      returned by getTokenButtons
      */
-    private void tokenButtonAction(int tokenIndex) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException {
+    private void tokenButtonAction(int tokenIndex) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException, IOException {
         String gameState = ((HeaderPanel) headerPanel).gameState.getText();
         TokenButton tokenButton = ((GamePanel) gamePanel).getTokenButtons()[tokenIndex];
-
-
 
         if(gameState.equals(gamePlay.getPlayerName(1) + "'s turn to add a token") & tokenButton.addable){
             tokenButton.setColour("W");
@@ -255,21 +254,29 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         this.repaint();
 
         gamePlay.updateEndOfP1();
+        gamePlay.updateEndOfP1();
         if(gamePlay.endOfP1 & (tokenButton.addable | tokenButton.removable)){
-            TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
-            for (TokenButton button : tokenButtons) {
-                button.setAddable(false);
-                button.setRemovable(false);
-                button.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            }
-
-            ((HeaderPanel) headerPanel).setGameState(gamePlay.getWinner());
-            ((LeaderboardPanel) leaderboardPanel).setTopPlayers(new String[]{"Player 1", "Player 2", "Player 3",
-                    "Player 4", "Player 5", "Player 6", "Player 7", "Player 8", "Player 9", "Player 10"});
-            goToLeaderboardFrame();
+            endGame();
         }
     }
 
+    private void endGame() throws IOException {
+        TokenButton[] tokenButtons = ((GamePanel) gamePanel).getTokenButtons();
+        for (TokenButton button : tokenButtons) {
+            button.setAddable(false);
+            button.setRemovable(false);
+            button.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+        String winner = gamePlay.getWinner();
+        ((HeaderPanel) headerPanel).setGameState(winner);
+
+        if(!winner.equals("It's a Tie")){
+            LeaderboardDataGateway.addWin(winner.substring(0, winner.length() - 4));
+        }
+
+        ((LeaderboardPanel) leaderboardPanel).setTopPlayers(LeaderboardDataGateway.getTopPlayers());
+        goToLeaderboardFrame();
+    }
 
     /**
      * Helper method for confirmButtonAction. Deletes all current JPanels in the frame.
