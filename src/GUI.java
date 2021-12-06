@@ -70,15 +70,15 @@ public class GUI extends JFrame implements ActionListener {
 
 
         if (tokenButton.clickable){
-            if(gameState.equals("Player 1's turn")){
+            if(gameState.equals("Entity.Player 1's turn")){
                 tokenButton.setColour("W");
                 ((TokenPanel) whiteTokenPanel).removeToken();
-                ((HeaderPanel) headerPanel).gameState.setText("Player 2's turn");
+                ((HeaderPanel) headerPanel).gameState.setText("Entity.Player 2's turn");
             }
-            else if(gameState.equals("Player 2's turn")){
+            else if(gameState.equals("Entity.Player 2's turn")){
                 tokenButton.setColour("B");
                 ((TokenPanel) blackTokenPanel).removeToken();
-                ((HeaderPanel) headerPanel).gameState.setText("Player 1's turn");
+                ((HeaderPanel) headerPanel).gameState.setText("Entity.Player 1's turn");
             }
             tokenButton.setClickable(false);
             tokenButton.setButtonVisual();

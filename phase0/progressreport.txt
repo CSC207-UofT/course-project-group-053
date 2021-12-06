@@ -1,6 +1,6 @@
 What each group member has worked on:
 Aalina - worked on the scenario walkthrough and the progress reports.  
-Aliza - worked on Main.java some part of which os now GamePlay1 and Scenario Walk Through. 
+Aliza - worked on Controller.Main.java some part of which os now Controller.GamePlay1 and Scenario Walk Through.
 Saksam - worked on removing the tokens when a mill was formed, and checking when the removal of token was valid. 
 Mary -  worked on Players class, HumanPlayer1 class, HumanPlayer2 class, GamePlayer1, tests, CRC models. 
 Jason - worked on gameboard and gameboardmanager classes, CRC models.  
@@ -38,19 +38,19 @@ to the rules and keeping them in check since the game moves from placing tokens 
 the pre-existing tokens on the board. There are also some variations on this game 
 where skipping tokens may be allowed which is a design choice and open question that still 
 needs to be addressed (this would be our phase 3). In addition, some open questions are also 
-to what extent we want to display player data in terms of their previous statistics and how detailed 
+to what extent we want to display player Gateways.data in terms of their previous statistics and how detailed
 the chosen statistics would be. 
 
 
 Summary:
 At this point GameBoardManager is working to see where on the board the token has been placed 
-and making a record of it, and the Player class keeps track of how many tokens the Players are 
+and making a record of it, and the Entity.Player class keeps track of how many tokens the Players are
 left with and how many of Players tokens are on the board.
 If no exceptions are thrown and players move is valid, GameBoardManager keeps a track of what 
 has been changed and stores it and outputs the state of the board for the Players to see.
-The code starts at the Main class where it would ask for Input from the user to enter the names 
-of two Human Players and the colour the first Human Player chooses.
-So when the Input is received, HumanPlayer, which is the subclass of Player initializes two player 
+The code starts at the Controller.Main class where it would ask for Input from the user to enter the names
+of two Human Players and the colour the first Human Entity.Player chooses.
+So when the Input is received, HumanPlayer, which is the subclass of Entity.Player initializes two player
 instances and stores the name of player, the token colour of the player, and initializes the number 
 of chips as 9 and sets the number of chips on the board to 0.
 When Player1 forms a mill and gets to remove opponents token, GameBoardManager 

@@ -1,3 +1,6 @@
+import Entity.GameBoard;
+import Entity.Player;
+import Entity.Token;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

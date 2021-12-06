@@ -1,3 +1,12 @@
+import Entity.GameBoard;
+import Entity.Token;
+import Exceptions.NonexistentPositionException;
+import Exceptions.OccupiedSlotException;
+import Exceptions.RemoveEmptySlotException;
+import UseCases.CheckMill;
+import UseCases.GameBoardManipulator;
+import UseCases.GameBoardPlacer;
+import UseCases.GameBoardRemover;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +40,7 @@ class GameBoardManipulatorTest {
         try {
             gbm.placeToken(token2, "SNADIUOEWNN");
         } catch (NonexistentPositionException e) {
-            System.out.println("NonexistentPositionException caught properly");
+            System.out.println("Exceptions.NonexistentPositionException caught properly");
         } catch (Exception e) {
             System.out.println("Caught unexpected exception");
             System.out.println(e.getMessage());
@@ -40,7 +49,7 @@ class GameBoardManipulatorTest {
         try {
             gbm.placeToken(token3, "A1");
         } catch (OccupiedSlotException e) {
-            System.out.println("OccupiedSlotException caught properly");
+            System.out.println("Exceptions.OccupiedSlotException caught properly");
         } catch (Exception e) {
             System.out.println("Caught unexpected exception");
             System.out.println(e.getMessage());
@@ -76,7 +85,7 @@ class GameBoardManipulatorTest {
         try {
             gbm.removeToken("BABABABABABA", "W");
         } catch (NonexistentPositionException e) {
-            System.out.println("NonexistentPositionException caught properly");
+            System.out.println("Exceptions.NonexistentPositionException caught properly");
         } catch (Exception e) {
             System.out.println("Something went wrong...");
             System.out.println(e.getMessage());
@@ -86,7 +95,7 @@ class GameBoardManipulatorTest {
         try {
             gbm.removeToken("A1", "B");
         } catch (RemoveEmptySlotException e) {
-            System.out.println("RemoveEmptySlotException caught properly");
+            System.out.println("Exceptions.RemoveEmptySlotException caught properly");
         } catch (Exception e) {
             System.out.println("Something went wrong...");
             System.out.println(e.getMessage());
