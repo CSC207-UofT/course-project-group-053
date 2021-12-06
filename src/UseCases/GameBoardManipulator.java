@@ -74,8 +74,8 @@ public class GameBoardManipulator implements Subject {
      * @throws RemoveMillException If player tries to remove token that belongs in an opponent's mill
      * @throws RemoveSelfTokenException If player tries to remove their own token
      */
-    public void removeToken(String position, String playerUserName, String playerColor, TokenTracker tracker) throws RemoveEmptySlotException,
-            InvalidPositionException, RemoveMillException, RemoveSelfTokenException {
+    public void removeToken(String position, String playerUserName, String playerColor, TokenTracker tracker)
+            throws RemoveEmptySlotException, InvalidPositionException, RemoveMillException, RemoveSelfTokenException {
         remover.remove(position, playerColor, playerUserName, tracker, millChecker);
         notifyObservers(position);
     }
@@ -85,7 +85,7 @@ public class GameBoardManipulator implements Subject {
      * @param position Position where opponent token is
      * @param gb Gameboard for which token is to be removed from position
      */
-    public void forceOpponentMilLToken(String position, GameBoard gb) {
+    public void removeOpponentMillToken(String position, GameBoard gb) {
         remover.forceRemove(position, gb);
     }
 }

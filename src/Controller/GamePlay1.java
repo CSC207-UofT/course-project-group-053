@@ -191,7 +191,7 @@ public class GamePlay1 {
                 if (isSpecialCase(playerNum)) {
                     // force removal of token from opponent's mill from player
                     checkMill.removeTokenFromMill(removeTokenPosition, playerNum);
-                    gameBoardManipulator.forceOpponentMilLToken(removeTokenPosition, tracker.getGameBoard());
+                    gameBoardManipulator.removeOpponentMillToken(removeTokenPosition, tracker.getGameBoard());
                 }
                 else{ return e.getMessage(); }
             }
