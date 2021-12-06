@@ -6,10 +6,10 @@ import Exceptions.NonexistentPositionException;
 import Exceptions.OccupiedSlotException;
 
 public class GameBoardPlacer {
-    // class for UseCases.GameBoardManipulator facade, placing tokens on a Entity.GameBoard instance
+    // class for GameBoardManipulator facade, placing tokens on a GameBoard instance
 
     /**
-     * Inserts a Entity.Token into a specified position on Entity.GameBoard
+     * Inserts a Token into a specified position on GameBoard
      *
      * @param gb Entity.GameBoard instance to place token on
      * @param token A Entity.Token instance to place on the gameboard

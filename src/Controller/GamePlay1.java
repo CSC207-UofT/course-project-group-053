@@ -1,161 +1,214 @@
 package Controller;
 
-import Entity.Player;
 import Entity.Token;
 import Exceptions.*;
 import Gateways.data.GameSaveData;
 import Gateways.data.GameState;
-import UseCases.CheckMill;
-import UseCases.GameBoardManipulator;
-import UseCases.GameBoardPlacer;
-import UseCases.GameBoardRemover;
+import UseCases.*;
 
-import java.util.List;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class GamePlay1 {
-    GameBoardPlacer placer = new GameBoardPlacer();
-    GameBoardRemover remover = new GameBoardRemover();
-    CheckMill checkMill = new CheckMill();
-    GameBoardManipulator gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
-    Scanner sc = new Scanner(System.in);
+    // attributes for simulating and manipulating gameboard
+    GameBoardPlacer placer;
+    GameBoardRemover remover;
+    public CheckMill checkMill;
+    TokenTracker tracker;
+    public GameBoardManipulator gameBoardManipulator;
 
-    public GamePlay1(List<Player> playerList) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException, ArrayIndexOutOfBoundsException,
-            NullPointerException {
-        Player player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
-        Player player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
-        System.out.println("Starting Game between " + player1.get_username() + " and " + player2.get_username());
+    // attributes for controlling game flow
+    WinnerCalculator winnerCalculator;
+    public boolean endOfP1;
+    public PlayerManager playerManager;
 
-        // print the initial gameboard state, before players make any moves
-        //TODO: Print Entity.GameBoard
+    public GamePlay1(String player1Username, String player2Username) throws ArrayIndexOutOfBoundsException, NullPointerException {
+        placer = new GameBoardPlacer();
+        remover = new GameBoardRemover();
+        checkMill = new CheckMill();
+        tracker = new TokenTracker();
 
-        // keep track of whether both players have run out of chips/tokens to place
-        // when they do, phase 1 of the game ends
-        boolean end_of_p1 = false;
+        gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
+        gameBoardManipulator.register(tracker);  // set up observer subject pattern between manipulator and tracker
 
-        // while loop to run phase 1 of game, where players lay all their chips on the board
-        while (!end_of_p1) {
-            int player1Houses = checkMill.getPlayerHouses(1);
-            int player2Houses = checkMill.getPlayerHouses(2);
+        endOfP1 = false;
 
-            move_token(player1);
-            //if player1 has made a mill; process remove
-            if (checkMill.getPlayerHouses(1) > player1Houses) {
-                player1Houses = CheckMill.getPlayerHouses(1);
-                remove_token(player1);
-            }
-
-
-            move_token(player2);
-            //if player2 has made a mill; process remove
-            if (checkMill.getPlayerHouses(2) > player2Houses) {
-                player2Houses = checkMill.getPlayerHouses(2);
-                remove_token(player2);
-            }
-            end_of_p1 = (player1.get_numchipsleft() == 0 & player2.get_numchipsleft() == 0);
-        }
-
+        setPlayers(player1Username, player2Username);
     }
 
-    public void move_token(Player player) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException, ArrayIndexOutOfBoundsException, NullPointerException {
-        while (true){
-            try {
-                System.out.println(player.get_username() + "'s turn. Place " + player.get_tokencolour() + " token. Choose an empty slot");
-                // player 1 inputs gameboard position to place their token in
-                String setToken_position = sc.nextLine();
-                if (setToken_position.equals("save")){
-                    boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
-                    try{
-                        GameState.save(save_file, "gamestate1.save");
-                        saved_data = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't save:" + e.getMessage());
-                    }
-                    if (saved_data){throw new SavedSuccessfully("Game saved successfully");}
+    public GamePlay1(){
+        placer = new GameBoardPlacer();
+        remover = new GameBoardRemover();
+        checkMill = new CheckMill();
+        gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
+        endOfP1 = false;
+        setPlayers("", "");
+    }
+
+    public void setPlayers(String player1Username, String player2Username){
+        playerManager = new PlayerManager(player1Username, "W", player2Username, "B");
+        winnerCalculator = new WinnerCalculator(this, playerManager.getPlayer(1), playerManager.getPlayer(2));
+    }
+
+    public int getPlayerHouses(int playerNum) {
+        return checkMill.getPlayerHouses(playerNum);
+    }
+
+    public boolean playerMadeMill(int playerHousesBeforeMove, int playerNum) {
+        return checkMill.getPlayerHouses(playerNum) > playerHousesBeforeMove;
+    }
+
+    public String getWinner() {
+        return winnerCalculator.who_won();
+    }
+
+    public String getPlayerName(int playerNum) {
+        if (playerNum == 1) {
+            return playerManager.getPlayerUsername(1);
+        } else if (playerNum == 2) {
+            return playerManager.getPlayerUsername(2);
+        } else {
+            return "";
+        }
+    }
+
+    public ArrayList<String> getTokenCoordinates(String colour){
+        ArrayList<String> tokenCoordinates = new ArrayList<>();
+        Set<String> gameboardKeys = tracker.getGameBoardPositions();
+        for(String key : gameboardKeys) {
+            if (tracker.getToken(key) != null){
+                if(tracker.getToken(key).toString().equals(colour)) {
+                    tokenCoordinates.add(key);
                 }
-                if (setToken_position.equals("load")) {
-                    boolean loaded_data = false;
-                        try {
-                            GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                            gameBoardManipulator.setGameboard(saveData.savedGameboard);
-                            loaded_data = true;
-                        } catch (Exception e) {
-                            System.out.println("Couldn't load:" + e.getMessage());
-                        }
-                        if (loaded_data){throw new LoadedSuccessfully("Game loaded successfully");
-                        }
-                    }
-
-
-                Token token = new Token(player.get_username(), player.get_tokencolour());
-
-                //TODO: make a Entity.Token
-                //InsertToken(token, position)
-                gameBoardManipulator.placeToken(token, setToken_position);
-
-                // reduce player 1's chips by 1
-                player.dec_numchipsleft();
-                // player 1 has successfully placed down a token, so break out of the while loop
-
-
-                checkMill.checkMill(setToken_position, player.get_tokencolour(), gameBoardManipulator.getGameboard());
-                break;
-
-            } catch (LoadedSuccessfully | SavedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
-                System.out.println(e.getMessage());
-                // skip the invalid token and ask for prompt again
             }
-
-            // print gameboard state after player 1 places down a chip
-            //TODO: print gameboard
         }
-        // Now check if the player1 has created a mill
-        //gameBoardManager.checkHouse();
-
+        return tokenCoordinates;
     }
 
-    public void remove_token(Player player) throws LoadedSuccessfully, SavedSuccessfully {
+    public void move_token(int playerNum, String setTokenPosition) throws ArrayIndexOutOfBoundsException, NullPointerException {
         while (true) {
-            System.out.println(player.get_username() + "'s turn. Choose a token to remove");
-            // in gameboard manager add a function that returns a playerList of positions available
-            String removeToken_position = sc.nextLine();
             try {
-                if (removeToken_position.equals("save")){
-                    boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
-                    try{
-                        GameState.save(save_file, "gamestate1.save");
-                        saved_data = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't save:" + e.getMessage());
-                    }
-                    if (saved_data){throw new SavedSuccessfully("Game saved successfully");}
-                }
-                if (removeToken_position.equals("load")) {
-                    boolean loaded_data = false;
-                    try {
-                        GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                        gameBoardManipulator.setGameboard(saveData.savedGameboard);
-                        loaded_data = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't load:" + e.getMessage());
-                    }
-                    if (loaded_data){throw new LoadedSuccessfully("Game loaded successfully");
-                    }
-                }
-                gameBoardManipulator.removeToken(removeToken_position, player.get_tokencolour());
+                Token token = new Token(playerManager.getPlayerUsername(playerNum), playerManager.getPlayerTokenColour(playerNum));
+                gameBoardManipulator.placeToken(setTokenPosition, token, tracker.getGameBoard());
+
+                // reduce player 1's chips by 1 and update chips on board
+                playerManager.decreasePlayerTokensLeft(playerNum);
+                playerManager.updateNumPlayerTokensOnBoard(playerNum, 1);
+
+                checkMill.checkMill(setTokenPosition, playerManager.getPlayerTokenColour(playerNum),
+                        tracker.getGameBoard());
+
+                // player has successfully placed down a token, so break out of the while loop
                 break;
-            } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
+            } catch (InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
                 System.out.println(e.getMessage());
                 // skip the invalid token and ask for prompt again
             }
-
         }
-        //shows state after removing opponents token
-        //TODO: print gameboard
-        //TODO: change duplicate code to suitable method
-        //TODO: add loading at start of game and add loading of player names etc as well
-        //TODO: save which player's turn it was and start from that player's turn when gamestate is loaded. Might have to rework gameplay1 slightly
+    }
+
+    public void updateEndOfP1() {
+        endOfP1 = !playerManager.playersHaveTokensLeft();
+    }
+
+    public String saveGame(String gameState){
+        GameSaveData save_file = new GameSaveData(playerManager.getPlayer(1),
+                playerManager.getPlayer(2), tracker.getGameBoard(), tracker, gameState);
+        try {
+            GameState.save(save_file, "gamestate1.save");
+            return "Game saved successfully";
+        } catch (Exception e) {
+            return "Couldn't save:" + e.getMessage();
+        }
+    }
+
+    public String[] loadGame(){
+        try {
+            GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
+
+            // load in saved gameboard into token tracker
+            this.tracker = saveData.getTracker();
+            tracker.setGameBoard(saveData.getGameBoard());
+
+            playerManager.setPlayer(1, saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerTokensRemaining(1));
+            playerManager.setPlayer(2, saveData.getSavedPlayerUsername(2), saveData.getSavedPlayerTokensRemaining(2));
+            winnerCalculator = new WinnerCalculator(this, playerManager.getPlayer(1), playerManager.getPlayer(2));
+
+            return new String[]{playerManager.getPlayerUsername(1),
+                    playerManager.getPlayerUsername(2),
+                    Integer.toString(playerManager.getTokensRemaining(1)),
+                    Integer.toString(playerManager.getTokensRemaining(2)),
+                    saveData.getSavedGameState()};
+
+        } catch (Exception e) {
+            return new String[]{"Couldn't load:" + e.getMessage()};
+        }
+    }
+
+    /**
+     * Removes token at position removeTokenPosition.
+     *
+     * @param playerNum indicates whether it is player1 or player2
+     * @param removeTokenPosition position in the form of [A-C][1-8] of the token to be removed
+     * @return empty string if token was removed; excpetion message otherwise.
+     */
+    public String remove_token(int playerNum, String removeTokenPosition) {
+        try {
+            if (removeTokenPosition.equals("save")) {
+                boolean saved_data = false;
+                GameSaveData save_file = new GameSaveData(tracker.getGameBoard());
+                try {
+                    GameState.save(save_file, "gamestate1.save");
+                    saved_data = true;
+                } catch (Exception e) {
+                    System.out.println("Couldn't save:" + e.getMessage());
+                }
+                if (saved_data) {
+                    throw new SavedSuccessfully("Game saved successfully");
+                }
+            }
+            if (removeTokenPosition.equals("load")) {
+                boolean loaded_data = false;
+                try {
+                    GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
+                    tracker.setGameBoard(saveData.getGameBoard());
+                    loaded_data = true;
+                } catch (Exception e) {
+                    System.out.println("Couldn't load:" + e.getMessage());
+                }
+                if (loaded_data) {
+                    throw new LoadedSuccessfully("Game loaded successfully");
+                }
+            }
+
+            try {
+                gameBoardManipulator.removeToken(removeTokenPosition, playerManager.getPlayerUsername(playerNum),
+                        playerManager.getPlayerTokenColour(playerNum), tracker);
+            } catch (RemoveMillException e) {
+                // player tried to remove token from opponent's mill, but make an exception if all player tokens are in
+                // mills
+                if (isSpecialCase(playerNum)) {
+                    // force removal of token from opponent's mill from player
+                    checkMill.removeTokenFromMill(removeTokenPosition, playerNum);
+                    gameBoardManipulator.forceOpponentMilLToken(removeTokenPosition, tracker.getGameBoard());
+                }
+            }
+
+            playerManager.updateNumPlayerTokensOnBoard(playerNum, -1);
+
+        } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
+            return e.getMessage();
+            // skip the invalid token and ask for prompt again
+        }
+        return "";
+    }
+
+    // player 1 is white, player 2 is black
+    // check if all tokens are in mills, so we have exception to rule of not being able to remove opponent mill tokens
+    private boolean isSpecialCase(int playerNum){
+        String colour;
+        if(playerNum == 1){ colour = "W"; }
+        else { colour = "B"; }
+        return playerManager.getPlayerNumOfTokens(playerNum) == checkMill.getPlayerHousesIndexes(colour).size();
     }
 }

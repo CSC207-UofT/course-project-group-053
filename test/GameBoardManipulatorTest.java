@@ -1,104 +1,159 @@
-import Entity.GameBoard;
 import Entity.Token;
 import Exceptions.NonexistentPositionException;
 import Exceptions.OccupiedSlotException;
 import Exceptions.RemoveEmptySlotException;
-import UseCases.CheckMill;
-import UseCases.GameBoardManipulator;
-import UseCases.GameBoardPlacer;
-import UseCases.GameBoardRemover;
+import Exceptions.RemoveSelfTokenException;
+import UseCases.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Tests for GameBoardManipulator to make sure GameBoardPlacer + GameBoardRemover work properly, and that TokenTracker
+// is updated appropriately by GameBoardManipulator
 class GameBoardManipulatorTest {
-    GameBoardManipulator gbm = new GameBoardManipulator(new GameBoardPlacer(), new GameBoardRemover(), new CheckMill());
+    TokenTracker tracker;
+    GameBoardPlacer placer;
+    GameBoardRemover remover;
+    CheckMill milLChecker;
+    GameBoardManipulator gbm;
 
     @BeforeEach
     void setUp() {
-        this.gbm = new GameBoardManipulator(new GameBoardPlacer(), new GameBoardRemover(), new CheckMill());
+        this.tracker = new TokenTracker();
+        this.placer = new GameBoardPlacer();
+        this.remover = new GameBoardRemover();
+        this.milLChecker = new CheckMill();
+        this.gbm = new GameBoardManipulator(placer, remover, milLChecker);
+        this.gbm.register(tracker);
+    }
+
+    @Test
+    void register(){
+        TokenTracker tracker2 = new TokenTracker();
+        gbm.register(tracker2);
+
+        // try removing both tracker
+        gbm.unregister(this.tracker);
+        gbm.unregister(tracker2);
+        gbm.unregister(tracker2);  // nothing should happen as all trackers removed
+    }
+
+    @Test
+    void notifyObservers() {
+        // no token initially at A3
+        assertNull(tracker.getToken("A3"));
+
+        // place new token at A3 and notify tracker
+        Token token = new Token("bruh", "B");
+        gbm.notifyObservers("A3", token);
+
+        // see if token correctly stored in tracker
+        Token expectedToken = tracker.getToken("A3");
+        assertEquals(token.getPlayer(), expectedToken.getPlayer());
+        assertEquals(token.toString(), expectedToken.toString());
+
+        // now try updating after "removing" token
+        gbm.notifyObservers("A3");
+        assertNull(tracker.getToken("A3"));
     }
 
     @Test
     void placeToken() {
-        // test cases:
-        // 1) place token in empty position
-        // 2) place token in non-existent position
-        // 3) place token in occupied position
-        Token token1 = new Token("bruh", "B");
-        Token token2 = new Token("hi", "W");
-        Token token3 = new Token("bruh", "B");
+        // cases:
+        // 1) Invalid position
+        // 2) Valid token placement
+        // 3) Occupied slot
+        Token token = new Token("bruh", "B");
 
+        // invalid position to place token
         try {
-            gbm.placeToken(token1, "A1");
-            assertEquals("B", gbm.getGameboard().getTokenAtPosition("A1"));
+            gbm.placeToken("ASNDSANDISANIDSA", token, tracker.getGameBoard());
         } catch (Exception e) {
-            System.out.println("Something went wrong...");
+            NonexistentPositionException expectedException = new NonexistentPositionException();
+            assertEquals(e.getClass(), expectedException.getClass());
         }
 
+        // place token in valid position
         try {
-            gbm.placeToken(token2, "SNADIUOEWNN");
-        } catch (NonexistentPositionException e) {
-            System.out.println("Exceptions.NonexistentPositionException caught properly");
+            gbm.placeToken("C6", token, tracker.getGameBoard());
+
+            Token placedToken = tracker.getToken("C6");
+            assertEquals(token.toString(), placedToken.toString());
+            assertEquals(token.getPlayer(), placedToken.getPlayer());
+            assertEquals(tracker.getGameBoard().getTokenAtPosition("C6"), token.toString());
         } catch (Exception e) {
-            System.out.println("Caught unexpected exception");
-            System.out.println(e.getMessage());
+            fail("Unexpected exception for placeToken, first try block");
         }
 
+        // try to place token in occupied position
+        Token token2 = new Token("dude", "W");
         try {
-            gbm.placeToken(token3, "A1");
+            gbm.placeToken("C6", token2, tracker.getGameBoard());
         } catch (OccupiedSlotException e) {
-            System.out.println("Exceptions.OccupiedSlotException caught properly");
+            Token originalToken = tracker.getToken("C6");
+
+            // make sure token at occupied position was unaltered
+            assertEquals(token.toString(), originalToken.toString());
+            assertEquals(token.getPlayer(), originalToken.getPlayer());
+            assertEquals(tracker.getGameBoard().getTokenAtPosition("C6"), "B");
         } catch (Exception e) {
-            System.out.println("Caught unexpected exception");
-            System.out.println(e.getMessage());
+            fail("Unexpected exception for placeToken, second try block");
         }
     }
 
     @Test
+        // removeToken(String position, String playerUserName, String playerColor, TokenTracker tracker)
     void removeToken() {
-        // test cases:
-        // 1) remove existing token from gameboard
-        // 2) remove from non-existent position
-        // 3) remove from empty position
-        Token token1 = new Token("bruh", "B");
+        // cases:
+        // 1) Invalid position
+        // 2) Remove empty position
+        // 3) Remove self token
+        // 4) remove mill token
+        // 5) remove valid token (after token is placed properly)
 
+        // remove from invalid position
         try {
-            gbm.placeToken(token1, "A1");
-            assertEquals("B", gbm.getGameboard().getTokenAtPosition("A1"));
-        } catch (Exception e) {
-            System.out.println("Something went wrong...");
-        }
-
-        // remove existing token from gameboard
-        try {
-            gbm.removeToken("A1", "B");
-            GameBoard gb = gbm.getGameboard();
-            assertNull(gb.getTokenAtPosition("A1"));
-        } catch (Exception e) {
-            System.out.println("Something went wrong...");
-            System.out.println(e.getMessage());
-        }
-
-        // remove token from non-existent position
-        try {
-            gbm.removeToken("BABABABABABA", "W");
+            gbm.removeToken("ANDSANJDS", "buddy", "W", tracker);
         } catch (NonexistentPositionException e) {
-            System.out.println("Exceptions.NonexistentPositionException caught properly");
+            System.out.println("Successfully caught NonExistentPositionException for removeToken");
         } catch (Exception e) {
-            System.out.println("Something went wrong...");
             System.out.println(e.getMessage());
+            fail("Unexpected exception thrown in removeToken case 1)");
         }
 
-        // remove token from empty position
+        // remove from empty position
         try {
-            gbm.removeToken("A1", "B");
+            gbm.removeToken("B7", "buddy", "W", tracker);
         } catch (RemoveEmptySlotException e) {
-            System.out.println("Exceptions.RemoveEmptySlotException caught properly");
+            System.out.println("Successfully caught RemoveEmptySlotException for removeToken");
         } catch (Exception e) {
-            System.out.println("Something went wrong...");
             System.out.println(e.getMessage());
+            fail("Unexpected exception thrown in removeToken case 2)");
+        }
+
+        // remove self token
+        try {
+            // place down token first, and check its been placed properly
+            Token token = new Token("bruh", "B");
+            gbm.placeToken("A4", token, tracker.getGameBoard());
+            assertEquals("B", tracker.getGameBoard().getTokenAtPosition("A4"));
+            assertEquals("bruh", tracker.getToken("A4").getPlayer());
+            assertEquals("B", tracker.getToken("A4").toString());
+
+            // try to have player remove their own token
+            gbm.removeToken("A4", "bruh", "B", tracker);
+        }
+        catch (RemoveSelfTokenException e) {
+            // check that self token was not removed
+            assertEquals("B", tracker.getGameBoard().getTokenAtPosition("A4"));
+            assertEquals("bruh", tracker.getToken("A4").getPlayer());
+            assertEquals("B", tracker.getToken("A4").toString());
+
+            System.out.println("Successfully caught RemoveSelfTokenException");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            fail("Unexpected exception caught when trying to remove self token");
         }
     }
 }

@@ -1,11 +1,11 @@
 Updated specification:
-The main features that we have added for Phase 1 are the GUI of the login page and the game board,
+The main features that we have added for Phase 1 are the UserInterface.GUI of the login page and the game board,
 connecting that to the code that we had for Phase 0, implementing the loading and saving of the game
 as well as implementing a class to determine who wins the game. We have also added an sql database
 which is not integrated as yet but is intended to be used for PlayerStats.
 
 Major design decisions:
-We decided to implement the GUI and connect it to main later. In addition, we decided to fix
+We decided to implement the UserInterface.GUI and connect it to main later. In addition, we decided to fix
 a lot of the design problems we had in Phase 0 such as changing GameBoardManager to
 UseCases.GameBoardManipulator as well as adding classes such as UseCases.CheckMill to check when a mill was
 made on the Entity.GameBoard and UseCases.WinnerCalculator for checking when a player had one. We implemented
@@ -54,20 +54,20 @@ changes the Entity.GameBoard. Now, we plan to implement this in Phase 2.
 Progress report:
 Some of the open questions that we have revolve more around how to connect various part of the code in a coherent
 way. As of right now, there are some factors of the code that could be replaced with specific classes so the code
-can run smoother. Specifically right now, we spent most of our time trying to resolve how to connect the GUI that
+can run smoother. Specifically right now, we spent most of our time trying to resolve how to connect the UserInterface.GUI that
 has been created with main. We were able to do so. We are also trying to look for solutions as to how we can adjust
 the old code we had to newer extensions we are adding in a way that adheres to clean architecture and is efficient.
-In addition, we are now going to spend time working on removing tokens for the GUI's. For Phase 2, we hope to add
-more features such as playerstats being displayed and removing tokens and sliding tokens on the GUI in addition to
+In addition, we are now going to spend time working on removing tokens for the UserInterface.GUI's. For Phase 2, we hope to add
+more features such as playerstats being displayed and removing tokens and sliding tokens on the UserInterface.GUI in addition to
 having a winner page to show when a player has won and messages when players have made a mill and when
 they lose a token etc. We also hope to implement the sliding in the game.
 
 What has worked well so far with the design:
 Implementing the extensions did not cause any serious errors that would hurt the skeleton of the game
-from phase 0. In addition, the GUI and the remaining portions from the game that were to be implemented
+from phase 0. In addition, the UserInterface.GUI and the remaining portions from the game that were to be implemented
 in Phase 1 were done. All new classes and/or methods that were added were with the view to make the code
-more efficient and clean, which has also been implemented on. Adding the GUI to main has also worked
-well in terms of implementing the GUI in itself and then connecting it to main.
+more efficient and clean, which has also been implemented on. Adding the UserInterface.GUI to main has also worked
+well in terms of implementing the UserInterface.GUI in itself and then connecting it to main.
 
 What each team member has worked on and plans to work on:
 
@@ -75,12 +75,12 @@ Aliza:
 Worked on creating Check Mill, a class which checks whether a mill has been made in the game and Winner
 Calculator which specifies who won the game. Also worked on the UML models. Will focus more on Phase 2
 with testing the gameto find any bugs in addition to working on the stats of the players that could
-be displayed in a GUI as well.
+be displayed in a UserInterface.GUI as well.
 
 Aalina: Working on UseCases.GameBoardMap and trying to resolve issues with unifying the code to try and resolve
 issues with UseCases.GameBoardMap and make it as efficient as possible. Also worked on progress reports and the
 design document. Will continue to work on UseCases.GameBoardMap and also on features that can be added to the
-GUI so it can be made more interactive.
+UserInterface.GUI so it can be made more interactive.
 
 Jason:
 Worked on UseCases.GameBoardManipulator, a newer version of GameBoardManager. Created the Entity.Token class and worked
@@ -91,12 +91,12 @@ break when packaged in addition to checking that its functionality remains intac
 
 Mary:
 Making changes in Controller.GamePlay1, which is the controller to follow clean architecture. For Phase 2,
-Mary and Felipe are also going to work on finding a way to remove tokens on the GUI in addition
+Mary and Felipe are also going to work on finding a way to remove tokens on the UserInterface.GUI in addition
 to focusing on more UI/UX principles.
 
 Felipe:
-Mainly worked on the GUI and has implemented the login page and the GUI for the game board. Also
-worked on implementing the GUI to connect to main.
+Mainly worked on the UserInterface.GUI and has implemented the login page and the UserInterface.GUI for the game board. Also
+worked on implementing the UserInterface.GUI to connect to main.
 
 Saksham:
 Worked on saving and loading the game. For Phase 2, will work more on making sure that all coding
