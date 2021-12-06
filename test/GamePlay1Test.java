@@ -15,7 +15,8 @@ class GamePlay1Test {
     List<Player> playerList;
 
     @BeforeEach
-    void setUp() throws InvalidPositionException, SavedSuccessfully, LoadedSuccessfully {
+    void setUp() {
+        // try initializing a new game
         player1 = new Player("Player1", "W");
         player2 = new Player("Player2", "B");
 
