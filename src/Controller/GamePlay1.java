@@ -1,26 +1,23 @@
 package Controller;
 
-import Entity.Player;
 import Entity.Token;
-import Exceptions.InvalidPositionException;
-import Exceptions.InvalidRemovalException;
-import Exceptions.LoadedSuccessfully;
-import Exceptions.SavedSuccessfully;
+import Exceptions.*;
 import Gateways.data.GameSaveData;
 import Gateways.data.GameState;
 import UseCases.*;
-import UserInterface.GamePanel;
-import UserInterface.TokenButton;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 public class GamePlay1 {
+    // attributes for simulating and manipulating gameboard
     GameBoardPlacer placer;
     GameBoardRemover remover;
     public CheckMill checkMill;
+    TokenTracker tracker;
     public GameBoardManipulator gameBoardManipulator;
+
+    // attributes for controlling game flow
     WinnerCalculator winnerCalculator;
     public boolean endOfP1;
     public PlayerManager playerManager;
@@ -29,7 +26,11 @@ public class GamePlay1 {
         placer = new GameBoardPlacer();
         remover = new GameBoardRemover();
         checkMill = new CheckMill();
+        tracker = new TokenTracker();
+
         gameBoardManipulator = new GameBoardManipulator(placer, remover, checkMill);
+        gameBoardManipulator.register(tracker);  // set up observer subject pattern between manipulator and tracker
+
         endOfP1 = false;
 
         setPlayers(player1Username, player2Username);
@@ -73,10 +74,10 @@ public class GamePlay1 {
 
     public ArrayList<String> getTokenCoordinates(String colour){
         ArrayList<String> tokenCoordinates = new ArrayList<>();
-        ArrayList<String> gameboardKeys = gameBoardManipulator.getKeys();
+        Set<String> gameboardKeys = tracker.getGameBoardPositions();
         for(String key : gameboardKeys) {
-            if (gameBoardManipulator.getCorrespondentValue(key) != null){
-                if(gameBoardManipulator.getCorrespondentValue(key).equals(colour)){
+            if (tracker.getToken(key) != null){
+                if(tracker.getToken(key).toString().equals(colour)) {
                     tokenCoordinates.add(key);
                 }
             }
@@ -88,13 +89,14 @@ public class GamePlay1 {
         while (true) {
             try {
                 Token token = new Token(playerManager.getPlayerUsername(playerNum), playerManager.getPlayerTokenColour(playerNum));
-                gameBoardManipulator.placeToken(token, setTokenPosition);
+                gameBoardManipulator.placeToken(setTokenPosition, token, tracker.getGameBoard());
 
                 // reduce player 1's chips by 1 and update chips on board
                 playerManager.decreasePlayerTokensLeft(playerNum);
                 playerManager.updateNumPlayerTokensOnBoard(playerNum, 1);
 
-                checkMill.checkMill(setTokenPosition, playerManager.getPlayerTokenColour(playerNum), gameBoardManipulator.getGameBoard());
+                checkMill.checkMill(setTokenPosition, playerManager.getPlayerTokenColour(playerNum),
+                        tracker.getGameBoard());
 
                 // player has successfully placed down a token, so break out of the while loop
                 break;
@@ -111,7 +113,7 @@ public class GamePlay1 {
 
     public String saveGame(String gameState){
         GameSaveData save_file = new GameSaveData(playerManager.getPlayer(1),
-                playerManager.getPlayer(2), gameBoardManipulator.getGameBoard(), gameState);
+                playerManager.getPlayer(2), tracker.getGameBoard(), tracker, gameState);
         try {
             GameState.save(save_file, "gamestate1.save");
             return "Game saved successfully";
@@ -123,7 +125,10 @@ public class GamePlay1 {
     public String[] loadGame(){
         try {
             GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-            gameBoardManipulator.setGameBoard(saveData.savedGameboard);
+
+            // load in saved gameboard into token tracker
+            this.tracker = saveData.getTracker();
+            tracker.setGameBoard(saveData.getGameBoard());
 
             playerManager.setPlayer(1, saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerTokensRemaining(1));
             playerManager.setPlayer(2, saveData.getSavedPlayerUsername(2), saveData.getSavedPlayerTokensRemaining(2));
@@ -151,7 +156,7 @@ public class GamePlay1 {
         try {
             if (removeTokenPosition.equals("save")) {
                 boolean saved_data = false;
-                GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameBoard());
+                GameSaveData save_file = new GameSaveData(tracker.getGameBoard());
                 try {
                     GameState.save(save_file, "gamestate1.save");
                     saved_data = true;
@@ -166,7 +171,7 @@ public class GamePlay1 {
                 boolean loaded_data = false;
                 try {
                     GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                    gameBoardManipulator.setGameBoard(saveData.savedGameboard);
+                    tracker.setGameBoard(saveData.getGameBoard());
                     loaded_data = true;
                 } catch (Exception e) {
                     System.out.println("Couldn't load:" + e.getMessage());
@@ -175,8 +180,20 @@ public class GamePlay1 {
                     throw new LoadedSuccessfully("Game loaded successfully");
                 }
             }
-            gameBoardManipulator.removeToken(removeTokenPosition, playerManager.getPlayerTokenColour(playerNum), isSpecialCase(playerNum));
-            if(isSpecialCase(playerNum)){ checkMill.removeTokenFromMill(removeTokenPosition, playerNum); }
+
+            try {
+                gameBoardManipulator.removeToken(removeTokenPosition, playerManager.getPlayerUsername(playerNum),
+                        playerManager.getPlayerTokenColour(playerNum), tracker);
+            } catch (RemoveMillException e) {
+                // player tried to remove token from opponent's mill, but make an exception if all player tokens are in
+                // mills
+                if (isSpecialCase(playerNum)) {
+                    // force removal of token from opponent's mill from player
+                    checkMill.removeTokenFromMill(removeTokenPosition, playerNum);
+                    gameBoardManipulator.forceOpponentMilLToken(removeTokenPosition, tracker.getGameBoard());
+                }
+            }
+
             playerManager.updateNumPlayerTokensOnBoard(playerNum, -1);
 
         } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
@@ -186,6 +203,8 @@ public class GamePlay1 {
         return "";
     }
 
+    // player 1 is white, player 2 is black
+    // check if all tokens are in mills, so we have exception to rule of not being able to remove opponent mill tokens
     private boolean isSpecialCase(int playerNum){
         String colour;
         if(playerNum == 1){ colour = "W"; }

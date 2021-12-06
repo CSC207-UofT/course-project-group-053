@@ -2,8 +2,6 @@ package UseCases;
 
 import Entity.GameBoard;
 import Exceptions.InvalidPositionException;
-import Exceptions.NonexistentPositionException;
-
 import java.util.*;
 
 public class CheckMill {
@@ -24,16 +22,13 @@ public class CheckMill {
     }
 
 
-    private String getItemInGameBoard(String targetPosition, GameBoard gameboard) throws NonexistentPositionException {
-        if (! targetPosition.matches(GameBoard.EMPTY_SLOT_PATTERN)) {
-            // position given isn't formatted properly/doesn't exist on gameboard
-            throw new NonexistentPositionException();
-        } else {
-            return gameboard.getTokenAtPosition(targetPosition);
-        }
+    private String getItemInGameBoard(String targetPosition, GameBoard gameboard) {
+        // No need to throw Non-existent position exception, as GameBoardManipulator will check for this whenever
+        // a player tries to make a move
+        return gameboard.getTokenAtPosition(targetPosition);
     }
 
-    public void millAdder(String position, String[] mill, GameBoard gameboard) throws InvalidPositionException {
+    public void millAdder(String position, String[] mill, GameBoard gameboard) {
         // checks which player the mill belongs to, and add the mill to the player's mills
         if (getItemInGameBoard(position, gameboard).equals("W")) {
             playerMills.get(1).add(List.of(mill));
@@ -163,7 +158,7 @@ public class CheckMill {
         }
     }
 
-    public Boolean checkMill2(String position, String colour, GameBoard gameboard) throws InvalidPositionException {
+    public Boolean checkMill2(String position, String colour, GameBoard gameboard) {
         List<List<String>> combinations = new ArrayList<>();
         List<String> innerList1 = new ArrayList<>();
         innerList1.add("A1");

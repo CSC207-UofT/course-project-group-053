@@ -34,7 +34,7 @@ class GameBoardTest {
         Token t = new Token(p.get_username(), p.get_tokencolour());
         gameBoard.setToken(t.toString(),"A2");
         assertEquals(t.toString(), gameBoard.getTokenAtPosition("A2"), "setToken: True");
-        assertEquals(24, gameBoard.getGameBoardCapacity());
+        assertEquals(23, gameBoard.getGameBoardCapacity());
 
         // remove the token we just added
         gameBoard.removeToken("A2");
