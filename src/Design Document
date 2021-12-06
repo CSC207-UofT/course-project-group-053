@@ -58,7 +58,7 @@ can run smoother. Specifically right now, we spent most of our time trying to re
 has been created with main. We were able to do so. We are also trying to look for solutions as to how we can adjust
 the old code we had to newer extensions we are adding in a way that adheres to clean architecture and is efficient.
 In addition, we are now going to spend time working on removing tokens for the GUI's. For Phase 2, we hope to add
-more features such as playerstats being displayed and removing tokens and sliding tokens on the GUI in addition to
+more features such as PlayerStats being displayed and removing tokens and sliding tokens on the GUI in addition to
 having a winner page to show when a player has won and messages when players have made a mill and when
 they lose a token etc. We also hope to implement the sliding in the game.
 
