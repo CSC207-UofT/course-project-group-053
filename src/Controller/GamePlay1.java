@@ -5,15 +5,13 @@ import Entity.Token;
 import Exceptions.*;
 import Gateways.data.GameSaveData;
 import Gateways.data.GameState;
-import UseCases.CheckMill;
-import UseCases.GameBoardManipulator;
-import UseCases.GameBoardPlacer;
-import UseCases.GameBoardRemover;
+import UseCases.*;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class GamePlay1 {
+    TokenTracker tracker = new TokenTracker();
     GameBoardPlacer placer = new GameBoardPlacer();
     GameBoardRemover remover = new GameBoardRemover();
     CheckMill checkMill = new CheckMill();
@@ -22,6 +20,9 @@ public class GamePlay1 {
 
     public GamePlay1(List<Player> playerList) throws SavedSuccessfully, LoadedSuccessfully, InvalidPositionException, ArrayIndexOutOfBoundsException,
             NullPointerException {
+        // Let GBM update token tracker as tokens are added/removed from the gameboard
+        gameBoardManipulator.register(tracker);
+
         Player player1 = new Player(playerList.get(0).get_username(), playerList.get(0).get_tokencolour());
         Player player2 = new Player(playerList.get(1).get_username(), playerList.get(1).get_tokencolour());
         System.out.println("Starting Game between " + player1.get_username() + " and " + player2.get_username());
@@ -65,7 +66,7 @@ public class GamePlay1 {
                 String setToken_position = sc.nextLine();
                 if (setToken_position.equals("save")){
                     boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
+                    GameSaveData save_file = new GameSaveData(tracker.getGameBoard(), tracker);
                     try{
                         GameState.save(save_file, "gamestate1.save");
                         saved_data = true;
@@ -78,7 +79,8 @@ public class GamePlay1 {
                     boolean loaded_data = false;
                         try {
                             GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                            gameBoardManipulator.setGameboard(saveData.savedGameboard);
+                            tracker = saveData.savedTracker;
+                            tracker.setGameBoard(saveData.savedGameboard);
                             loaded_data = true;
                         } catch (Exception e) {
                             System.out.println("Couldn't load:" + e.getMessage());
@@ -88,18 +90,19 @@ public class GamePlay1 {
                     }
 
 
+                // NOTE: think about how to remove token from here
                 Token token = new Token(player.get_username(), player.get_tokencolour());
 
                 //TODO: make a Entity.Token
                 //InsertToken(token, position)
-                gameBoardManipulator.placeToken(token, setToken_position);
+                gameBoardManipulator.placeToken(setToken_position, token, tracker.getGameBoard());
 
                 // reduce player 1's chips by 1
                 player.dec_numchipsleft();
                 // player 1 has successfully placed down a token, so break out of the while loop
 
 
-                checkMill.checkMill(setToken_position, player.get_tokencolour(), gameBoardManipulator.getGameboard());
+                checkMill.checkMill(setToken_position, player.get_tokencolour(), tracker.getGameBoard());
                 break;
 
             } catch (LoadedSuccessfully | SavedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException e) {
@@ -123,7 +126,9 @@ public class GamePlay1 {
             try {
                 if (removeToken_position.equals("save")){
                     boolean saved_data = false;
-                    GameSaveData save_file = new GameSaveData(gameBoardManipulator.getGameboard());
+
+                    // save current gameboard and token tracker, to recover saved game in future
+                    GameSaveData save_file = new GameSaveData(tracker.getGameBoard(), tracker);
                     try{
                         GameState.save(save_file, "gamestate1.save");
                         saved_data = true;
@@ -136,7 +141,8 @@ public class GamePlay1 {
                     boolean loaded_data = false;
                     try {
                         GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
-                        gameBoardManipulator.setGameboard(saveData.savedGameboard);
+                        tracker = saveData.savedTracker;
+                        tracker.setGameBoard(saveData.savedGameboard);
                         loaded_data = true;
                     } catch (Exception e) {
                         System.out.println("Couldn't load:" + e.getMessage());
@@ -144,7 +150,8 @@ public class GamePlay1 {
                     if (loaded_data){throw new LoadedSuccessfully("Game loaded successfully");
                     }
                 }
-                gameBoardManipulator.removeToken(removeToken_position, player.get_tokencolour());
+                gameBoardManipulator.removeToken(removeToken_position, player.get_username(), player.get_tokencolour(),
+                                                 tracker);
                 break;
             } catch (SavedSuccessfully | LoadedSuccessfully | InvalidPositionException | ArrayIndexOutOfBoundsException | NullPointerException | InvalidRemovalException e) {
                 System.out.println(e.getMessage());

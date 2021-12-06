@@ -47,8 +47,8 @@ the single responsibility principle of SOLID. UseCases.GameBoardManipulator was 
 that could perform its functionality so if anything needed to change, we changed those classes only and
 nothing else.
 
-Interfaces.Observer: Didn't have time to implement, but originally planned to implement using UseCases.GameBoardMap and UseCases.GameBoardManipulator,
-so UseCases.GameBoardMap is updated with new positions occupied by tokens and new mills formed by players whenever UseCases.GameBoardManipulator
+Interfaces.Observer: Didn't have time to implement, but originally planned to implement using UseCases.TokenTracker and UseCases.GameBoardManipulator,
+so UseCases.TokenTracker is updated with new positions occupied by tokens and new mills formed by players whenever UseCases.GameBoardManipulator
 changes the Entity.GameBoard. Now, we plan to implement this in Phase 2.
 
 Progress report:
@@ -77,9 +77,9 @@ Calculator which specifies who won the game. Also worked on the UML models. Will
 with testing the gameto find any bugs in addition to working on the stats of the players that could
 be displayed in a GUI as well.
 
-Aalina: Working on UseCases.GameBoardMap and trying to resolve issues with unifying the code to try and resolve
-issues with UseCases.GameBoardMap and make it as efficient as possible. Also worked on progress reports and the
-design document. Will continue to work on UseCases.GameBoardMap and also on features that can be added to the
+Aalina: Working on UseCases.TokenTracker and trying to resolve issues with unifying the code to try and resolve
+issues with UseCases.TokenTracker and make it as efficient as possible. Also worked on progress reports and the
+design document. Will continue to work on UseCases.TokenTracker and also on features that can be added to the
 GUI so it can be made more interactive.
 
 Jason:
