@@ -1,9 +1,11 @@
 package Entity;
 
+import java.io.Serializable;
+
 /**
  * Tokens placed on GameBoards
  */
-public class Token {
+public class Token implements Serializable {
     public final String owner;  // username of player who owns this token
     private final char color;  // character representing the token (ex: B, W, R, etc...)
 

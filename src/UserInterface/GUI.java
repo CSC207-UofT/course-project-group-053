@@ -4,6 +4,7 @@ package UserInterface;/*
 
 import Controller.GamePlay1;
 import Exceptions.InvalidPositionException;
+import Exceptions.InvalidSaveFileException;
 import Exceptions.LoadedSuccessfully;
 import Exceptions.SavedSuccessfully;
 import Gateways.LeaderboardDataGateway;
@@ -91,7 +92,13 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
     public void addActionEvent() {
         ((LoginPanel) loginPanel).continueButton.addActionListener(e -> confirmButtonAction());
 
-        ((LoginPanel) loginPanel).loadButton.addActionListener(e -> loadButtonAction());
+        ((LoginPanel) loginPanel).loadButton.addActionListener(e -> {
+            try {
+                loadButtonAction();
+            } catch (InvalidSaveFileException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         saveButton.addActionListener(e -> JOptionPane.showMessageDialog(null,
                 gamePlay.saveGame(((HeaderPanel) headerPanel).gameState.getText())));
@@ -135,7 +142,7 @@ public class GUI extends JFrame implements ActionListener, DataAdapter<String, I
         }
     }
 
-    private void loadButtonAction(){
+    private void loadButtonAction() throws InvalidSaveFileException {
         String[] gamePlayLoadedResult = gamePlay.loadGame();
         if (gamePlayLoadedResult.length == 1){
             JOptionPane.showMessageDialog(null, gamePlayLoadedResult);

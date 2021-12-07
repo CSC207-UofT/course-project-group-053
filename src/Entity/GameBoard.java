@@ -2,6 +2,7 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class GameBoard implements Serializable {
@@ -42,7 +43,8 @@ public class GameBoard implements Serializable {
         gameBoardCapacity = 24;
 
         // all possible gameboard positions
-        gameBoardPositions = gameBoard.keySet();
+        gameBoardPositions = new HashSet<>();
+        gameBoardPositions.addAll(gameBoard.keySet());
     }
 
     private void decreaseCapacity() { gameBoardCapacity--; }

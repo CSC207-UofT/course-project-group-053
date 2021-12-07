@@ -7,6 +7,7 @@ import Interfaces.Observer;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,16 +20,16 @@ public class TokenTracker implements Observer, Serializable {
     private GameBoard gameBoard;
 
     // store all valid gameboard positions
-    private final Set<String> gbPositions;
+    private final HashSet<String> gbPositions;
 
     // keeps track of where player tokens are on the gameboard
     private final HashMap<String, Token> playerTokenMap;
 
     public TokenTracker() {
         gameBoard = new GameBoard();
-        gbPositions = gameBoard.getGameBoardPositions();
+        gbPositions = (HashSet<String>) gameBoard.getGameBoardPositions();
         playerTokenMap = new HashMap<>();
-        Set<String> gameBoardPositions = gameBoard.getGameBoardPositions();
+        HashSet<String> gameBoardPositions = (HashSet<String>) gameBoard.getGameBoardPositions();
         for (String position : gameBoardPositions) {
             // initialize all positions as null, until tokens are placed in them
             playerTokenMap.put(position, null);
