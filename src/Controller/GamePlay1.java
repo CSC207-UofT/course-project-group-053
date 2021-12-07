@@ -6,8 +6,11 @@ import Gateways.data.GameSaveData;
 import Gateways.data.GameState;
 import UseCases.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GamePlay1 {
     // attributes for simulating and manipulating gameboard
@@ -116,30 +119,50 @@ public class GamePlay1 {
         GameSaveData save_file = new GameSaveData(playerManager.getPlayer(1),
                 playerManager.getPlayer(2), tracker.getGameBoard(), tracker, gameState);
         try {
-            GameState.save(save_file, "gamestate1.save");
-            return "Game saved successfully";
+            JFileChooser fileChooser = new JFileChooser();
+            //FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            //        "Save files", "save");
+            //fileChooser.setFileFilter(filter);
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                //File selectedDirectory = fileChooser.getCurrentDirectory();
+                String saveName = save_file.getSavedPlayerUsername(1) + save_file.getSavedPlayerUsername(2) + java.time.LocalDate.now() + ".save";
+                GameState.save(save_file, saveName);
+                return "Game saved successfully";
+            }
+            throw new InvalidSaveFileException("");
         } catch (Exception e) {
             return "Couldn't save:" + e.getMessage();
         }
     }
 
-    public String[] loadGame(){
+    public String[] loadGame() throws InvalidSaveFileException{
         try {
-            GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Save files", "save");
+            fileChooser.setFileFilter(filter);
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                GameSaveData saveData;
+                saveData = (GameSaveData) GameState.load(selectedFile.toString());
+                // load in saved gameboard into token tracker
+                this.tracker = saveData.getTracker();
+                tracker.setGameBoard(saveData.getGameBoard());
+                playerManager.setPlayer(1, saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerTokensRemaining(1));
+                playerManager.setPlayer(2, saveData.getSavedPlayerUsername(2), saveData.getSavedPlayerTokensRemaining(2));
+                winnerCalculator = new WinnerCalculator(this, playerManager.getPlayer(1), playerManager.getPlayer(2));
+                return new String[]{playerManager.getPlayerUsername(1),
+                        playerManager.getPlayerUsername(2),
+                        Integer.toString(playerManager.getTokensRemaining(1)),
+                        Integer.toString(playerManager.getTokensRemaining(2)),
+                        saveData.getSavedGameState(), selectedFile.getName()};
+            }
+            else { throw new InvalidSaveFileException("Invalid File selected.");}
 
-            // load in saved gameboard into token tracker
-            this.tracker = saveData.getTracker();
-            tracker.setGameBoard(saveData.getGameBoard());
 
-            playerManager.setPlayer(1, saveData.getSavedPlayerUsername(1), saveData.getSavedPlayerTokensRemaining(1));
-            playerManager.setPlayer(2, saveData.getSavedPlayerUsername(2), saveData.getSavedPlayerTokensRemaining(2));
-            winnerCalculator = new WinnerCalculator(this, playerManager.getPlayer(1), playerManager.getPlayer(2));
-
-            return new String[]{playerManager.getPlayerUsername(1),
-                    playerManager.getPlayerUsername(2),
-                    Integer.toString(playerManager.getTokensRemaining(1)),
-                    Integer.toString(playerManager.getTokensRemaining(2)),
-                    saveData.getSavedGameState()};
 
         } catch (Exception e) {
             return new String[]{"Couldn't load:" + e.getMessage()};
@@ -159,7 +182,8 @@ public class GamePlay1 {
                 boolean saved_data = false;
                 GameSaveData save_file = new GameSaveData(tracker.getGameBoard());
                 try {
-                    GameState.save(save_file, "gamestate1.save");
+                    String saveName = save_file.getSavedPlayerUsername(1) + save_file.getSavedPlayerUsername(2) + java.time.LocalDate.now() + ".save";
+                    GameState.save(save_file, saveName);
                     saved_data = true;
                 } catch (Exception e) {
                     System.out.println("Couldn't save:" + e.getMessage());
@@ -171,7 +195,8 @@ public class GamePlay1 {
             if (removeTokenPosition.equals("load")) {
                 boolean loaded_data = false;
                 try {
-                    GameSaveData saveData = (GameSaveData) GameState.load("gamestate1.save");
+                    String[] loadedGame = this.loadGame();
+                    GameSaveData saveData = (GameSaveData) GameState.load(loadedGame[5]);
                     tracker.setGameBoard(saveData.getGameBoard());
                     loaded_data = true;
                 } catch (Exception e) {
